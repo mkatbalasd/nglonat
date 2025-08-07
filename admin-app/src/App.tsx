@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 // استيراد المكوّن الرئيسي لإدارة الواجهة والموارد
-import { Admin, Resource } from 'react-admin'
+import { Admin, Resource, CustomRoutes } from 'react-admin'
+import { Route } from 'react-router-dom'
 import { createTheme } from '@mui/material'
 // استيراد موفّر البيانات المبني على Supabase
 import supabaseDataProvider from './data/supabaseDataProvider'
@@ -48,6 +49,7 @@ import {
   VehicleCreate,
   VehicleEdit,
 } from './Vehicle'
+import DriverWizard from './DriverWizard'
 
 // إنشاء الثيم مع دعم الاتجاه من اليمين إلى اليسار
 const theme = createTheme({
@@ -66,6 +68,9 @@ const App = () => {
   return (
     // مكوّن الإدارة مع تمرير موفّر بيانات Supabase والثيم المخصص
     <Admin dataProvider={supabaseDataProvider()} theme={theme}>
+      <CustomRoutes>
+        <Route path="/wizard" element={<DriverWizard />} />
+      </CustomRoutes>
       <Resource
         name="OPC_Facility"
         list={FacilityList}

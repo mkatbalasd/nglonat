@@ -11,10 +11,24 @@ import {
   TextInput,
   ReferenceInput,
   SelectInput,
+  TopToolbar,
+  CreateButton,
+  Button,
 } from 'react-admin'
+import { useNavigate } from 'react-router-dom'
+
+const DriverListActions = () => {
+  const navigate = useNavigate()
+  return (
+    <TopToolbar>
+      <CreateButton />
+      <Button label="المعالج" onClick={() => navigate('/wizard')} />
+    </TopToolbar>
+  )
+}
 
 export const DriverList = () => (
-  <List>
+  <List actions={<DriverListActions />}>
     <Datagrid rowClick="show">
       <TextField source="DriverID" />
       <TextField source="FirstName" />
