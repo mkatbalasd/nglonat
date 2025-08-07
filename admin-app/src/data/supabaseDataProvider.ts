@@ -13,14 +13,35 @@ import type {
 import { supabase } from '../supabaseClient'
 
 /**
- * موفّر بيانات يعتمد على Supabase لتنفيذ عمليات CRUD.
+ * موفّر بيانات يعتمد على Supabase لتنفيذ عمليات CRUD مع دعم تسجيل العمليات.
  * يمكن تمرير عميل Supabase مخصّص لاستخدامه في الاختبارات أو السياقات المختلفة.
  *
  * @param client عميل Supabase جاهز للاستخدام.
  * @returns كائن {@link DataProvider} متوافق مع React-Admin.
  */
-const supabaseDataProvider = (client = supabase): DataProvider =>
-  ({
+const supabaseDataProvider = (client = supabase): DataProvider => {
+  /**
+   * يسجل العملية في جدول AuditLog مع تجاهل أي أخطاء قد تحدث أثناء التسجيل.
+   */
+  const logAudit = async (
+    action: string,
+    resource: string,
+    record: unknown,
+    id?: string | number
+  ) => {
+    try {
+      await client.from('AuditLog').insert({
+        table_name: resource,
+        action,
+        record_id: id ?? ((record as { id?: string | number })?.id ?? null),
+        payload: record,
+      })
+    } catch (error) {
+      console.error('Failed to log audit action', error)
+    }
+  }
+
+  return {
   /**
    * جلب قائمة من السجلات مع دعم التصفية والترتيب والتقسيم إلى صفحات.
    *
@@ -148,6 +169,7 @@ const supabaseDataProvider = (client = supabase): DataProvider =>
       .single()
 
     if (error) throw error
+    await logAudit('create', resource, data, (data as { id?: string | number })?.id)
     return { data }
   },
 
@@ -168,6 +190,7 @@ const supabaseDataProvider = (client = supabase): DataProvider =>
       .single()
 
     if (error) throw error
+    await logAudit('update', resource, data, params.id)
     return { data }
   },
 
@@ -214,6 +237,7 @@ const supabaseDataProvider = (client = supabase): DataProvider =>
       .single()
 
     if (error) throw error
+    await logAudit('delete', resource, data, params.id)
     return { data }
   },
 
@@ -242,7 +266,8 @@ const supabaseDataProvider = (client = supabase): DataProvider =>
     const ids = (data ?? []).map((record) => (record as { id: string | number }).id)
     return { data: ids }
   },
-} as DataProvider)
+} as DataProvider
+}
 
 export default supabaseDataProvider
 

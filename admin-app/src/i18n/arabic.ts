@@ -220,6 +220,17 @@ export const arabicMessages: TranslationMessages = {
         ManufacturingYear: 'سنة الصنع',
       },
     },
+    AuditLog: {
+      name: 'سجل التدقيق |||| سجلات التدقيق',
+      fields: {
+        id: 'المعرف',
+        table_name: 'الجدول',
+        action: 'الإجراء',
+        record_id: 'معرف السجل',
+        payload: 'البيانات',
+        created_at: 'التاريخ',
+      },
+    },
   },
 }
 
