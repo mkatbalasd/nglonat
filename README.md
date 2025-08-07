@@ -41,3 +41,14 @@
    - فعّل HTTPS باستخدام شهادات Let's Encrypt أو ما يعادلها، ثم حدّث إعداد Nginx ليستمع إلى المنفذ `443`.
    - اختبر التطبيق بعد النشر للتأكد من عمل الواجهات وتكامل الاتصال مع Supabase.
 
+
+## التشغيل باستخدام Docker
+
+يمكن تشغيل التطبيق محلياً باستخدام Docker Compose:
+
+```bash
+docker compose build
+docker compose up -d
+```
+
+سيخدم Nginx ملفات `admin-app/dist` على المنافذ `80` و`443`.
