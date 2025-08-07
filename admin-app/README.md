@@ -1,5 +1,11 @@
 # React + TypeScript + Vite
 
+## الإعداد
+
+1. انسخ ملف `.env.example` إلى `.env` وأضف قيم `VITE_SUPABASE_URL` و`VITE_SUPABASE_ANON_KEY` الخاصة بك.
+2. ثبّت الحزم عبر `npm install`.
+3. شغّل التطبيق محليًا باستخدام `npm run dev`.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
