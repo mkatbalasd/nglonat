@@ -7,6 +7,7 @@ import { createTheme } from '@mui/material'
 import arabicMessages from './i18n/arabic'
 // استيراد موفّر البيانات المبني على Supabase
 import supabaseDataProvider from './data/supabaseDataProvider'
+import { AuditLogList, AuditLogShow } from './AuditLog'
 
 // استيراد مكونات الموارد
 import {
@@ -129,6 +130,7 @@ const App = () => {
         create={VehicleCreate}
         edit={VehicleEdit}
       />
+      <Resource name="AuditLog" list={AuditLogList} show={AuditLogShow} />
     </Admin>
   )
 }
