@@ -2,9 +2,13 @@ import type {
   DataProvider,
   GetListParams,
   GetOneParams,
+  GetManyParams,
+  GetManyReferenceParams,
   CreateParams,
   UpdateParams,
+  UpdateManyParams,
   DeleteParams,
+  DeleteManyParams,
 } from 'react-admin'
 import { supabase } from '../supabaseClient'
 
@@ -70,6 +74,65 @@ const supabaseDataProvider = (client = supabase): DataProvider =>
   },
 
   /**
+   * جلب عدة سجلات حسب مجموعة من المعرفات مع إمكانية التصفية.
+   *
+   * @param resource اسم الجدول أو المورد.
+   * @param params يحوي قائمة المعرفات ومرشحات إضافية.
+   * @returns السجلات المطابقة.
+   * @throws يظهر خطأ من Supabase عند فشل التنفيذ.
+   */
+  async getMany(resource: string, params: GetManyParams) {
+    let query = client.from(resource).select('*').in('id', params.ids)
+
+    const filter = (params as { filter?: Record<string, unknown> }).filter ?? {}
+    Object.entries(filter).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        query = query.in(key, value)
+      } else {
+        query = query.eq(key, value as string | number | boolean | null)
+      }
+    })
+
+    const { data, error } = await query
+    if (error) throw error
+    return { data: data ?? [] }
+  },
+
+  /**
+   * جلب سجلات مرتبطة بسجل آخر عبر مفتاح أجنبي مع دعم التصفية والصفحات.
+   *
+   * @param resource اسم الجدول أو المورد.
+   * @param params يحوي معلومات المرجع والتصفية والصفحات.
+   * @returns السجلات المطابقة وعددها الكلي.
+   * @throws يظهر خطأ من Supabase عند فشل التنفيذ.
+   */
+  async getManyReference(resource: string, params: GetManyReferenceParams) {
+    const { page, perPage } = params.pagination ?? { page: 1, perPage: 10 }
+    const { field, order } = params.sort ?? { field: 'id', order: 'ASC' }
+    const from = (page - 1) * perPage
+    const to = from + perPage - 1
+
+    let query = client
+      .from(resource)
+      .select('*', { count: 'exact' })
+      .order(field, { ascending: order === 'ASC' })
+      .range(from, to)
+      .eq(params.target, params.id)
+
+    Object.entries(params.filter ?? {}).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        query = query.in(key, value)
+      } else {
+        query = query.eq(key, value as string | number | boolean | null)
+      }
+    })
+
+    const { data, error, count } = await query
+    if (error) throw error
+    return { data: data ?? [], total: count ?? 0 }
+  },
+
+  /**
    * إنشاء سجل جديد في المورد المحدّد.
    *
    * @param resource اسم الجدول أو المورد.
@@ -109,6 +172,32 @@ const supabaseDataProvider = (client = supabase): DataProvider =>
   },
 
   /**
+   * تحديث مجموعة من السجلات وفق قائمة من المعرفات مع دعم التصفية.
+   *
+   * @param resource اسم الجدول أو المورد.
+   * @param params يحوي المعرفات والبيانات الجديدة ومرشحات إضافية.
+   * @returns قائمة المعرفات التي تم تحديثها.
+   * @throws يظهر خطأ من Supabase عند فشل التنفيذ.
+   */
+  async updateMany(resource: string, params: UpdateManyParams) {
+    let query = client.from(resource).update(params.data).in('id', params.ids)
+
+    const filter = (params as { filter?: Record<string, unknown> }).filter ?? {}
+    Object.entries(filter).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        query = query.in(key, value)
+      } else {
+        query = query.eq(key, value as string | number | boolean | null)
+      }
+    })
+
+    const { data, error } = await query.select('id')
+    if (error) throw error
+    const ids = (data ?? []).map((record) => (record as { id: string | number }).id)
+    return { data: ids }
+  },
+
+  /**
    * حذف سجل موجود بالمعرّف.
    *
    * @param resource اسم الجدول أو المورد.
@@ -126,6 +215,32 @@ const supabaseDataProvider = (client = supabase): DataProvider =>
 
     if (error) throw error
     return { data }
+  },
+
+  /**
+   * حذف مجموعة من السجلات وفق قائمة من المعرفات مع دعم التصفية.
+   *
+   * @param resource اسم الجدول أو المورد.
+   * @param params يحوي قائمة المعرفات المراد حذفها ومرشحات إضافية.
+   * @returns قائمة المعرفات التي تم حذفها.
+   * @throws يظهر خطأ من Supabase عند فشل التنفيذ.
+   */
+  async deleteMany(resource: string, params: DeleteManyParams) {
+    let query = client.from(resource).delete().in('id', params.ids)
+
+    const filter = (params as { filter?: Record<string, unknown> }).filter ?? {}
+    Object.entries(filter).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        query = query.in(key, value)
+      } else {
+        query = query.eq(key, value as string | number | boolean | null)
+      }
+    })
+
+    const { data, error } = await query.select('id')
+    if (error) throw error
+    const ids = (data ?? []).map((record) => (record as { id: string | number }).id)
+    return { data: ids }
   },
 } as DataProvider)
 
