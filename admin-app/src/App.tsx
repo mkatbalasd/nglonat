@@ -1,8 +1,10 @@
 import { useEffect } from 'react'
 // استيراد المكوّن الرئيسي لإدارة الواجهة والموارد
 import { Admin, Resource, CustomRoutes } from 'react-admin'
+import polyglotI18nProvider from 'ra-i18n-polyglot'
 import { Route } from 'react-router-dom'
 import { createTheme } from '@mui/material'
+import arabicMessages from './i18n/arabic'
 // استيراد موفّر البيانات المبني على Supabase
 import supabaseDataProvider from './data/supabaseDataProvider'
 
@@ -59,15 +61,22 @@ const theme = createTheme({
   },
 })
 
+// تهيئة موفر الترجمة للغة العربية
+const i18nProvider = polyglotI18nProvider(() => arabicMessages, 'ar')
+
 const App = () => {
   // ضبط اتجاه الصفحة ليكون من اليمين إلى اليسار عند بدء التطبيق
   useEffect(() => {
-    document.documentElement.dir = 'rtl'
+    document.dir = 'rtl'
   }, [])
 
   return (
-    // مكوّن الإدارة مع تمرير موفّر بيانات Supabase والثيم المخصص
-    <Admin dataProvider={supabaseDataProvider()} theme={theme}>
+    // مكوّن الإدارة مع تمرير موفّر البيانات، الثيم، وموفّر الترجمة
+    <Admin
+      dataProvider={supabaseDataProvider()}
+      theme={theme}
+      i18nProvider={i18nProvider}
+    >
       <CustomRoutes>
         <Route path="/wizard" element={<DriverWizard />} />
       </CustomRoutes>
