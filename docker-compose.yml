@@ -2,10 +2,13 @@ version: '3.8'
 
 services:
   admin:
-    # تأكد من تنفيذ `npm run build` في مجلد admin-app قبل نشر هذه الحاوية
+    # يتم تمرير المتغيرات أثناء بناء واجهة الإدارة
     build:
       context: ./admin-app
       dockerfile: Dockerfile
+      args:
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
+        VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY}
     ports:
       - '80:80'
       - '443:443'

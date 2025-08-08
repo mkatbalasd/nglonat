@@ -45,11 +45,11 @@
 
 ## التشغيل باستخدام Docker
 
-يمكن تشغيل التطبيق محلياً باستخدام Docker Compose:
+يمكن تشغيل التطبيق محلياً باستخدام Docker Compose بعد تعريف متغيرات البيئة `VITE_SUPABASE_URL` و`VITE_SUPABASE_ANON_KEY`:
 
 ```bash
 docker compose build
 docker compose up -d
 ```
 
-سيخدم Nginx ملفات `admin-app/dist` على المنافذ `80` و`443`.
+يعمل أمر `build` على تثبيت الاعتمادات وتشغيل عملية التجميع، ثم يخدم Nginx الملفات الناتجة على المنافذ `80` و`443`.
