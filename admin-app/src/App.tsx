@@ -119,19 +119,19 @@ const App = () => {
         edit={LicenseTypeEdit}
       />
       <Resource
-        name="OPC_Brand"
+        name="OPC_Brand_view"
         list={BrandList}
         create={BrandCreate}
         edit={BrandEdit}
       />
       <Resource
-        name="OPC_Model"
+        name="OPC_Model_view"
         list={ModelList}
         create={ModelCreate}
         edit={ModelEdit}
       />
       <Resource
-        name="OPC_Color"
+        name="OPC_Color_view"
         list={ColorList}
         create={ColorCreate}
         edit={ColorEdit}
