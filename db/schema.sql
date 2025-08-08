@@ -21,6 +21,13 @@ CREATE TABLE IF NOT EXISTS "OPC_LicenseType" (
   "LicenseTypeNameEN" VARCHAR(255) NOT NULL
 );
 
+-- View OPC_LicenseType_view to provide a generic id column
+CREATE OR REPLACE VIEW "OPC_LicenseType_view" AS
+SELECT "LicenseTypeID" AS id,
+       "LicenseTypeNameAR",
+       "LicenseTypeNameEN"
+FROM "OPC_LicenseType";
+
 -- Table Supplier
 CREATE TABLE IF NOT EXISTS "Supplier" (
   "id" SERIAL PRIMARY KEY,

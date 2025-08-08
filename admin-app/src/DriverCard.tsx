@@ -24,7 +24,7 @@ export const DriverCardList = () => (
       <ReferenceField source="FacilityID" reference="OPC_Facility">
         <TextField source="Name" />
       </ReferenceField>
-      <ReferenceField source="CardType" reference="OPC_LicenseType">
+      <ReferenceField source="CardType" reference="OPC_LicenseType_view">
         <TextField source="LicenseTypeNameAR" />
       </ReferenceField>
       <TextField source="IssueDate" />
@@ -44,7 +44,7 @@ export const DriverCardShow = () => (
       <ReferenceField source="FacilityID" reference="OPC_Facility">
         <TextField source="Name" />
       </ReferenceField>
-      <ReferenceField source="CardType" reference="OPC_LicenseType">
+      <ReferenceField source="CardType" reference="OPC_LicenseType_view">
         <TextField source="LicenseTypeNameAR" />
       </ReferenceField>
       <ReferenceField source="Supplier" reference="Supplier">
@@ -65,7 +65,7 @@ export const DriverCardForm = () => (
     <ReferenceInput source="DriverID" reference="OPC_Driver">
       <SelectInput optionText="FirstName" />
     </ReferenceInput>
-    <ReferenceInput source="CardType" reference="OPC_LicenseType">
+    <ReferenceInput source="CardType" reference="OPC_LicenseType_view">
       <SelectInput optionText="LicenseTypeNameAR" />
     </ReferenceInput>
     <ReferenceInput source="Supplier" reference="Supplier">

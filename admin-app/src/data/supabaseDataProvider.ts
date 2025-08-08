@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type {
   DataProvider,
   GetListParams,
@@ -25,13 +26,17 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
     OPC_Driver: 'DriverID',
     OPC_DriverCard: 'ID',
     OPC_Card: 'ID',
-    OPC_LicenseType: 'LicenseTypeID',
+    OPC_LicenseType: '"LicenseTypeID"',
+    OPC_LicenseType_view: 'id',
     Supplier: 'id',
     OPC_Vehicle: 'ID',
     AuditLog: 'id',
   }
 
-  const getPrimaryKey = (resource: string) => primaryKeys[resource] ?? 'id'
+  const getPrimaryKey = (resource: string) => {
+    const key = primaryKeys[resource] ?? 'id'
+    return key.startsWith('"') ? key : `"${key}"`
+  }
   /**
    * يسجل العملية في جدول AuditLog مع تجاهل أي أخطاء قد تحدث أثناء التسجيل.
    */

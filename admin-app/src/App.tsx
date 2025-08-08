@@ -110,7 +110,7 @@ const App = () => {
         edit={OperationCardEdit}
       />
       <Resource
-        name="OPC_LicenseType"
+        name="OPC_LicenseType_view"
         list={LicenseTypeList}
         show={LicenseTypeShow}
         create={LicenseTypeCreate}
