@@ -161,6 +161,17 @@ export const arabicMessages: TranslationMessages = {
       not_authorized: 'لست مخولاً للوصول إلى هذا المورد.',
       application_update_available: 'هناك نسخة جديدة متاحة.',
     },
+    saved_queries: {
+      label: 'الاستعلامات المحفوظة',
+      query_name: 'اسم الاستعلام',
+      new_label: 'حفظ الاستعلام الحالي',
+      new_dialog_title: 'حفظ الاستعلام الحالي',
+      remove_label: 'إزالة الاستعلام',
+      remove_label_with_name: 'إزالة %{name}',
+      remove_dialog_title: 'إزالة الاستعلام المحفوظ؟',
+      remove_message: 'هل تريد بالتأكيد إزالة هذا الاستعلام من القائمة؟',
+      help: 'قم بحفظ الاستعلام لاستخدامه لاحقاً',
+    },
     validation: {
       required: 'مطلوب',
       minLength: 'يجب أن يكون%{min} حرفًا على الأقل',
