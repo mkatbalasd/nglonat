@@ -42,7 +42,9 @@ CREATE TABLE IF NOT EXISTS "OPC_Brand" (
 
 -- View OPC_Brand_view to provide a generic id column
 CREATE OR REPLACE VIEW "OPC_Brand_view" AS
-SELECT "BrandID" AS id, * FROM "OPC_Brand";
+SELECT "BrandID" AS id,
+       "BrandName"
+FROM "OPC_Brand";
 
 -- Table OPC_Model
 CREATE TABLE IF NOT EXISTS "OPC_Model" (
@@ -54,7 +56,10 @@ CREATE TABLE IF NOT EXISTS "OPC_Model" (
 
 -- View OPC_Model_view to provide a generic id column
 CREATE OR REPLACE VIEW "OPC_Model_view" AS
-SELECT "ModelID" AS id, * FROM "OPC_Model";
+SELECT "ModelID" AS id,
+       "BrandID",
+       "ModelName"
+FROM "OPC_Model";
 
 -- Table OPC_Color
 CREATE TABLE IF NOT EXISTS "OPC_Color" (
@@ -64,7 +69,9 @@ CREATE TABLE IF NOT EXISTS "OPC_Color" (
 
 -- View OPC_Color_view to provide a generic id column
 CREATE OR REPLACE VIEW "OPC_Color_view" AS
-SELECT "ColorID" AS id, * FROM "OPC_Color";
+SELECT "ColorID" AS id,
+       "ColorName"
+FROM "OPC_Color";
 
 -- Table OPC_Facility
 CREATE TABLE IF NOT EXISTS "OPC_Facility" (
@@ -83,7 +90,16 @@ CREATE TABLE IF NOT EXISTS "OPC_Facility" (
 
 -- View OPC_Facility_view to provide a generic id column
 CREATE OR REPLACE VIEW "OPC_Facility_view" AS
-SELECT "FacilityID" AS id, * FROM "OPC_Facility";
+SELECT "FacilityID" AS id,
+       "IdentityNumber",
+       "Name",
+       "EnglishName",
+       "LicenseNumber",
+       "LicenseTypeID",
+       "LicenseCityID",
+       "LicenseIssueDate",
+       "LicenseExpirationDate"
+FROM "OPC_Facility";
 
 -- Table OPC_Driver
 CREATE TABLE IF NOT EXISTS "OPC_Driver" (
@@ -97,7 +113,12 @@ CREATE TABLE IF NOT EXISTS "OPC_Driver" (
 
 -- View OPC_Driver_view to provide a generic id column
 CREATE OR REPLACE VIEW "OPC_Driver_view" AS
-SELECT "DriverID" AS id, * FROM "OPC_Driver";
+SELECT "DriverID" AS id,
+       "FacilityID",
+       "FirstName",
+       "LastName",
+       "IdentityNumber"
+FROM "OPC_Driver";
 
 -- Table OPC_Vehicle
 CREATE TABLE IF NOT EXISTS "OPC_Vehicle" (
@@ -115,7 +136,14 @@ CREATE TABLE IF NOT EXISTS "OPC_Vehicle" (
 
 -- View OPC_Vehicle_view to provide a generic id column
 CREATE OR REPLACE VIEW "OPC_Vehicle_view" AS
-SELECT "ID" AS id, * FROM "OPC_Vehicle";
+SELECT "ID" AS id,
+       "FacilityID",
+       "ModelID",
+       "ColorID",
+       "PlateNumber",
+       "SerialNumber",
+       "ManufacturingYear"
+FROM "OPC_Vehicle";
 
 -- Table OPC_Card
 CREATE TABLE IF NOT EXISTS "OPC_Card" (
@@ -142,7 +170,22 @@ CREATE TABLE IF NOT EXISTS "OPC_Card" (
 
 -- View OPC_Card_view to provide a generic id column
 CREATE OR REPLACE VIEW "OPC_Card_view" AS
-SELECT "ID" AS id, * FROM "OPC_Card";
+SELECT "ID" AS id,
+       "token",
+       "CardNumber",
+       "CardType",
+       "FacilityID",
+       "VehicleID",
+       "DriverID",
+       "IssueDate",
+       "ExpirationDate",
+       "RenewalDate",
+       "Supplier",
+       "addingDate",
+       "LastUpdate",
+       "userID",
+       "status"
+FROM "OPC_Card";
 
 -- Table OPC_DriverCard
 CREATE TABLE IF NOT EXISTS "OPC_DriverCard" (
@@ -169,7 +212,22 @@ CREATE TABLE IF NOT EXISTS "OPC_DriverCard" (
 
 -- View OPC_DriverCard_view to provide a generic id column
 CREATE OR REPLACE VIEW "OPC_DriverCard_view" AS
-SELECT "ID" AS id, * FROM "OPC_DriverCard";
+SELECT "ID" AS id,
+       "token",
+       "CardNumber",
+       "CardType",
+       "Category",
+       "FacilityID",
+       "DriverID",
+       "IssueDate",
+       "ExpirationDate",
+       "RenewalDate",
+       "Supplier",
+       "addingDate",
+       "LastUpdate",
+       "userID",
+       "status"
+FROM "OPC_DriverCard";
 
 -- Table Users
 CREATE TABLE IF NOT EXISTS "Users" (
