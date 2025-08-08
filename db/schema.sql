@@ -124,6 +124,46 @@ CREATE TABLE IF NOT EXISTS "Users" (
   "CreatedAt" TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Functions
+
+--
+-- توليد رقم البطاقة حسب نوعها مع الحفاظ على تسلسل منفصل لكل نوع
+-- ويُستخدم أول ثلاثة أحرف من رقم الترخيص كرمز مُسبق
+--
+CREATE OR REPLACE FUNCTION generate_card_number(type text, license_number text)
+RETURNS text AS $$
+DECLARE
+  prefix TEXT := COALESCE(SUBSTRING(license_number FROM 1 FOR 3), '000');
+  next_num INTEGER;
+BEGIN
+  IF type = 'operation' THEN
+    SELECT "LastOperationCardNumber" + 1 INTO next_num
+    FROM "CardSequence" WHERE "Prefix" = prefix FOR UPDATE;
+
+    IF NOT FOUND THEN
+      next_num := 1;
+      INSERT INTO "CardSequence" ("Prefix", "LastDriverCardNumber", "LastOperationCardNumber")
+      VALUES (prefix, 0, next_num);
+    ELSE
+      UPDATE "CardSequence" SET "LastOperationCardNumber" = next_num WHERE "Prefix" = prefix;
+    END IF;
+  ELSE
+    SELECT "LastDriverCardNumber" + 1 INTO next_num
+    FROM "CardSequence" WHERE "Prefix" = prefix FOR UPDATE;
+
+    IF NOT FOUND THEN
+      next_num := 1;
+      INSERT INTO "CardSequence" ("Prefix", "LastDriverCardNumber", "LastOperationCardNumber")
+      VALUES (prefix, next_num, 0);
+    ELSE
+      UPDATE "CardSequence" SET "LastDriverCardNumber" = next_num WHERE "Prefix" = prefix;
+    END IF;
+  END IF;
+
+  RETURN prefix || LPAD(next_num::text, 6, '0');
+END;
+$$ LANGUAGE plpgsql;
+
 -- Triggers
 
 CREATE OR REPLACE FUNCTION before_insert_operation_card()
