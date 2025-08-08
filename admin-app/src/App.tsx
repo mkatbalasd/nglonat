@@ -82,28 +82,28 @@ const App = () => {
         <Route path="/wizard" element={<DriverWizard />} />
       </CustomRoutes>
       <Resource
-        name="OPC_Facility"
+        name="OPC_Facility_view"
         list={FacilityList}
         show={FacilityShow}
         create={FacilityCreate}
         edit={FacilityEdit}
       />
       <Resource
-        name="OPC_Driver"
+        name="OPC_Driver_view"
         list={DriverList}
         show={DriverShow}
         create={DriverCreate}
         edit={DriverEdit}
       />
       <Resource
-        name="OPC_DriverCard"
+        name="OPC_DriverCard_view"
         list={DriverCardList}
         show={DriverCardShow}
         create={DriverCardCreate}
         edit={DriverCardEdit}
       />
       <Resource
-        name="OPC_Card"
+        name="OPC_Card_view"
         list={OperationCardList}
         show={OperationCardShow}
         create={OperationCardCreate}
@@ -124,7 +124,7 @@ const App = () => {
         edit={SupplierEdit}
       />
       <Resource
-        name="OPC_Vehicle"
+        name="OPC_Vehicle_view"
         list={VehicleList}
         show={VehicleShow}
         create={VehicleCreate}

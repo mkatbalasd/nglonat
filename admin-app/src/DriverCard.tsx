@@ -18,10 +18,10 @@ export const DriverCardList = () => (
   <List>
     <Datagrid rowClick="show">
       <TextField source="id" />
-      <ReferenceField source="DriverID" reference="OPC_Driver">
+      <ReferenceField source="DriverID" reference="OPC_Driver_view">
         <TextField source="FirstName" />
       </ReferenceField>
-      <ReferenceField source="FacilityID" reference="OPC_Facility">
+      <ReferenceField source="FacilityID" reference="OPC_Facility_view">
         <TextField source="Name" />
       </ReferenceField>
       <ReferenceField source="CardType" reference="OPC_LicenseType_view">
@@ -38,10 +38,10 @@ export const DriverCardShow = () => (
     <SimpleShowLayout>
       <TextField source="id" />
       <TextField source="CardNumber" />
-      <ReferenceField source="DriverID" reference="OPC_Driver">
+      <ReferenceField source="DriverID" reference="OPC_Driver_view">
         <TextField source="FirstName" />
       </ReferenceField>
-      <ReferenceField source="FacilityID" reference="OPC_Facility">
+      <ReferenceField source="FacilityID" reference="OPC_Facility_view">
         <TextField source="Name" />
       </ReferenceField>
       <ReferenceField source="CardType" reference="OPC_LicenseType_view">
@@ -59,10 +59,10 @@ export const DriverCardShow = () => (
 
 export const DriverCardForm = () => (
   <SimpleForm>
-    <ReferenceInput source="FacilityID" reference="OPC_Facility">
+    <ReferenceInput source="FacilityID" reference="OPC_Facility_view">
       <SelectInput optionText="Name" />
     </ReferenceInput>
-    <ReferenceInput source="DriverID" reference="OPC_Driver">
+    <ReferenceInput source="DriverID" reference="OPC_Driver_view">
       <SelectInput optionText="FirstName" />
     </ReferenceInput>
     <ReferenceInput source="CardType" reference="OPC_LicenseType_view">
