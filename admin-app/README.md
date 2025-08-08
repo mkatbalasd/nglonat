@@ -2,9 +2,10 @@
 
 ## الإعداد
 
-1. انسخ ملف `.env.example` إلى `.env` وأضف قيم `VITE_SUPABASE_URL` و`VITE_SUPABASE_ANON_KEY` الخاصة بك.
-2. ثبّت الحزم عبر `npm install`.
-3. شغّل التطبيق محليًا باستخدام `npm run dev`.
+1. انسخ ملف `.env.example` إلى `.env`.
+2. عيّن قيم متغيرات البيئة `VITE_SUPABASE_URL` و`VITE_SUPABASE_ANON_KEY` الخاصة بك.
+3. ثبّت الحزم عبر `npm install`.
+4. شغّل التطبيق محليًا باستخدام `npm run dev` للتحقق من الاتصال بـ Supabase.
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
