@@ -224,43 +224,58 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+--
+-- توليد رمز فريد مع رقم البطاقة المناسب لنوعها والمنشأة
+--
+CREATE OR REPLACE FUNCTION generate_token_and_card(p_type text, p_facility_id integer,
+                                                   OUT token text, OUT cardnumber text)
+AS $$
+DECLARE
+  license_number VARCHAR(30);
+BEGIN
+  SELECT "LicenseNumber" INTO license_number
+  FROM "OPC_Facility"
+  WHERE "FacilityID" = p_facility_id
+  LIMIT 1;
+
+  token := md5(random()::text || clock_timestamp()::text);
+  cardnumber := generate_card_number(p_type, license_number);
+END;
+$$ LANGUAGE plpgsql;
+
 -- Triggers
 
-CREATE OR REPLACE FUNCTION before_insert_operation_card()
+CREATE OR REPLACE FUNCTION before_insert_opc_card()
 RETURNS TRIGGER AS $$
 DECLARE
-  license_number VARCHAR(30);
+  details RECORD;
 BEGIN
-  SELECT "LicenseNumber" INTO license_number
-  FROM "OPC_Facility"
-  WHERE "FacilityID" = NEW."FacilityID"
-  LIMIT 1;
-  NEW."CardNumber" := generate_card_number('operation', license_number);
+  SELECT * INTO details FROM generate_token_and_card('operation', NEW."FacilityID");
+  NEW."token" := details.token;
+  NEW."CardNumber" := details.cardnumber;
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER before_insert_operation_card
+CREATE TRIGGER before_insert_opc_card
 BEFORE INSERT ON "OPC_Card"
-FOR EACH ROW EXECUTE FUNCTION before_insert_operation_card();
+FOR EACH ROW EXECUTE FUNCTION before_insert_opc_card();
 
-CREATE OR REPLACE FUNCTION before_insert_driver_card()
+CREATE OR REPLACE FUNCTION before_insert_opc_drivercard()
 RETURNS TRIGGER AS $$
 DECLARE
-  license_number VARCHAR(30);
+  details RECORD;
 BEGIN
-  SELECT "LicenseNumber" INTO license_number
-  FROM "OPC_Facility"
-  WHERE "FacilityID" = NEW."FacilityID"
-  LIMIT 1;
-  NEW."CardNumber" := generate_card_number('driver', license_number);
+  SELECT * INTO details FROM generate_token_and_card('driver', NEW."FacilityID");
+  NEW."token" := details.token;
+  NEW."CardNumber" := details.cardnumber;
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER before_insert_driver_card
+CREATE TRIGGER before_insert_opc_drivercard
 BEFORE INSERT ON "OPC_DriverCard"
-FOR EACH ROW EXECUTE FUNCTION before_insert_driver_card();
+FOR EACH ROW EXECUTE FUNCTION before_insert_opc_drivercard();
 
 CREATE OR REPLACE FUNCTION prevent_duplicate_active_driver_card()
 RETURNS TRIGGER AS $$
