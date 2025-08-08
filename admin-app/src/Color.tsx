@@ -8,30 +8,30 @@ import {
   TextInput,
 } from 'react-admin'
 
-export const SupplierList = () => (
+export const ColorList = () => (
   <List>
     <Datagrid rowClick="edit">
       <TextField source="id" />
-      <TextField source="name" />
+      <TextField source="ColorName" />
     </Datagrid>
   </List>
 )
 
-const SupplierForm = () => (
+const ColorForm = () => (
   <SimpleForm>
-    <TextInput source="name" />
+    <TextInput source="ColorName" />
   </SimpleForm>
 )
 
-export const SupplierCreate = () => (
+export const ColorCreate = () => (
   <Create>
-    <SupplierForm />
+    <ColorForm />
   </Create>
 )
 
-export const SupplierEdit = () => (
+export const ColorEdit = () => (
   <Edit>
-    <SupplierForm />
+    <ColorForm />
   </Edit>
 )
 
