@@ -102,13 +102,7 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
 
     const { data, error, count } = await query
     if (error) throw error
-    const pkField = pk.replace(/"/g, '')
-    const cleaned = (data ?? []).map((record: Record<string, unknown>) => {
-      const { [pkField]: _ignored, ...rest } = record
-      void _ignored
-      return rest
-    })
-    return { data: cleaned, total: count ?? 0 }
+    return { data: data ?? [], total: count ?? 0 }
   },
 
   /**
@@ -128,10 +122,7 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
       .single()
 
     if (error) throw error
-    const pkField = pk.replace(/"/g, '')
-    const { [pkField]: _ignored, ...rest } = data ?? {}
-    void _ignored
-    return { data: rest }
+    return { data }
   },
 
   /**
@@ -161,13 +152,7 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
 
     const { data, error } = await query
     if (error) throw error
-    const pkField = pk.replace(/"/g, '')
-    const cleaned = (data ?? []).map((record: Record<string, unknown>) => {
-      const { [pkField]: _ignored, ...rest } = record
-      void _ignored
-      return rest
-    })
-    return { data: cleaned }
+    return { data: data ?? [] }
   },
 
   /**
@@ -205,13 +190,7 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
 
     const { data, error, count } = await query
     if (error) throw error
-    const pkField = pk.replace(/"/g, '')
-    const cleaned = (data ?? []).map((record: Record<string, unknown>) => {
-      const { [pkField]: _ignored, ...rest } = record
-      void _ignored
-      return rest
-    })
-    return { data: cleaned, total: count ?? 0 }
+    return { data: data ?? [], total: count ?? 0 }
   },
 
   /**
@@ -245,20 +224,16 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    */
   async update(resource: string, params: UpdateParams) {
     const pk = getPrimaryKey(resource)
-    const pkField = pk.replace(/"/g, '')
-    const data = { ...params.data }
-    delete data.id
-    delete (data as Record<string, unknown>)[pkField]
-    const { data: updated, error } = await (client as any)
+    const { data, error } = await (client as any)
       .from(resource)
-      .update(data)
+      .update(params.data)
       .eq(pk, params.id)
       .select(`${pk}:id, *`)
       .single()
 
     if (error) throw error
-    await logAudit('update', resource, updated, params.id)
-    return { data: updated }
+    await logAudit('update', resource, data, params.id)
+    return { data }
   },
 
   /**
@@ -271,11 +246,7 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    */
   async updateMany(resource: string, params: UpdateManyParams) {
     const pk = getPrimaryKey(resource)
-    const pkField = pk.replace(/"/g, '')
-    const data = { ...params.data }
-    delete data.id
-    delete (data as Record<string, unknown>)[pkField]
-    let query = client.from(resource).update(data).in(pk, params.ids)
+    let query = client.from(resource).update(params.data).in(pk, params.ids)
 
     const filter = (params as { filter?: Record<string, unknown> }).filter ?? {}
     Object.entries(filter).forEach(([key, value]) => {
@@ -287,9 +258,9 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
       }
     })
 
-    const { data: updated, error } = await (query as any).select(`${pk}:id`)
+    const { data, error } = await (query as any).select(`${pk}:id`)
     if (error) throw error
-    const ids = (updated ?? []).map(
+    const ids = (data ?? []).map(
       (record: { id: string | number }) => record.id
     )
     return { data: ids }
