@@ -246,7 +246,7 @@ export const arabicMessages: TranslationMessages = {
         Status: 'الحالة',
       },
     },
-    OPC_LicenseType: {
+    OPC_LicenseType_view: {
       name: 'نوع الرخصة |||| أنواع الرخص',
       fields: {
         id: 'معرف النوع',

@@ -32,7 +32,7 @@ export const FacilityShow = () => (
       <TextField source="Name" />
       <TextField source="EnglishName" />
       <TextField source="LicenseNumber" />
-      <ReferenceField source="LicenseTypeID" reference="OPC_LicenseType">
+      <ReferenceField source="LicenseTypeID" reference="OPC_LicenseType_view">
         <TextField source="LicenseTypeNameAR" />
       </ReferenceField>
       <TextField source="LicenseCityID" />
@@ -48,7 +48,7 @@ export const FacilityForm = () => (
     <TextInput source="Name" />
     <TextInput source="EnglishName" />
     <TextInput source="LicenseNumber" />
-    <ReferenceInput source="LicenseTypeID" reference="OPC_LicenseType">
+    <ReferenceInput source="LicenseTypeID" reference="OPC_LicenseType_view">
       <SelectInput optionText="LicenseTypeNameAR" />
     </ReferenceInput>
     <TextInput source="LicenseCityID" />
