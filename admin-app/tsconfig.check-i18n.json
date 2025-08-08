@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.app.json",
+  "include": ["scripts/check-i18n.ts"],
+  "compilerOptions": {
+    "noEmit": true
+  }
+}
