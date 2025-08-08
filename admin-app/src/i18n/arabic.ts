@@ -261,15 +261,36 @@ export const arabicMessages: TranslationMessages = {
         name: 'الاسم',
       },
     },
+    OPC_Brand_view: {
+      name: 'علامة تجارية |||| علامات تجارية',
+      fields: {
+        id: 'المعرف',
+        BrandName: 'العلامة التجارية',
+      },
+    },
+    OPC_Model_view: {
+      name: 'طراز |||| طرازات',
+      fields: {
+        id: 'المعرف',
+        BrandID: 'العلامة التجارية',
+        ModelName: 'الطراز',
+      },
+    },
+    OPC_Color_view: {
+      name: 'لون |||| ألوان',
+      fields: {
+        id: 'المعرف',
+        ColorName: 'اللون',
+      },
+    },
     OPC_Vehicle_view: {
       name: 'مركبة |||| مركبات',
       fields: {
         id: 'المعرف',
         PlateNumber: 'رقم اللوحة',
         FacilityID: 'المنشأة',
-        Brand: 'العلامة التجارية',
-        Model: 'الطراز',
-        Color: 'اللون',
+        ModelID: 'الطراز',
+        ColorID: 'اللون',
         SerialNumber: 'الرقم التسلسلي',
         ManufacturingYear: 'سنة الصنع',
       },

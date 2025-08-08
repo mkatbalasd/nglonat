@@ -33,9 +33,12 @@ export const VehicleShow = () => (
       <ReferenceField source="FacilityID" reference="OPC_Facility_view">
         <TextField source="Name" />
       </ReferenceField>
-      <TextField source="Brand" />
-      <TextField source="Model" />
-      <TextField source="Color" />
+      <ReferenceField source="ModelID" reference="OPC_Model_view">
+        <TextField source="ModelName" />
+      </ReferenceField>
+      <ReferenceField source="ColorID" reference="OPC_Color_view">
+        <TextField source="ColorName" />
+      </ReferenceField>
       <TextField source="PlateNumber" />
       <TextField source="SerialNumber" />
       <TextField source="ManufacturingYear" />
@@ -48,9 +51,12 @@ export const VehicleForm = () => (
     <ReferenceInput source="FacilityID" reference="OPC_Facility_view">
       <SelectInput optionText="Name" />
     </ReferenceInput>
-    <TextInput source="Brand" />
-    <TextInput source="Model" />
-    <TextInput source="Color" />
+    <ReferenceInput source="ModelID" reference="OPC_Model_view">
+      <SelectInput optionText="ModelName" />
+    </ReferenceInput>
+    <ReferenceInput source="ColorID" reference="OPC_Color_view">
+      <SelectInput optionText="ColorName" />
+    </ReferenceInput>
     <TextInput source="PlateNumber" />
     <TextInput source="SerialNumber" />
     <NumberInput source="ManufacturingYear" />
