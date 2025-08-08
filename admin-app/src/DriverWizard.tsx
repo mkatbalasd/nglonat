@@ -226,7 +226,7 @@ const DriverWizard = () => {
           <ReferenceInput source="LicenseTypeID" reference="OPC_LicenseType_view">
             <SelectInput optionText="LicenseTypeNameAR" />
           </ReferenceInput>
-          <ReferenceInput source="SupplierID" reference="OPC_Supplier">
+          <ReferenceInput source="SupplierID" reference="Supplier">
             <SelectInput optionText="name" />
           </ReferenceInput>
           <DateInput source="IssueDate" label="تاريخ الإصدار" />
@@ -252,7 +252,7 @@ const DriverWizard = () => {
           {operationCard.issue && (
             <>
               <TextInput source="CardNumber" label="رقم بطاقة التشغيل" fullWidth />
-              <ReferenceInput source="SupplierID" reference="OPC_Supplier">
+              <ReferenceInput source="SupplierID" reference="Supplier">
                 <SelectInput optionText="name" />
               </ReferenceInput>
               <DateInput source="IssueDate" label="تاريخ الإصدار" />

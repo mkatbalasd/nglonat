@@ -137,7 +137,7 @@ const App = () => {
         edit={ColorEdit}
       />
       <Resource
-        name="OPC_Supplier"
+        name="Supplier"
         list={SupplierList}
         create={SupplierCreate}
         edit={SupplierEdit}
