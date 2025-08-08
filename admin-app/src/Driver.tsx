@@ -30,7 +30,7 @@ const DriverListActions = () => {
 export const DriverList = () => (
   <List actions={<DriverListActions />}>
     <Datagrid rowClick="show">
-      <TextField source="DriverID" />
+      <TextField source="id" />
       <TextField source="FirstName" />
       <TextField source="LastName" />
       <ReferenceField source="FacilityID" reference="OPC_Facility">
@@ -43,7 +43,7 @@ export const DriverList = () => (
 export const DriverShow = () => (
   <Show>
     <SimpleShowLayout>
-      <TextField source="DriverID" />
+      <TextField source="id" />
       <TextField source="FirstName" />
       <TextField source="LastName" />
       <TextField source="IdentityNumber" />

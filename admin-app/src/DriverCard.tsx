@@ -17,7 +17,7 @@ import {
 export const DriverCardList = () => (
   <List>
     <Datagrid rowClick="show">
-      <TextField source="ID" />
+      <TextField source="id" />
       <ReferenceField source="DriverID" reference="OPC_Driver">
         <TextField source="FirstName" />
       </ReferenceField>
@@ -36,7 +36,7 @@ export const DriverCardList = () => (
 export const DriverCardShow = () => (
   <Show>
     <SimpleShowLayout>
-      <TextField source="ID" />
+      <TextField source="id" />
       <TextField source="CardNumber" />
       <ReferenceField source="DriverID" reference="OPC_Driver">
         <TextField source="FirstName" />

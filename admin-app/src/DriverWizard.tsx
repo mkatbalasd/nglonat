@@ -19,7 +19,7 @@ const DriverWizard = () => {
 
   const [facility, setFacility] = useState({ IdentityNumber: '', Name: '' })
   interface FacilityRecord {
-    FacilityID: number
+    id: number
   }
   const [facilityRecord, setFacilityRecord] = useState<FacilityRecord | null>(null)
 
@@ -29,7 +29,7 @@ const DriverWizard = () => {
     IdentityNumber: '',
   })
   interface DriverRecord {
-    DriverID: number
+    id: number
   }
   const [driverRecord, setDriverRecord] = useState<DriverRecord | null>(null)
 
@@ -44,7 +44,7 @@ const DriverWizard = () => {
 
   const handleDriverNext = async () => {
     const { data } = await dataProvider.create('OPC_Driver', {
-      data: { ...driver, FacilityID: facilityRecord?.FacilityID },
+      data: { ...driver, FacilityID: facilityRecord?.id },
     })
     setDriverRecord(data)
     setActiveStep(2)
@@ -54,8 +54,8 @@ const DriverWizard = () => {
     await dataProvider.create('OPC_DriverCard', {
       data: {
         ...driverCard,
-        DriverID: driverRecord?.DriverID,
-        FacilityID: facilityRecord?.FacilityID,
+        DriverID: driverRecord?.id,
+        FacilityID: facilityRecord?.id,
       },
     })
     setActiveStep(3)
@@ -66,8 +66,8 @@ const DriverWizard = () => {
       await dataProvider.create('OPC_Card', {
         data: {
           CardNumber: operationCard.CardNumber,
-          DriverID: driverRecord?.DriverID,
-          FacilityID: facilityRecord?.FacilityID,
+          DriverID: driverRecord?.id,
+          FacilityID: facilityRecord?.id,
         },
       })
     }

@@ -17,7 +17,7 @@ import {
 export const FacilityList = () => (
   <List>
     <Datagrid rowClick="show">
-      <TextField source="FacilityID" />
+      <TextField source="id" />
       <TextField source="Name" />
       <TextField source="LicenseNumber" />
     </Datagrid>
@@ -27,7 +27,7 @@ export const FacilityList = () => (
 export const FacilityShow = () => (
   <Show>
     <SimpleShowLayout>
-      <TextField source="FacilityID" />
+      <TextField source="id" />
       <TextField source="IdentityNumber" />
       <TextField source="Name" />
       <TextField source="EnglishName" />

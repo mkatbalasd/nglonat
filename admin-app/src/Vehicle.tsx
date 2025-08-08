@@ -17,7 +17,7 @@ import {
 export const VehicleList = () => (
   <List>
     <Datagrid rowClick="show">
-      <TextField source="ID" />
+      <TextField source="id" />
       <TextField source="PlateNumber" />
       <ReferenceField source="FacilityID" reference="OPC_Facility">
         <TextField source="Name" />
@@ -29,7 +29,7 @@ export const VehicleList = () => (
 export const VehicleShow = () => (
   <Show>
     <SimpleShowLayout>
-      <TextField source="ID" />
+      <TextField source="id" />
       <ReferenceField source="FacilityID" reference="OPC_Facility">
         <TextField source="Name" />
       </ReferenceField>
