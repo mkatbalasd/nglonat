@@ -17,7 +17,7 @@ import {
 export const OperationCardList = () => (
   <List>
     <Datagrid rowClick="show">
-      <TextField source="ID" />
+      <TextField source="id" />
       <ReferenceField source="FacilityID" reference="OPC_Facility">
         <TextField source="Name" />
       </ReferenceField>
@@ -36,7 +36,7 @@ export const OperationCardList = () => (
 export const OperationCardShow = () => (
   <Show>
     <SimpleShowLayout>
-      <TextField source="ID" />
+      <TextField source="id" />
       <TextField source="CardNumber" />
       <ReferenceField source="FacilityID" reference="OPC_Facility">
         <TextField source="Name" />

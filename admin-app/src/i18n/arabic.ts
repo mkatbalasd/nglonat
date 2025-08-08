@@ -188,7 +188,7 @@ export const arabicMessages: TranslationMessages = {
     OPC_Facility: {
       name: 'منشأة |||| منشآت',
       fields: {
-        FacilityID: 'معرف المنشأة',
+        id: 'معرف المنشأة',
         IdentityNumber: 'رقم الهوية',
         Name: 'الاسم',
         EnglishName: 'الاسم بالإنجليزية',
@@ -203,7 +203,7 @@ export const arabicMessages: TranslationMessages = {
     OPC_Driver: {
       name: 'سائق |||| سائقون',
       fields: {
-        DriverID: 'معرف السائق',
+        id: 'معرف السائق',
         FirstName: 'الاسم الأول',
         LastName: 'اسم العائلة',
         IdentityNumber: 'رقم الهوية',
@@ -214,7 +214,7 @@ export const arabicMessages: TranslationMessages = {
     OPC_DriverCard: {
       name: 'بطاقة سائق |||| بطاقات السائقين',
       fields: {
-        ID: 'المعرف',
+        id: 'المعرف',
         DriverID: 'السائق',
         FacilityID: 'المنشأة',
         CardType: 'نوع البطاقة',
@@ -229,7 +229,7 @@ export const arabicMessages: TranslationMessages = {
     OPC_Card: {
       name: 'بطاقة تشغيل |||| بطاقات التشغيل',
       fields: {
-        ID: 'المعرف',
+        id: 'المعرف',
         CardNumber: 'رقم البطاقة',
         FacilityID: 'المنشأة',
         DriverID: 'السائق',
@@ -244,7 +244,7 @@ export const arabicMessages: TranslationMessages = {
     OPC_LicenseType: {
       name: 'نوع الرخصة |||| أنواع الرخص',
       fields: {
-        LicenseTypeID: 'معرف النوع',
+        id: 'معرف النوع',
         LicenseTypeNameAR: 'الاسم بالعربية',
         LicenseTypeNameEN: 'الاسم بالإنجليزية',
       },
@@ -259,7 +259,7 @@ export const arabicMessages: TranslationMessages = {
     OPC_Vehicle: {
       name: 'مركبة |||| مركبات',
       fields: {
-        ID: 'المعرف',
+        id: 'المعرف',
         PlateNumber: 'رقم اللوحة',
         FacilityID: 'المنشأة',
         Brand: 'العلامة التجارية',

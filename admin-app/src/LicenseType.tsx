@@ -13,7 +13,7 @@ import {
 export const LicenseTypeList = () => (
   <List>
     <Datagrid rowClick="show">
-      <TextField source="LicenseTypeID" />
+      <TextField source="id" />
       <TextField source="LicenseTypeNameAR" />
     </Datagrid>
   </List>
@@ -22,7 +22,7 @@ export const LicenseTypeList = () => (
 export const LicenseTypeShow = () => (
   <Show>
     <SimpleShowLayout>
-      <TextField source="LicenseTypeID" />
+      <TextField source="id" />
       <TextField source="LicenseTypeNameAR" />
       <TextField source="LicenseTypeNameEN" />
     </SimpleShowLayout>
