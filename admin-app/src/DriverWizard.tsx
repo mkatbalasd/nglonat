@@ -9,7 +9,14 @@ import {
   Checkbox,
   FormControlLabel,
 } from '@mui/material'
-import { useDataProvider } from 'react-admin'
+import {
+  useDataProvider,
+  Form,
+  TextInput,
+  ReferenceInput,
+  SelectInput,
+  DateInput,
+} from 'react-admin'
 
 const steps = ['المنشأة', 'السائق', 'بطاقة السائق', 'بطاقة التشغيل']
 
@@ -17,7 +24,11 @@ const DriverWizard = () => {
   const dataProvider = useDataProvider()
   const [activeStep, setActiveStep] = useState(0)
 
-  const [facility, setFacility] = useState({ IdentityNumber: '', Name: '' })
+  const [facility, setFacility] = useState({
+    IdentityNumber: '',
+    LicenseNumber: '',
+    Name: '',
+  })
   interface FacilityRecord {
     id: number
   }
@@ -33,45 +44,113 @@ const DriverWizard = () => {
   }
   const [driverRecord, setDriverRecord] = useState<DriverRecord | null>(null)
 
-  const [driverCard, setDriverCard] = useState({ CardNumber: '' })
-  const [operationCard, setOperationCard] = useState({ CardNumber: '', issue: false })
+  const [operationCard, setOperationCard] = useState({
+    issue: false,
+  })
+
+  const handleFacilitySearch = async () => {
+    try {
+      const filter: Record<string, string> = {}
+      if (facility.IdentityNumber)
+        filter.IdentityNumber = facility.IdentityNumber
+      if (facility.LicenseNumber)
+        filter.LicenseNumber = facility.LicenseNumber
+      const { data } = await dataProvider.getList('OPC_Facility', {
+        filter,
+        pagination: { page: 1, perPage: 1 },
+        sort: { field: 'id', order: 'ASC' },
+      })
+      if (data.length > 0) {
+        setFacilityRecord(data[0])
+        setFacility({
+          IdentityNumber: data[0].IdentityNumber || '',
+          LicenseNumber: data[0].LicenseNumber || '',
+          Name: data[0].Name || '',
+        })
+        setActiveStep(1)
+      } else {
+        window.alert('لم يتم العثور على منشأة')
+      }
+    } catch {
+      window.alert('فشل البحث عن المنشأة')
+    }
+  }
 
   const handleFacilityNext = async () => {
-    const { data } = await dataProvider.create('OPC_Facility', { data: facility })
-    setFacilityRecord(data)
-    setActiveStep(1)
+    try {
+      const { data } = await dataProvider.create('OPC_Facility', { data: facility })
+      setFacilityRecord(data)
+      setActiveStep(1)
+    } catch {
+      window.alert('فشل إنشاء المنشأة')
+    }
+  }
+
+  const handleDriverSearch = async () => {
+    try {
+      const { data } = await dataProvider.getList('OPC_Driver', {
+        filter: { IdentityNumber: driver.IdentityNumber },
+        pagination: { page: 1, perPage: 1 },
+        sort: { field: 'id', order: 'ASC' },
+      })
+      if (data.length > 0) {
+        setDriverRecord(data[0])
+        setDriver({
+          FirstName: data[0].FirstName || '',
+          LastName: data[0].LastName || '',
+          IdentityNumber: data[0].IdentityNumber || '',
+        })
+        setActiveStep(2)
+      } else {
+        window.alert('لم يتم العثور على سائق')
+      }
+    } catch {
+      window.alert('فشل البحث عن السائق')
+    }
   }
 
   const handleDriverNext = async () => {
-    const { data } = await dataProvider.create('OPC_Driver', {
-      data: { ...driver, FacilityID: facilityRecord?.id },
-    })
-    setDriverRecord(data)
-    setActiveStep(2)
+    try {
+      const { data } = await dataProvider.create('OPC_Driver', {
+        data: { ...driver, FacilityID: facilityRecord?.id },
+      })
+      setDriverRecord(data)
+      setActiveStep(2)
+    } catch {
+      window.alert('فشل إنشاء السائق')
+    }
   }
 
-  const handleDriverCardNext = async () => {
-    await dataProvider.create('OPC_DriverCard', {
-      data: {
-        ...driverCard,
-        DriverID: driverRecord?.id,
-        FacilityID: facilityRecord?.id,
-      },
-    })
-    setActiveStep(3)
-  }
-
-  const handleOperationCardFinish = async () => {
-    if (operationCard.issue) {
-      await dataProvider.create('OPC_Card', {
+  const handleDriverCardNext = async (values: Record<string, unknown>) => {
+    try {
+      await dataProvider.create('OPC_DriverCard', {
         data: {
-          CardNumber: operationCard.CardNumber,
+          ...values,
           DriverID: driverRecord?.id,
           FacilityID: facilityRecord?.id,
         },
       })
+      setActiveStep(3)
+    } catch {
+      window.alert('فشل إنشاء بطاقة السائق')
     }
-    setActiveStep(4)
+  }
+
+  const handleOperationCardFinish = async (values: Record<string, unknown>) => {
+    try {
+      if (operationCard.issue) {
+        await dataProvider.create('OPC_Card', {
+          data: {
+            ...values,
+            DriverID: driverRecord?.id,
+            FacilityID: facilityRecord?.id,
+          },
+        })
+      }
+      setActiveStep(4)
+    } catch {
+      window.alert('فشل إنشاء بطاقة التشغيل')
+    }
   }
 
   return (
@@ -93,14 +172,22 @@ const DriverWizard = () => {
             onChange={e => setFacility({ ...facility, IdentityNumber: e.target.value })}
           />
           <TextField
+            label="رقم الترخيص"
+            fullWidth
+            margin="normal"
+            value={facility.LicenseNumber}
+            onChange={e => setFacility({ ...facility, LicenseNumber: e.target.value })}
+          />
+          <TextField
             label="اسم المنشأة"
             fullWidth
             margin="normal"
             value={facility.Name}
             onChange={e => setFacility({ ...facility, Name: e.target.value })}
           />
-          <MuiButton variant="contained" onClick={handleFacilityNext}>
-            التالي
+          <MuiButton onClick={handleFacilitySearch}>بحث</MuiButton>
+          <MuiButton variant="contained" onClick={handleFacilityNext} sx={{ ml: 1 }}>
+            إنشاء
           </MuiButton>
         </Box>
       )}
@@ -127,27 +214,30 @@ const DriverWizard = () => {
             value={driver.IdentityNumber}
             onChange={e => setDriver({ ...driver, IdentityNumber: e.target.value })}
           />
-          <MuiButton variant="contained" onClick={handleDriverNext}>
-            التالي
+          <MuiButton onClick={handleDriverSearch}>بحث</MuiButton>
+          <MuiButton variant="contained" onClick={handleDriverNext} sx={{ ml: 1 }}>
+            إنشاء
           </MuiButton>
         </Box>
       )}
       {activeStep === 2 && (
-        <Box>
-          <TextField
-            label="رقم بطاقة السائق"
-            fullWidth
-            margin="normal"
-            value={driverCard.CardNumber}
-            onChange={e => setDriverCard({ ...driverCard, CardNumber: e.target.value })}
-          />
-          <MuiButton variant="contained" onClick={handleDriverCardNext}>
+        <Form onSubmit={handleDriverCardNext} defaultValues={{}}>
+          <TextInput source="CardNumber" label="رقم بطاقة السائق" fullWidth />
+          <ReferenceInput source="LicenseTypeID" reference="OPC_LicenseType">
+            <SelectInput optionText="LicenseTypeNameAR" />
+          </ReferenceInput>
+          <ReferenceInput source="SupplierID" reference="OPC_Supplier">
+            <SelectInput optionText="name" />
+          </ReferenceInput>
+          <DateInput source="IssueDate" label="تاريخ الإصدار" />
+          <DateInput source="ExpiryDate" label="تاريخ الانتهاء" />
+          <MuiButton type="submit" variant="contained">
             التالي
           </MuiButton>
-        </Box>
+        </Form>
       )}
       {activeStep === 3 && (
-        <Box>
+        <Form onSubmit={handleOperationCardFinish} defaultValues={{}}>
           <FormControlLabel
             control={
               <Checkbox
@@ -160,20 +250,19 @@ const DriverWizard = () => {
             label="إصدار بطاقة تشغيل"
           />
           {operationCard.issue && (
-            <TextField
-              label="رقم بطاقة التشغيل"
-              fullWidth
-              margin="normal"
-              value={operationCard.CardNumber}
-              onChange={e =>
-                setOperationCard({ ...operationCard, CardNumber: e.target.value })
-              }
-            />
+            <>
+              <TextInput source="CardNumber" label="رقم بطاقة التشغيل" fullWidth />
+              <ReferenceInput source="SupplierID" reference="OPC_Supplier">
+                <SelectInput optionText="name" />
+              </ReferenceInput>
+              <DateInput source="IssueDate" label="تاريخ الإصدار" />
+              <DateInput source="ExpiryDate" label="تاريخ الانتهاء" />
+            </>
           )}
-          <MuiButton variant="contained" onClick={handleOperationCardFinish}>
+          <MuiButton type="submit" variant="contained">
             إنهاء
           </MuiButton>
-        </Box>
+        </Form>
       )}
       {activeStep === 4 && <Box>تم إكمال المعالج</Box>}
     </Box>
