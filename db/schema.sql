@@ -34,6 +34,38 @@ CREATE TABLE IF NOT EXISTS "Supplier" (
   "name" VARCHAR(50) NOT NULL
 );
 
+-- Table OPC_Brand
+CREATE TABLE IF NOT EXISTS "OPC_Brand" (
+  "BrandID" SERIAL PRIMARY KEY,
+  "BrandName" VARCHAR(50) NOT NULL
+);
+
+-- View OPC_Brand_view to provide a generic id column
+CREATE OR REPLACE VIEW "OPC_Brand_view" AS
+SELECT "BrandID" AS id, * FROM "OPC_Brand";
+
+-- Table OPC_Model
+CREATE TABLE IF NOT EXISTS "OPC_Model" (
+  "ModelID" SERIAL PRIMARY KEY,
+  "BrandID" INTEGER NOT NULL,
+  "ModelName" VARCHAR(50) NOT NULL,
+  FOREIGN KEY ("BrandID") REFERENCES "OPC_Brand" ("BrandID")
+);
+
+-- View OPC_Model_view to provide a generic id column
+CREATE OR REPLACE VIEW "OPC_Model_view" AS
+SELECT "ModelID" AS id, * FROM "OPC_Model";
+
+-- Table OPC_Color
+CREATE TABLE IF NOT EXISTS "OPC_Color" (
+  "ColorID" SERIAL PRIMARY KEY,
+  "ColorName" VARCHAR(30) NOT NULL
+);
+
+-- View OPC_Color_view to provide a generic id column
+CREATE OR REPLACE VIEW "OPC_Color_view" AS
+SELECT "ColorID" AS id, * FROM "OPC_Color";
+
 -- Table OPC_Facility
 CREATE TABLE IF NOT EXISTS "OPC_Facility" (
   "FacilityID" SERIAL PRIMARY KEY,
@@ -71,13 +103,14 @@ SELECT "DriverID" AS id, * FROM "OPC_Driver";
 CREATE TABLE IF NOT EXISTS "OPC_Vehicle" (
   "ID" SERIAL PRIMARY KEY,
   "FacilityID" INTEGER,
-  "Brand" VARCHAR(50),
-  "Model" VARCHAR(50),
-  "Color" VARCHAR(30),
+  "ModelID" INTEGER,
+  "ColorID" INTEGER,
   "PlateNumber" VARCHAR(50),
   "SerialNumber" VARCHAR(30),
   "ManufacturingYear" INTEGER,
-  FOREIGN KEY ("FacilityID") REFERENCES "OPC_Facility" ("FacilityID")
+  FOREIGN KEY ("FacilityID") REFERENCES "OPC_Facility" ("FacilityID"),
+  FOREIGN KEY ("ModelID") REFERENCES "OPC_Model" ("ModelID"),
+  FOREIGN KEY ("ColorID") REFERENCES "OPC_Color" ("ColorID")
 );
 
 -- View OPC_Vehicle_view to provide a generic id column
@@ -267,4 +300,7 @@ CREATE INDEX IF NOT EXISTS idx_opc_drivercard_supplier ON "OPC_DriverCard" ("Sup
 CREATE INDEX IF NOT EXISTS idx_opc_facility_licensetype ON "OPC_Facility" ("LicenseTypeID");
 CREATE INDEX IF NOT EXISTS idx_opc_facility_licensecity ON "OPC_Facility" ("LicenseCityID");
 
+CREATE INDEX IF NOT EXISTS idx_opc_model_brand ON "OPC_Model" ("BrandID");
 CREATE INDEX IF NOT EXISTS idx_opc_vehicle_facility ON "OPC_Vehicle" ("FacilityID");
+CREATE INDEX IF NOT EXISTS idx_opc_vehicle_model ON "OPC_Vehicle" ("ModelID");
+CREATE INDEX IF NOT EXISTS idx_opc_vehicle_color ON "OPC_Vehicle" ("ColorID");
