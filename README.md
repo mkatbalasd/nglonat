@@ -18,8 +18,9 @@
    - عرِّف متغيّرات البيئة مثل `SUPABASE_ANON_KEY` و`SUPABASE_SERVICE_ROLE_KEY` واسم قاعدة البيانات قبل تشغيل الحاويات.
 
 2. **تهيئة متغيّرات البيئة للتطبيق**
-   - انسخ ملف `.env.example` إلى `.env`.
-   - حدّد `VITE_SUPABASE_URL` و`VITE_SUPABASE_ANON_KEY` وأي مفاتيح أخرى يحتاجها التطبيق.
+   - انسخ ملف `.env.example` داخل `admin-app` إلى `.env`.
+   - انسخ القيم `SUPABASE_PUBLIC_URL` و`ANON_KEY` من ملف Supabase `.env` إلى `VITE_SUPABASE_URL` و`VITE_SUPABASE_ANON_KEY`.
+   - لمزيد من التفاصيل، راجع [دليل إعداد وتشغيل البيئة](docs/environment_setup.md).
 
 3. **بناء التطبيق ورفع مجلد الإنتاج**
    - ثبّت الحزم ثم نفّذ `npm run build`.
