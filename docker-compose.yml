@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   admin:
+    # تأكد من تنفيذ `npm run build` في مجلد admin-app قبل نشر هذه الحاوية
     build:
       context: ./admin-app
       dockerfile: Dockerfile

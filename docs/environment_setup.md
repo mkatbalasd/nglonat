@@ -10,10 +10,11 @@
    npm install
    ```
 3. **إعداد متغيرات البيئة**
-   - أنشئ ملفًا باسم `.env` داخل مجلد `admin-app` يتضمن القيم التالية:
+   - افتح ملف `.env` الخاص بمشروع Supabase واستخرج القيمتين `SUPABASE_PUBLIC_URL` و`ANON_KEY`.
+   - أنشئ ملفًا باسم `.env` داخل مجلد `admin-app` ثم انسخ القيم على النحو الآتي:
      ```
-     VITE_SUPABASE_URL=رابط-مشروع-supabase
-     VITE_SUPABASE_ANON_KEY=المفتاح-العام
+     VITE_SUPABASE_URL=<قيمة SUPABASE_PUBLIC_URL>
+     VITE_SUPABASE_ANON_KEY=<قيمة ANON_KEY>
      ```
 4. **التشغيل محليًا**
    ```bash
