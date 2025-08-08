@@ -1,3 +1,8 @@
+/**
+ * المصدر: https://github.com/marmelab/react-admin/tree/v5.10.1/packages/ra-language-english
+ * الإصدار المستهدف من React Admin: 5.10.1
+ */
+
 import type { TranslationMessages } from 'ra-core'
 
 export const arabicMessages: TranslationMessages = {
