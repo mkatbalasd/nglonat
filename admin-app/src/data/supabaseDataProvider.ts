@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type {
   DataProvider,
   GetListParams,
@@ -25,7 +26,7 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
     OPC_Driver: 'DriverID',
     OPC_DriverCard: 'ID',
     OPC_Card: 'ID',
-    OPC_LicenseType: 'LicenseTypeID',
+    OPC_LicenseType_view: 'id',
     Supplier: 'id',
     OPC_Vehicle: 'ID',
     AuditLog: 'id',
