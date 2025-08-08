@@ -42,10 +42,12 @@ import {
 } from './LicenseType'
 import {
   SupplierList,
-  SupplierShow,
   SupplierCreate,
   SupplierEdit,
 } from './Supplier'
+import { BrandList, BrandCreate, BrandEdit } from './Brand'
+import { ModelList, ModelCreate, ModelEdit } from './Model'
+import { ColorList, ColorCreate, ColorEdit } from './Color'
 import {
   VehicleList,
   VehicleShow,
@@ -117,9 +119,26 @@ const App = () => {
         edit={LicenseTypeEdit}
       />
       <Resource
-        name="Supplier"
+        name="OPC_Brand"
+        list={BrandList}
+        create={BrandCreate}
+        edit={BrandEdit}
+      />
+      <Resource
+        name="OPC_Model"
+        list={ModelList}
+        create={ModelCreate}
+        edit={ModelEdit}
+      />
+      <Resource
+        name="OPC_Color"
+        list={ColorList}
+        create={ColorCreate}
+        edit={ColorEdit}
+      />
+      <Resource
+        name="OPC_Supplier"
         list={SupplierList}
-        show={SupplierShow}
         create={SupplierCreate}
         edit={SupplierEdit}
       />
