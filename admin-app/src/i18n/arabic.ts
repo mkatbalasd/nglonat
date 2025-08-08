@@ -190,7 +190,7 @@ export const arabicMessages: TranslationMessages = {
     },
   },
   resources: {
-    OPC_Facility: {
+    OPC_Facility_view: {
       name: 'منشأة |||| منشآت',
       fields: {
         id: 'معرف المنشأة',
@@ -205,7 +205,7 @@ export const arabicMessages: TranslationMessages = {
         LicenseExpirationDate: 'تاريخ الانتهاء',
       },
     },
-    OPC_Driver: {
+    OPC_Driver_view: {
       name: 'سائق |||| سائقون',
       fields: {
         id: 'معرف السائق',
@@ -216,7 +216,7 @@ export const arabicMessages: TranslationMessages = {
         Name: 'اسم المنشأة',
       },
     },
-    OPC_DriverCard: {
+    OPC_DriverCard_view: {
       name: 'بطاقة سائق |||| بطاقات السائقين',
       fields: {
         id: 'المعرف',
@@ -231,7 +231,7 @@ export const arabicMessages: TranslationMessages = {
         Category: 'الفئة',
       },
     },
-    OPC_Card: {
+    OPC_Card_view: {
       name: 'بطاقة تشغيل |||| بطاقات التشغيل',
       fields: {
         id: 'المعرف',
@@ -261,7 +261,7 @@ export const arabicMessages: TranslationMessages = {
         name: 'الاسم',
       },
     },
-    OPC_Vehicle: {
+    OPC_Vehicle_view: {
       name: 'مركبة |||| مركبات',
       fields: {
         id: 'المعرف',

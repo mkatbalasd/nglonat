@@ -33,7 +33,7 @@ export const DriverList = () => (
       <TextField source="id" />
       <TextField source="FirstName" />
       <TextField source="LastName" />
-      <ReferenceField source="FacilityID" reference="OPC_Facility">
+      <ReferenceField source="FacilityID" reference="OPC_Facility_view">
         <TextField source="Name" />
       </ReferenceField>
     </Datagrid>
@@ -47,7 +47,7 @@ export const DriverShow = () => (
       <TextField source="FirstName" />
       <TextField source="LastName" />
       <TextField source="IdentityNumber" />
-      <ReferenceField source="FacilityID" reference="OPC_Facility">
+      <ReferenceField source="FacilityID" reference="OPC_Facility_view">
         <TextField source="Name" />
       </ReferenceField>
     </SimpleShowLayout>
@@ -56,7 +56,7 @@ export const DriverShow = () => (
 
 export const DriverForm = () => (
   <SimpleForm>
-    <ReferenceInput source="FacilityID" reference="OPC_Facility">
+    <ReferenceInput source="FacilityID" reference="OPC_Facility_view">
       <SelectInput optionText="Name" />
     </ReferenceInput>
     <TextInput source="FirstName" />

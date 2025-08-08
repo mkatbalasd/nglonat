@@ -49,6 +49,10 @@ CREATE TABLE IF NOT EXISTS "OPC_Facility" (
   FOREIGN KEY ("LicenseCityID") REFERENCES "City" ("CityID")
 );
 
+-- View OPC_Facility_view to provide a generic id column
+CREATE OR REPLACE VIEW "OPC_Facility_view" AS
+SELECT "FacilityID" AS id, * FROM "OPC_Facility";
+
 -- Table OPC_Driver
 CREATE TABLE IF NOT EXISTS "OPC_Driver" (
   "DriverID" SERIAL PRIMARY KEY,
@@ -58,6 +62,10 @@ CREATE TABLE IF NOT EXISTS "OPC_Driver" (
   "IdentityNumber" VARCHAR(30),
   FOREIGN KEY ("FacilityID") REFERENCES "OPC_Facility" ("FacilityID")
 );
+
+-- View OPC_Driver_view to provide a generic id column
+CREATE OR REPLACE VIEW "OPC_Driver_view" AS
+SELECT "DriverID" AS id, * FROM "OPC_Driver";
 
 -- Table OPC_Vehicle
 CREATE TABLE IF NOT EXISTS "OPC_Vehicle" (
@@ -71,6 +79,10 @@ CREATE TABLE IF NOT EXISTS "OPC_Vehicle" (
   "ManufacturingYear" INTEGER,
   FOREIGN KEY ("FacilityID") REFERENCES "OPC_Facility" ("FacilityID")
 );
+
+-- View OPC_Vehicle_view to provide a generic id column
+CREATE OR REPLACE VIEW "OPC_Vehicle_view" AS
+SELECT "ID" AS id, * FROM "OPC_Vehicle";
 
 -- Table OPC_Card
 CREATE TABLE IF NOT EXISTS "OPC_Card" (
@@ -95,6 +107,10 @@ CREATE TABLE IF NOT EXISTS "OPC_Card" (
   FOREIGN KEY ("Supplier") REFERENCES "Supplier" ("id")
 );
 
+-- View OPC_Card_view to provide a generic id column
+CREATE OR REPLACE VIEW "OPC_Card_view" AS
+SELECT "ID" AS id, * FROM "OPC_Card";
+
 -- Table OPC_DriverCard
 CREATE TABLE IF NOT EXISTS "OPC_DriverCard" (
   "ID" SERIAL PRIMARY KEY,
@@ -117,6 +133,10 @@ CREATE TABLE IF NOT EXISTS "OPC_DriverCard" (
   FOREIGN KEY ("DriverID") REFERENCES "OPC_Driver" ("DriverID"),
   FOREIGN KEY ("Supplier") REFERENCES "Supplier" ("id")
 );
+
+-- View OPC_DriverCard_view to provide a generic id column
+CREATE OR REPLACE VIEW "OPC_DriverCard_view" AS
+SELECT "ID" AS id, * FROM "OPC_DriverCard";
 
 -- Table Users
 CREATE TABLE IF NOT EXISTS "Users" (

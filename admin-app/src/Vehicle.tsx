@@ -19,7 +19,7 @@ export const VehicleList = () => (
     <Datagrid rowClick="show">
       <TextField source="id" />
       <TextField source="PlateNumber" />
-      <ReferenceField source="FacilityID" reference="OPC_Facility">
+      <ReferenceField source="FacilityID" reference="OPC_Facility_view">
         <TextField source="Name" />
       </ReferenceField>
     </Datagrid>
@@ -30,7 +30,7 @@ export const VehicleShow = () => (
   <Show>
     <SimpleShowLayout>
       <TextField source="id" />
-      <ReferenceField source="FacilityID" reference="OPC_Facility">
+      <ReferenceField source="FacilityID" reference="OPC_Facility_view">
         <TextField source="Name" />
       </ReferenceField>
       <TextField source="Brand" />
@@ -45,7 +45,7 @@ export const VehicleShow = () => (
 
 export const VehicleForm = () => (
   <SimpleForm>
-    <ReferenceInput source="FacilityID" reference="OPC_Facility">
+    <ReferenceInput source="FacilityID" reference="OPC_Facility_view">
       <SelectInput optionText="Name" />
     </ReferenceInput>
     <TextInput source="Brand" />

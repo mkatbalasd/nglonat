@@ -22,14 +22,13 @@ import { supabase } from '../supabaseClient'
  */
 const supabaseDataProvider = (client = supabase): DataProvider => {
   const primaryKeys: Record<string, string> = {
-    OPC_Facility: 'FacilityID',
-    OPC_Driver: 'DriverID',
-    OPC_DriverCard: 'ID',
-    OPC_Card: 'ID',
-    OPC_LicenseType: '"LicenseTypeID"',
+    OPC_Facility_view: 'id',
+    OPC_Driver_view: 'id',
+    OPC_DriverCard_view: 'id',
+    OPC_Card_view: 'id',
     OPC_LicenseType_view: 'id',
     Supplier: 'id',
-    OPC_Vehicle: 'ID',
+    OPC_Vehicle_view: 'id',
     AuditLog: 'id',
   }
 
