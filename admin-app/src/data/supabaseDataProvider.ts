@@ -106,9 +106,12 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
     }
     const pkField = pk.replace(/"/g, '')
     const cleaned = (data ?? []).map((record: Record<string, unknown>) => {
-      const { [pkField]: _ignored, ...rest } = record
-      void _ignored
-      return rest
+      if (pkField !== 'id') {
+        const { [pkField]: _ignored, ...rest } = record
+        void _ignored
+        return rest
+      }
+      return record
     })
     return { data: cleaned, total: count ?? 0 }
   },
@@ -133,9 +136,12 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
       throw error
     }
     const pkField = pk.replace(/"/g, '')
-    const { [pkField]: _ignored, ...rest } = data ?? {}
-    void _ignored
-    return { data: rest }
+    if (pkField !== 'id') {
+      const { [pkField]: _ignored, ...rest } = data ?? {}
+      void _ignored
+      return { data: rest }
+    }
+    return { data }
   },
 
   /**
@@ -170,9 +176,12 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
     }
     const pkField = pk.replace(/"/g, '')
     const cleaned = (data ?? []).map((record: Record<string, unknown>) => {
-      const { [pkField]: _ignored, ...rest } = record
-      void _ignored
-      return rest
+      if (pkField !== 'id') {
+        const { [pkField]: _ignored, ...rest } = record
+        void _ignored
+        return rest
+      }
+      return record
     })
     return { data: cleaned }
   },
@@ -218,9 +227,12 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
     }
     const pkField = pk.replace(/"/g, '')
     const cleaned = (data ?? []).map((record: Record<string, unknown>) => {
-      const { [pkField]: _ignored, ...rest } = record
-      void _ignored
-      return rest
+      if (pkField !== 'id') {
+        const { [pkField]: _ignored, ...rest } = record
+        void _ignored
+        return rest
+      }
+      return record
     })
     return { data: cleaned, total: count ?? 0 }
   },
@@ -258,7 +270,7 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    */
   async update(resource: string, params: UpdateParams) {
     const pk = getPrimaryKey(resource)
-    const { data, error } = await (client as any)
+    const { data: updated, error } = await (client as any)
       .from(resource)
       .update(params.data)
       .eq(pk, params.id)
