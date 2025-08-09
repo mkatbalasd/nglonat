@@ -35,7 +35,9 @@ export const FacilityShow = () => (
       <ReferenceField source="LicenseTypeID" reference="OPC_LicenseType_view">
         <TextField source="LicenseTypeNameAR" />
       </ReferenceField>
-      <TextField source="LicenseCityID" />
+      <ReferenceField source="LicenseCityID" reference="City">
+        <TextField source="NameAr" />
+      </ReferenceField>
       <TextField source="LicenseIssueDate" />
       <TextField source="LicenseExpirationDate" />
     </SimpleShowLayout>
@@ -51,7 +53,9 @@ export const FacilityForm = () => (
     <ReferenceInput source="LicenseTypeID" reference="OPC_LicenseType_view">
       <SelectInput optionText="LicenseTypeNameAR" />
     </ReferenceInput>
-    <TextInput source="LicenseCityID" />
+    <ReferenceInput source="LicenseCityID" reference="City">
+      <SelectInput optionText="NameAr" />
+    </ReferenceInput>
     <DateInput source="LicenseIssueDate" />
     <DateInput source="LicenseExpirationDate" />
   </SimpleForm>
