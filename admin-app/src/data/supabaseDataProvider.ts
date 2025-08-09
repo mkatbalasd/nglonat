@@ -32,6 +32,7 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
     OPC_Color: '"ColorID"',
     Supplier: '"id"',
     City: '"CityID"',
+    City_view: 'id',
     OPC_Vehicle: '"ID"',
     AuditLog: '"id"',
     OPC_Facility_view: 'id',

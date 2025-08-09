@@ -143,7 +143,7 @@ const App = () => {
         create={SupplierCreate}
         edit={SupplierEdit}
       />
-      <Resource name="City" list={CityList} create={CityCreate} edit={CityEdit} />
+      <Resource name="City_view" list={CityList} create={CityCreate} edit={CityEdit} />
       <Resource
         name="OPC_Vehicle_view"
         list={VehicleList}

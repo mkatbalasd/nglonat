@@ -14,6 +14,13 @@ CREATE TABLE IF NOT EXISTS "City" (
   "NameEn" VARCHAR(100) NOT NULL
 );
 
+-- View City_view to provide a generic id column
+CREATE OR REPLACE VIEW "City_view" AS
+SELECT "CityID" AS id,
+       "NameAr",
+       "NameEn"
+FROM "City";
+
 -- Table OPC_LicenseType
 CREATE TABLE IF NOT EXISTS "OPC_LicenseType" (
   "LicenseTypeID" SERIAL PRIMARY KEY,
