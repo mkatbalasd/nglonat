@@ -21,32 +21,6 @@ import { supabase } from '../supabaseClient'
  * @returns كائن {@link DataProvider} متوافق مع React-Admin.
  */
 const supabaseDataProvider = (client = supabase): DataProvider => {
-  const primaryKeys: Record<string, string> = {
-    OPC_Facility: '"FacilityID"',
-    OPC_Driver: '"DriverID"',
-    OPC_DriverCard: '"ID"',
-    OPC_Card: '"ID"',
-    OPC_LicenseType: '"LicenseTypeID"',
-    OPC_Brand: '"BrandID"',
-    OPC_Model: '"ModelID"',
-    OPC_Color: '"ColorID"',
-    Supplier: '"id"',
-    City: '"CityID"',
-    City_view: 'id',
-    OPC_Vehicle: '"ID"',
-    AuditLog: '"id"',
-    OPC_Facility_view: 'id',
-    OPC_Driver_view: 'id',
-    OPC_DriverCard_view: 'id',
-    OPC_Card_view: 'id',
-    OPC_LicenseType_view: 'id',
-    OPC_Vehicle_view: 'id',
-  }
-
-  const getPrimaryKey = (resource: string) => {
-    const key = primaryKeys[resource] ?? 'id'
-    return key.startsWith('"') ? key : `"${key}"`
-  }
   /**
    * يسجل العملية في جدول AuditLog مع تجاهل أي أخطاء قد تحدث أثناء التسجيل.
    */
@@ -78,26 +52,22 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    * @throws يظهر خطأ من Supabase عند فشل التنفيذ.
    */
   async getList(resource: string, params: GetListParams) {
-    const pk = getPrimaryKey(resource)
     const { page, perPage } = params.pagination ?? { page: 1, perPage: 10 }
     const { field, order } = params.sort ?? { field: 'id', order: 'ASC' }
     const from = (page - 1) * perPage
     const to = from + perPage - 1
 
-    const sortField = field === 'id' ? pk : field
-
     let query = (client as any)
       .from(resource)
-      .select(`${pk}:id, *`, { count: 'exact' })
-      .order(sortField, { ascending: order === 'ASC' })
+      .select('*', { count: 'exact' })
+      .order(field, { ascending: order === 'ASC' })
       .range(from, to)
 
     Object.entries(params.filter ?? {}).forEach(([key, value]) => {
-      const filterKey = key === 'id' ? pk : key
       if (Array.isArray(value)) {
-        query = query.in(filterKey, value)
+        query = query.in(key, value)
       } else {
-        query = query.eq(filterKey, value as string | number | boolean | null)
+        query = query.eq(key, value as string | number | boolean | null)
       }
     })
 
@@ -106,16 +76,7 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
       console.error(`Supabase error in ${resource}/getList`, error)
       throw error
     }
-    const pkField = pk.replace(/"/g, '')
-    const cleaned = (data ?? []).map((record: Record<string, unknown>) => {
-      if (pkField !== 'id') {
-        const { [pkField]: _ignored, ...rest } = record
-        void _ignored
-        return rest
-      }
-      return record
-    })
-    return { data: cleaned, total: count ?? 0 }
+    return { data: data ?? [], total: count ?? 0 }
   },
 
   /**
@@ -127,21 +88,14 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    * @throws يظهر خطأ من Supabase عند فشل التنفيذ.
    */
   async getOne(resource: string, params: GetOneParams) {
-    const pk = getPrimaryKey(resource)
     const { data, error } = await (client as any)
       .from(resource)
-      .select(`${pk}:id, *`)
-      .eq(pk, params.id)
+      .select('*')
+      .eq('id', params.id)
       .single()
     if (error) {
       console.error(`Supabase error in ${resource}/getOne`, error)
       throw error
-    }
-    const pkField = pk.replace(/"/g, '')
-    if (pkField !== 'id') {
-      const { [pkField]: _ignored, ...rest } = data ?? {}
-      void _ignored
-      return { data: rest }
     }
     return { data }
   },
@@ -155,19 +109,17 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    * @throws يظهر خطأ من Supabase عند فشل التنفيذ.
    */
   async getMany(resource: string, params: GetManyParams) {
-    const pk = getPrimaryKey(resource)
     let query = (client as any)
       .from(resource)
-      .select(`${pk}:id, *`)
-      .in(pk, params.ids)
+      .select('*')
+      .in('id', params.ids)
 
     const filter = (params as { filter?: Record<string, unknown> }).filter ?? {}
     Object.entries(filter).forEach(([key, value]) => {
-      const filterKey = key === 'id' ? pk : key
       if (Array.isArray(value)) {
-        query = query.in(filterKey, value)
+        query = query.in(key, value)
       } else {
-        query = query.eq(filterKey, value as string | number | boolean | null)
+        query = query.eq(key, value as string | number | boolean | null)
       }
     })
 
@@ -176,16 +128,7 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
       console.error(`Supabase error in ${resource}/getMany`, error)
       throw error
     }
-    const pkField = pk.replace(/"/g, '')
-    const cleaned = (data ?? []).map((record: Record<string, unknown>) => {
-      if (pkField !== 'id') {
-        const { [pkField]: _ignored, ...rest } = record
-        void _ignored
-        return rest
-      }
-      return record
-    })
-    return { data: cleaned }
+    return { data: data ?? [] }
   },
 
   /**
@@ -197,27 +140,23 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    * @throws يظهر خطأ من Supabase عند فشل التنفيذ.
    */
   async getManyReference(resource: string, params: GetManyReferenceParams) {
-    const pk = getPrimaryKey(resource)
     const { page, perPage } = params.pagination ?? { page: 1, perPage: 10 }
     const { field, order } = params.sort ?? { field: 'id', order: 'ASC' }
     const from = (page - 1) * perPage
     const to = from + perPage - 1
 
-    const sortField = field === 'id' ? pk : field
-
     let query = (client as any)
       .from(resource)
-      .select(`${pk}:id, *`, { count: 'exact' })
-      .order(sortField, { ascending: order === 'ASC' })
+      .select('*', { count: 'exact' })
+      .order(field, { ascending: order === 'ASC' })
       .range(from, to)
-      .eq(params.target === 'id' ? pk : params.target, params.id)
+      .eq(params.target, params.id)
 
     Object.entries(params.filter ?? {}).forEach(([key, value]) => {
-      const filterKey = key === 'id' ? pk : key
       if (Array.isArray(value)) {
-        query = query.in(filterKey, value)
+        query = query.in(key, value)
       } else {
-        query = query.eq(filterKey, value as string | number | boolean | null)
+        query = query.eq(key, value as string | number | boolean | null)
       }
     })
 
@@ -227,16 +166,7 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
       console.error(`Supabase error in ${resource}/getManyReference`, error)
       throw error
     }
-    const pkField = pk.replace(/"/g, '')
-    const cleaned = (data ?? []).map((record: Record<string, unknown>) => {
-      if (pkField !== 'id') {
-        const { [pkField]: _ignored, ...rest } = record
-        void _ignored
-        return rest
-      }
-      return record
-    })
-    return { data: cleaned, total: count ?? 0 }
+    return { data: data ?? [], total: count ?? 0 }
   },
 
   /**
@@ -248,11 +178,10 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    * @throws يظهر خطأ من Supabase عند فشل التنفيذ.
    */
   async create(resource: string, params: CreateParams) {
-    const pk = getPrimaryKey(resource)
     const { data, error } = await (client as any)
       .from(resource)
       .insert(params.data)
-      .select(`${pk}:id, *`)
+      .select('*')
       .single()
     if (error) {
       console.error(`Supabase error in ${resource}/create`, error)
@@ -271,17 +200,11 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    * @throws يظهر خطأ من Supabase عند فشل التنفيذ.
   */
   async update(resource: string, params: UpdateParams) {
-    const pk = getPrimaryKey(resource)
-    const pkField = pk.replace(/"/g, '')
-    const data = { ...params.data }
-    delete data.id
-    delete data[pkField]
-    // نستخدم alias باسم "updated" لتوضيح البيانات المُحدَّثة
     const { data: updated, error } = await (client as any)
       .from(resource)
-      .update(data)
-      .eq(pk, params.id)
-      .select(`${pk}:id, *`)
+      .update(params.data)
+      .eq('id', params.id)
+      .select('*')
       .single()
 
     if (error) {
@@ -301,24 +224,18 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    * @throws يظهر خطأ من Supabase عند فشل التنفيذ.
    */
   async updateMany(resource: string, params: UpdateManyParams) {
-    const pk = getPrimaryKey(resource)
-    const pkField = pk.replace(/"/g, '')
-    const data = { ...params.data }
-    delete data.id
-    delete data[pkField]
-    let query = client.from(resource).update(data).in(pk, params.ids)
+    let query = client.from(resource).update(params.data).in('id', params.ids)
 
     const filter = (params as { filter?: Record<string, unknown> }).filter ?? {}
     Object.entries(filter).forEach(([key, value]) => {
-      const filterKey = key === 'id' ? pk : key
       if (Array.isArray(value)) {
-        query = query.in(filterKey, value)
+        query = query.in(key, value)
       } else {
-        query = query.eq(filterKey, value as string | number | boolean | null)
+        query = query.eq(key, value as string | number | boolean | null)
       }
     })
 
-    const { data: updated, error } = await (query as any).select(`${pk}:id`)
+    const { data: updated, error } = await (query as any).select('id')
     if (error) {
       console.error(`Supabase error in ${resource}/updateMany`, error)
       throw error
@@ -338,12 +255,11 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    * @throws يظهر خطأ من Supabase عند فشل التنفيذ.
    */
   async delete(resource: string, params: DeleteParams) {
-    const pk = getPrimaryKey(resource)
     const { data, error } = await (client as any)
       .from(resource)
       .delete()
-      .eq(pk, params.id)
-      .select(`${pk}:id, *`)
+      .eq('id', params.id)
+      .select('*')
       .single()
     if (error) {
       console.error(`Supabase error in ${resource}/delete`, error)
@@ -362,20 +278,18 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    * @throws يظهر خطأ من Supabase عند فشل التنفيذ.
    */
   async deleteMany(resource: string, params: DeleteManyParams) {
-    const pk = getPrimaryKey(resource)
-    let query = client.from(resource).delete().in(pk, params.ids)
+    let query = client.from(resource).delete().in('id', params.ids)
 
     const filter = (params as { filter?: Record<string, unknown> }).filter ?? {}
     Object.entries(filter).forEach(([key, value]) => {
-      const filterKey = key === 'id' ? pk : key
       if (Array.isArray(value)) {
-        query = query.in(filterKey, value)
+        query = query.in(key, value)
       } else {
-        query = query.eq(filterKey, value as string | number | boolean | null)
+        query = query.eq(key, value as string | number | boolean | null)
       }
     })
 
-    const { data, error } = await (query as any).select(`${pk}:id`)
+    const { data, error } = await (query as any).select('id')
     if (error) {
       console.error(`Supabase error in ${resource}/deleteMany`, error)
       throw error
