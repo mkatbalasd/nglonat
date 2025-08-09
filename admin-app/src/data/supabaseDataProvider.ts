@@ -270,6 +270,7 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    */
   async update(resource: string, params: UpdateParams) {
     const pk = getPrimaryKey(resource)
+    // نستخدم alias باسم "updated" لتوضيح البيانات المُحدَّثة
     const { data: updated, error } = await (client as any)
       .from(resource)
       .update(params.data)
