@@ -123,9 +123,16 @@ const DriverWizard = () => {
 
   const handleDriverCardNext = async (values: Record<string, unknown>) => {
     try {
+      const { CardType, Supplier, ...rest } = values as {
+        CardType: unknown
+        Supplier: unknown
+        [key: string]: unknown
+      }
       await dataProvider.create('OPC_DriverCard_view', {
         data: {
-          ...values,
+          ...rest,
+          CardType,
+          Supplier,
           DriverID: driverRecord?.id,
           FacilityID: facilityRecord?.id,
         },
@@ -223,10 +230,10 @@ const DriverWizard = () => {
       {activeStep === 2 && (
         <Form onSubmit={handleDriverCardNext} defaultValues={{}}>
           <TextInput source="CardNumber" label="رقم بطاقة السائق" fullWidth />
-          <ReferenceInput source="LicenseTypeID" reference="OPC_LicenseType_view">
+          <ReferenceInput source="CardType" reference="OPC_LicenseType_view">
             <SelectInput optionText="LicenseTypeNameAR" />
           </ReferenceInput>
-          <ReferenceInput source="SupplierID" reference="Supplier">
+          <ReferenceInput source="Supplier" reference="Supplier">
             <SelectInput optionText="name" />
           </ReferenceInput>
           <DateInput source="IssueDate" label="تاريخ الإصدار" />
