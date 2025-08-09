@@ -212,6 +212,7 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
     })
 
     const { data, error, count } = await query
+
     if (error) {
       console.error(`Supabase error in ${resource}/getManyReference`, error)
       throw error
@@ -258,16 +259,13 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    */
   async update(resource: string, params: UpdateParams) {
     const pk = getPrimaryKey(resource)
-    const pkField = pk.replace(/"/g, '')
-    const data = { ...params.data }
-    delete data.id
-    delete (data as Record<string, unknown>)[pkField]
-    const { data: updated, error } = await (client as any)
+    const { data, error } = await (client as any)
       .from(resource)
-      .update(data)
+      .update(params.data)
       .eq(pk, params.id)
       .select(`${pk}:id, *`)
       .single()
+
     if (error) {
       console.error(`Supabase error in ${resource}/update`, error)
       throw error
@@ -286,11 +284,7 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    */
   async updateMany(resource: string, params: UpdateManyParams) {
     const pk = getPrimaryKey(resource)
-    const pkField = pk.replace(/"/g, '')
-    const data = { ...params.data }
-    delete data.id
-    delete (data as Record<string, unknown>)[pkField]
-    let query = client.from(resource).update(data).in(pk, params.ids)
+    let query = client.from(resource).update(params.data).in(pk, params.ids)
 
     const filter = (params as { filter?: Record<string, unknown> }).filter ?? {}
     Object.entries(filter).forEach(([key, value]) => {
