@@ -267,13 +267,17 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    * @param params يحتوي على المعرّف والبيانات الجديدة.
    * @returns السجل بعد التحديث.
    * @throws يظهر خطأ من Supabase عند فشل التنفيذ.
-   */
+  */
   async update(resource: string, params: UpdateParams) {
     const pk = getPrimaryKey(resource)
+    const pkField = pk.replace(/"/g, '')
+    const data = { ...params.data }
+    delete data.id
+    delete data[pkField]
     // نستخدم alias باسم "updated" لتوضيح البيانات المُحدَّثة
     const { data: updated, error } = await (client as any)
       .from(resource)
-      .update(params.data)
+      .update(data)
       .eq(pk, params.id)
       .select(`${pk}:id, *`)
       .single()
@@ -296,7 +300,11 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    */
   async updateMany(resource: string, params: UpdateManyParams) {
     const pk = getPrimaryKey(resource)
-    let query = client.from(resource).update(params.data).in(pk, params.ids)
+    const pkField = pk.replace(/"/g, '')
+    const data = { ...params.data }
+    delete data.id
+    delete data[pkField]
+    let query = client.from(resource).update(data).in(pk, params.ids)
 
     const filter = (params as { filter?: Record<string, unknown> }).filter ?? {}
     Object.entries(filter).forEach(([key, value]) => {
