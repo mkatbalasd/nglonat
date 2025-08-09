@@ -2,87 +2,95 @@
 
 -- Table CardSequence
 CREATE TABLE IF NOT EXISTS "CardSequence" (
-  "Prefix" VARCHAR(10) PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
+  "Prefix" VARCHAR(10) UNIQUE,
   "LastDriverCardNumber" INTEGER DEFAULT 47115,
-  "LastOperationCardNumber" INTEGER DEFAULT 14220
+  "LastOperationCardNumber" INTEGER DEFAULT 14220,
+  created_at TIMESTAMPTZ DEFAULT now() NOT NULL
 );
 
 -- Table City
 CREATE TABLE IF NOT EXISTS "City" (
-  "CityID" SERIAL PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   "NameAr" VARCHAR(100) NOT NULL,
-  "NameEn" VARCHAR(100) NOT NULL
+  "NameEn" VARCHAR(100) NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now() NOT NULL
 );
 
 -- View City_view to provide a generic id column
 CREATE OR REPLACE VIEW "City_view" AS
-SELECT "CityID" AS id,
+SELECT id,
        "NameAr",
        "NameEn"
 FROM "City";
 
 -- Table OPC_LicenseType
 CREATE TABLE IF NOT EXISTS "OPC_LicenseType" (
-  "LicenseTypeID" SERIAL PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   "LicenseTypeNameAR" VARCHAR(255) NOT NULL,
-  "LicenseTypeNameEN" VARCHAR(255) NOT NULL
+  "LicenseTypeNameEN" VARCHAR(255) NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now() NOT NULL
 );
 
 -- View OPC_LicenseType_view to provide a generic id column
 CREATE OR REPLACE VIEW "OPC_LicenseType_view" AS
-SELECT "LicenseTypeID" AS id,
+SELECT id,
        "LicenseTypeNameAR",
        "LicenseTypeNameEN"
 FROM "OPC_LicenseType";
 
 -- Table Supplier
 CREATE TABLE IF NOT EXISTS "Supplier" (
-  "id" SERIAL PRIMARY KEY,
-  "name" VARCHAR(50) NOT NULL
+  id BIGSERIAL PRIMARY KEY,
+  "name" VARCHAR(50) NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now() NOT NULL
 );
 
 -- Table OPC_Brand
 CREATE TABLE IF NOT EXISTS "OPC_Brand" (
-  "BrandID" SERIAL PRIMARY KEY,
-  "BrandName" VARCHAR(50) NOT NULL
+  id BIGSERIAL PRIMARY KEY,
+  "BrandName" VARCHAR(50) NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now() NOT NULL
 );
 
 -- View OPC_Brand_view to provide a generic id column
 CREATE OR REPLACE VIEW "OPC_Brand_view" AS
-SELECT "BrandID" AS id,
+SELECT id,
        "BrandName"
 FROM "OPC_Brand";
 
 -- Table OPC_Model
 CREATE TABLE IF NOT EXISTS "OPC_Model" (
-  "ModelID" SERIAL PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   "BrandID" INTEGER NOT NULL,
   "ModelName" VARCHAR(50) NOT NULL,
-  FOREIGN KEY ("BrandID") REFERENCES "OPC_Brand" ("BrandID")
+  created_at TIMESTAMPTZ DEFAULT now() NOT NULL,
+  FOREIGN KEY ("BrandID") REFERENCES "OPC_Brand" (id)
 );
 
 -- View OPC_Model_view to provide a generic id column
 CREATE OR REPLACE VIEW "OPC_Model_view" AS
-SELECT "ModelID" AS id,
+SELECT id,
        "BrandID",
        "ModelName"
 FROM "OPC_Model";
 
 -- Table OPC_Color
 CREATE TABLE IF NOT EXISTS "OPC_Color" (
-  "ColorID" SERIAL PRIMARY KEY,
-  "ColorName" VARCHAR(30) NOT NULL
+  id BIGSERIAL PRIMARY KEY,
+  "ColorName" VARCHAR(30) NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now() NOT NULL
 );
 
 -- View OPC_Color_view to provide a generic id column
 CREATE OR REPLACE VIEW "OPC_Color_view" AS
-SELECT "ColorID" AS id,
+SELECT id,
        "ColorName"
 FROM "OPC_Color";
 
 -- Table OPC_Facility
 CREATE TABLE IF NOT EXISTS "OPC_Facility" (
-  "FacilityID" SERIAL PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   "IdentityNumber" VARCHAR(50) NOT NULL,
   "Name" VARCHAR(100) NOT NULL,
   "EnglishName" VARCHAR(100),
@@ -91,13 +99,14 @@ CREATE TABLE IF NOT EXISTS "OPC_Facility" (
   "LicenseCityID" INTEGER,
   "LicenseIssueDate" VARCHAR(30),
   "LicenseExpirationDate" VARCHAR(30),
-  FOREIGN KEY ("LicenseTypeID") REFERENCES "OPC_LicenseType" ("LicenseTypeID"),
-  FOREIGN KEY ("LicenseCityID") REFERENCES "City" ("CityID")
+  created_at TIMESTAMPTZ DEFAULT now() NOT NULL,
+  FOREIGN KEY ("LicenseTypeID") REFERENCES "OPC_LicenseType" (id),
+  FOREIGN KEY ("LicenseCityID") REFERENCES "City" (id)
 );
 
 -- View OPC_Facility_view to provide a generic id column
 CREATE OR REPLACE VIEW "OPC_Facility_view" AS
-SELECT "FacilityID" AS id,
+SELECT id,
        "IdentityNumber",
        "Name",
        "EnglishName",
@@ -110,17 +119,18 @@ FROM "OPC_Facility";
 
 -- Table OPC_Driver
 CREATE TABLE IF NOT EXISTS "OPC_Driver" (
-  "DriverID" SERIAL PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   "FacilityID" INTEGER,
   "FirstName" VARCHAR(100) NOT NULL,
   "LastName" VARCHAR(100) NOT NULL,
   "IdentityNumber" VARCHAR(30),
-  FOREIGN KEY ("FacilityID") REFERENCES "OPC_Facility" ("FacilityID")
+  created_at TIMESTAMPTZ DEFAULT now() NOT NULL,
+  FOREIGN KEY ("FacilityID") REFERENCES "OPC_Facility" (id)
 );
 
 -- View OPC_Driver_view to provide a generic id column
 CREATE OR REPLACE VIEW "OPC_Driver_view" AS
-SELECT "DriverID" AS id,
+SELECT id,
        "FacilityID",
        "FirstName",
        "LastName",
@@ -129,21 +139,22 @@ FROM "OPC_Driver";
 
 -- Table OPC_Vehicle
 CREATE TABLE IF NOT EXISTS "OPC_Vehicle" (
-  "ID" SERIAL PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   "FacilityID" INTEGER,
   "ModelID" INTEGER,
   "ColorID" INTEGER,
-  "PlateNumber" VARCHAR(50),
+  "PlateNumber" VARCHAR(30),
   "SerialNumber" VARCHAR(30),
   "ManufacturingYear" INTEGER,
-  FOREIGN KEY ("FacilityID") REFERENCES "OPC_Facility" ("FacilityID"),
-  FOREIGN KEY ("ModelID") REFERENCES "OPC_Model" ("ModelID"),
-  FOREIGN KEY ("ColorID") REFERENCES "OPC_Color" ("ColorID")
+  created_at TIMESTAMPTZ DEFAULT now() NOT NULL,
+  FOREIGN KEY ("FacilityID") REFERENCES "OPC_Facility" (id),
+  FOREIGN KEY ("ModelID") REFERENCES "OPC_Model" (id),
+  FOREIGN KEY ("ColorID") REFERENCES "OPC_Color" (id)
 );
 
 -- View OPC_Vehicle_view to provide a generic id column
 CREATE OR REPLACE VIEW "OPC_Vehicle_view" AS
-SELECT "ID" AS id,
+SELECT id,
        "FacilityID",
        "ModelID",
        "ColorID",
@@ -154,7 +165,7 @@ FROM "OPC_Vehicle";
 
 -- Table OPC_Card
 CREATE TABLE IF NOT EXISTS "OPC_Card" (
-  "ID" SERIAL PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   "token" VARCHAR(50),
   "CardNumber" VARCHAR(30),
   "CardType" VARCHAR(100),
@@ -169,15 +180,16 @@ CREATE TABLE IF NOT EXISTS "OPC_Card" (
   "LastUpdate" DATE,
   "userID" INTEGER,
   "status" TEXT DEFAULT 'نشطة' CHECK ("status" IN ('نشطة','منتهية','معلقة','ملغاة')),
-  FOREIGN KEY ("FacilityID") REFERENCES "OPC_Facility" ("FacilityID"),
-  FOREIGN KEY ("VehicleID") REFERENCES "OPC_Vehicle" ("ID"),
-  FOREIGN KEY ("DriverID") REFERENCES "OPC_Driver" ("DriverID"),
-  FOREIGN KEY ("Supplier") REFERENCES "Supplier" ("id")
+  created_at TIMESTAMPTZ DEFAULT now() NOT NULL,
+  FOREIGN KEY ("FacilityID") REFERENCES "OPC_Facility" (id),
+  FOREIGN KEY ("VehicleID") REFERENCES "OPC_Vehicle" (id),
+  FOREIGN KEY ("DriverID") REFERENCES "OPC_Driver" (id),
+  FOREIGN KEY ("Supplier") REFERENCES "Supplier" (id)
 );
 
 -- View OPC_Card_view to provide a generic id column
 CREATE OR REPLACE VIEW "OPC_Card_view" AS
-SELECT "ID" AS id,
+SELECT id,
        "token",
        "CardNumber",
        "CardType",
@@ -196,7 +208,7 @@ FROM "OPC_Card";
 
 -- Table OPC_DriverCard
 CREATE TABLE IF NOT EXISTS "OPC_DriverCard" (
-  "ID" SERIAL PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   "token" VARCHAR(50),
   "CardNumber" VARCHAR(30),
   "CardType" INTEGER,
@@ -211,15 +223,16 @@ CREATE TABLE IF NOT EXISTS "OPC_DriverCard" (
   "LastUpdate" DATE,
   "userID" INTEGER,
   "status" TEXT DEFAULT 'نشطة' CHECK ("status" IN ('نشطة','منتهية','معلقة','ملغاة')),
-  FOREIGN KEY ("CardType") REFERENCES "OPC_LicenseType" ("LicenseTypeID"),
-  FOREIGN KEY ("FacilityID") REFERENCES "OPC_Facility" ("FacilityID"),
-  FOREIGN KEY ("DriverID") REFERENCES "OPC_Driver" ("DriverID"),
-  FOREIGN KEY ("Supplier") REFERENCES "Supplier" ("id")
+  created_at TIMESTAMPTZ DEFAULT now() NOT NULL,
+  FOREIGN KEY ("CardType") REFERENCES "OPC_LicenseType" (id),
+  FOREIGN KEY ("FacilityID") REFERENCES "OPC_Facility" (id),
+  FOREIGN KEY ("DriverID") REFERENCES "OPC_Driver" (id),
+  FOREIGN KEY ("Supplier") REFERENCES "Supplier" (id)
 );
 
 -- View OPC_DriverCard_view to provide a generic id column
 CREATE OR REPLACE VIEW "OPC_DriverCard_view" AS
-SELECT "ID" AS id,
+SELECT id,
        "token",
        "CardNumber",
        "CardType",
@@ -238,7 +251,7 @@ FROM "OPC_DriverCard";
 
 -- Table Users
 CREATE TABLE IF NOT EXISTS "Users" (
-  "ID" SERIAL PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   "Username" VARCHAR(100) NOT NULL UNIQUE,
   "FullName" VARCHAR(150) NOT NULL,
   "Email" VARCHAR(150),
@@ -246,7 +259,7 @@ CREATE TABLE IF NOT EXISTS "Users" (
   "Role" TEXT NOT NULL DEFAULT 'موظف' CHECK ("Role" IN ('مدير','موظف','مراقب')),
   "Status" TEXT DEFAULT 'نشط' CHECK ("Status" IN ('نشط','موقوف')),
   "LastLogin" TIMESTAMP,
-  "CreatedAt" TIMESTAMPTZ DEFAULT NOW()
+  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
 
 -- Functions
@@ -300,7 +313,7 @@ DECLARE
 BEGIN
   SELECT "LicenseNumber" INTO license_number
   FROM "OPC_Facility"
-  WHERE "FacilityID" = p_facility_id
+  WHERE id = p_facility_id
   LIMIT 1;
 
   token := md5(random()::text || clock_timestamp()::text);
@@ -384,3 +397,4 @@ CREATE INDEX IF NOT EXISTS idx_opc_model_brand ON "OPC_Model" ("BrandID");
 CREATE INDEX IF NOT EXISTS idx_opc_vehicle_facility ON "OPC_Vehicle" ("FacilityID");
 CREATE INDEX IF NOT EXISTS idx_opc_vehicle_model ON "OPC_Vehicle" ("ModelID");
 CREATE INDEX IF NOT EXISTS idx_opc_vehicle_color ON "OPC_Vehicle" ("ColorID");
+
