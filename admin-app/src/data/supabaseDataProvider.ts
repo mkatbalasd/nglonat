@@ -101,8 +101,17 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
     })
 
     const { data, error, count } = await query
-    if (error) throw error
-    return { data: data ?? [], total: count ?? 0 }
+    if (error) {
+      console.error(`Supabase error in ${resource}/getList`, error)
+      throw error
+    }
+    const pkField = pk.replace(/"/g, '')
+    const cleaned = (data ?? []).map((record: Record<string, unknown>) => {
+      const { [pkField]: _ignored, ...rest } = record
+      void _ignored
+      return rest
+    })
+    return { data: cleaned, total: count ?? 0 }
   },
 
   /**
@@ -120,9 +129,14 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
       .select(`${pk}:id, *`)
       .eq(pk, params.id)
       .single()
-
-    if (error) throw error
-    return { data }
+    if (error) {
+      console.error(`Supabase error in ${resource}/getOne`, error)
+      throw error
+    }
+    const pkField = pk.replace(/"/g, '')
+    const { [pkField]: _ignored, ...rest } = data ?? {}
+    void _ignored
+    return { data: rest }
   },
 
   /**
@@ -151,8 +165,17 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
     })
 
     const { data, error } = await query
-    if (error) throw error
-    return { data: data ?? [] }
+    if (error) {
+      console.error(`Supabase error in ${resource}/getMany`, error)
+      throw error
+    }
+    const pkField = pk.replace(/"/g, '')
+    const cleaned = (data ?? []).map((record: Record<string, unknown>) => {
+      const { [pkField]: _ignored, ...rest } = record
+      void _ignored
+      return rest
+    })
+    return { data: cleaned }
   },
 
   /**
@@ -189,8 +212,18 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
     })
 
     const { data, error, count } = await query
-    if (error) throw error
-    return { data: data ?? [], total: count ?? 0 }
+
+    if (error) {
+      console.error(`Supabase error in ${resource}/getManyReference`, error)
+      throw error
+    }
+    const pkField = pk.replace(/"/g, '')
+    const cleaned = (data ?? []).map((record: Record<string, unknown>) => {
+      const { [pkField]: _ignored, ...rest } = record
+      void _ignored
+      return rest
+    })
+    return { data: cleaned, total: count ?? 0 }
   },
 
   /**
@@ -208,8 +241,10 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
       .insert(params.data)
       .select(`${pk}:id, *`)
       .single()
-
-    if (error) throw error
+    if (error) {
+      console.error(`Supabase error in ${resource}/create`, error)
+      throw error
+    }
     await logAudit('create', resource, data, (data as { id?: string | number })?.id)
     return { data }
   },
@@ -231,9 +266,12 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
       .select(`${pk}:id, *`)
       .single()
 
-    if (error) throw error
-    await logAudit('update', resource, data, params.id)
-    return { data }
+    if (error) {
+      console.error(`Supabase error in ${resource}/update`, error)
+      throw error
+    }
+    await logAudit('update', resource, updated, params.id)
+    return { data: updated }
   },
 
   /**
@@ -258,9 +296,12 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
       }
     })
 
-    const { data, error } = await (query as any).select(`${pk}:id`)
-    if (error) throw error
-    const ids = (data ?? []).map(
+    const { data: updated, error } = await (query as any).select(`${pk}:id`)
+    if (error) {
+      console.error(`Supabase error in ${resource}/updateMany`, error)
+      throw error
+    }
+    const ids = (updated ?? []).map(
       (record: { id: string | number }) => record.id
     )
     return { data: ids }
@@ -282,8 +323,10 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
       .eq(pk, params.id)
       .select(`${pk}:id, *`)
       .single()
-
-    if (error) throw error
+    if (error) {
+      console.error(`Supabase error in ${resource}/delete`, error)
+      throw error
+    }
     await logAudit('delete', resource, data, params.id)
     return { data }
   },
@@ -311,7 +354,10 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
     })
 
     const { data, error } = await (query as any).select(`${pk}:id`)
-    if (error) throw error
+    if (error) {
+      console.error(`Supabase error in ${resource}/deleteMany`, error)
+      throw error
+    }
     const ids = (data ?? []).map(
       (record: { id: string | number }) => record.id
     )
