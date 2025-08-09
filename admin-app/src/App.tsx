@@ -45,6 +45,7 @@ import {
   SupplierCreate,
   SupplierEdit,
 } from './Supplier'
+import { CityList, CityCreate, CityEdit } from './City'
 import { BrandList, BrandCreate, BrandEdit } from './Brand'
 import { ModelList, ModelCreate, ModelEdit } from './Model'
 import { ColorList, ColorCreate, ColorEdit } from './Color'
@@ -142,6 +143,7 @@ const App = () => {
         create={SupplierCreate}
         edit={SupplierEdit}
       />
+      <Resource name="City" list={CityList} create={CityCreate} edit={CityEdit} />
       <Resource
         name="OPC_Vehicle_view"
         list={VehicleList}

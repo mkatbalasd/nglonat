@@ -286,6 +286,14 @@ export const arabicMessages: TranslationMessages = {
         name: 'الاسم',
       },
     },
+    City: {
+      name: 'مدينة |||| مدن',
+      fields: {
+        id: 'المعرف',
+        NameAr: 'الاسم بالعربية',
+        NameEn: 'الاسم بالإنجليزية',
+      },
+    },
     OPC_Brand_view: {
       name: 'علامة تجارية |||| علامات تجارية',
       fields: {
