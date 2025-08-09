@@ -177,6 +177,31 @@ export const arabicMessages: TranslationMessages = {
       remove_message: 'هل تريد بالتأكيد إزالة هذا الاستعلام من القائمة؟',
       help: 'قم بحفظ الاستعلام لاستخدامه لاحقاً',
     },
+    configurable: {
+      customize: 'تخصيص',
+      configureMode: 'وضع الإعداد',
+      inspector: {
+        title: 'المفتش',
+        content: 'مرر فوق عناصر واجهة المستخدم في التطبيق لتكوينها',
+        reset: 'إعادة ضبط الإعدادات',
+        hideAll: 'إخفاء الكل',
+        showAll: 'إظهار الكل',
+      },
+      Datagrid: {
+        title: 'جدول البيانات',
+        unlabeled: 'عمود بدون تسمية #%{column}',
+      },
+      SimpleForm: {
+        title: 'نموذج',
+        unlabeled: 'حقل بدون تسمية #%{input}',
+      },
+      SimpleList: {
+        title: 'قائمة مبسطة',
+        primaryText: 'النص الأساسي',
+        secondaryText: 'النص الثانوي',
+        tertiaryText: 'النص الثالث',
+      },
+    },
     validation: {
       required: 'مطلوب',
       minLength: 'يجب أن يكون%{min} حرفًا على الأقل',
