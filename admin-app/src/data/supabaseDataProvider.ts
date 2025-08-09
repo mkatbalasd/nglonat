@@ -38,7 +38,6 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
     OPC_DriverCard_view: 'id',
     OPC_Card_view: 'id',
     OPC_LicenseType_view: 'id',
-    OPC_Brand_view: 'id',
     OPC_Vehicle_view: 'id',
   }
 
