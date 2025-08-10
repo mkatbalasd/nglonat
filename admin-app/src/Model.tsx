@@ -16,9 +16,9 @@ export const ModelList = () => (
     <Datagrid rowClick="edit">
       <TextField source="id" />
       <ReferenceField source="brand_id" reference="opc_brand">
-        <TextField source="name" />
+        <TextField source="brand_name" />
       </ReferenceField>
-      <TextField source="name" />
+      <TextField source="model_name" />
     </Datagrid>
   </List>
 )
@@ -26,9 +26,9 @@ export const ModelList = () => (
 const ModelForm = () => (
   <SimpleForm>
     <ReferenceInput source="brand_id" reference="opc_brand">
-      <SelectInput optionText="name" />
+      <SelectInput optionText="brand_name" />
     </ReferenceInput>
-    <TextInput source="name" />
+    <TextInput source="model_name" />
   </SimpleForm>
 )
 
