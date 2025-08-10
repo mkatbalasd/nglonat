@@ -18,13 +18,13 @@ export const DriverCardList = () => (
   <List>
     <Datagrid rowClick="show">
       <TextField source="id" />
-      <ReferenceField source="DriverID" reference="OPC_Driver_view">
+      <ReferenceField source="DriverID" reference="OPC_Driver">
         <TextField source="FirstName" />
       </ReferenceField>
-      <ReferenceField source="FacilityID" reference="OPC_Facility_view">
+      <ReferenceField source="FacilityID" reference="OPC_Facility">
         <TextField source="Name" />
       </ReferenceField>
-      <ReferenceField source="CardType" reference="OPC_LicenseType_view">
+      <ReferenceField source="CardType" reference="OPC_LicenseType">
         <TextField source="LicenseTypeNameAR" />
       </ReferenceField>
       <TextField source="IssueDate" />
@@ -38,13 +38,13 @@ export const DriverCardShow = () => (
     <SimpleShowLayout>
       <TextField source="id" />
       <TextField source="CardNumber" />
-      <ReferenceField source="DriverID" reference="OPC_Driver_view">
+      <ReferenceField source="DriverID" reference="OPC_Driver">
         <TextField source="FirstName" />
       </ReferenceField>
-      <ReferenceField source="FacilityID" reference="OPC_Facility_view">
+      <ReferenceField source="FacilityID" reference="OPC_Facility">
         <TextField source="Name" />
       </ReferenceField>
-      <ReferenceField source="CardType" reference="OPC_LicenseType_view">
+      <ReferenceField source="CardType" reference="OPC_LicenseType">
         <TextField source="LicenseTypeNameAR" />
       </ReferenceField>
       <ReferenceField source="Supplier" reference="Supplier">
@@ -59,13 +59,13 @@ export const DriverCardShow = () => (
 
 export const DriverCardForm = () => (
   <SimpleForm>
-    <ReferenceInput source="FacilityID" reference="OPC_Facility_view">
+    <ReferenceInput source="FacilityID" reference="OPC_Facility">
       <SelectInput optionText="Name" />
     </ReferenceInput>
-    <ReferenceInput source="DriverID" reference="OPC_Driver_view">
+    <ReferenceInput source="DriverID" reference="OPC_Driver">
       <SelectInput optionText="FirstName" />
     </ReferenceInput>
-    <ReferenceInput source="CardType" reference="OPC_LicenseType_view">
+    <ReferenceInput source="CardType" reference="OPC_LicenseType">
       <SelectInput optionText="LicenseTypeNameAR" />
     </ReferenceInput>
     <ReferenceInput source="Supplier" reference="Supplier">

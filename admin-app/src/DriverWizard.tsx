@@ -55,7 +55,7 @@ const DriverWizard = () => {
         filter.IdentityNumber = facility.IdentityNumber
       if (facility.LicenseNumber)
         filter.LicenseNumber = facility.LicenseNumber
-      const { data } = await dataProvider.getList('OPC_Facility_view', {
+      const { data } = await dataProvider.getList('OPC_Facility', {
         filter,
         pagination: { page: 1, perPage: 1 },
         sort: { field: 'id', order: 'ASC' },
@@ -78,7 +78,7 @@ const DriverWizard = () => {
 
   const handleFacilityNext = async () => {
     try {
-      const { data } = await dataProvider.create('OPC_Facility_view', { data: facility })
+      const { data } = await dataProvider.create('OPC_Facility', { data: facility })
       setFacilityRecord(data)
       setActiveStep(1)
     } catch {
@@ -88,7 +88,7 @@ const DriverWizard = () => {
 
   const handleDriverSearch = async () => {
     try {
-      const { data } = await dataProvider.getList('OPC_Driver_view', {
+      const { data } = await dataProvider.getList('OPC_Driver', {
         filter: { IdentityNumber: driver.IdentityNumber },
         pagination: { page: 1, perPage: 1 },
         sort: { field: 'id', order: 'ASC' },
@@ -111,7 +111,7 @@ const DriverWizard = () => {
 
   const handleDriverNext = async () => {
     try {
-      const { data } = await dataProvider.create('OPC_Driver_view', {
+      const { data } = await dataProvider.create('OPC_Driver', {
         data: { ...driver, FacilityID: facilityRecord?.id },
       })
       setDriverRecord(data)
@@ -128,7 +128,7 @@ const DriverWizard = () => {
         Supplier: unknown
         [key: string]: unknown
       }
-      await dataProvider.create('OPC_DriverCard_view', {
+      await dataProvider.create('OPC_DriverCard', {
         data: {
           ...rest,
           CardType,
@@ -146,7 +146,7 @@ const DriverWizard = () => {
   const handleOperationCardFinish = async (values: Record<string, unknown>) => {
     try {
       if (operationCard.issue) {
-        await dataProvider.create('OPC_Card_view', {
+        await dataProvider.create('OPC_Card', {
           data: {
             ...values,
             DriverID: driverRecord?.id,
@@ -230,7 +230,7 @@ const DriverWizard = () => {
       {activeStep === 2 && (
         <Form onSubmit={handleDriverCardNext} defaultValues={{}}>
           <TextInput source="CardNumber" label="رقم بطاقة السائق" fullWidth />
-          <ReferenceInput source="CardType" reference="OPC_LicenseType_view">
+          <ReferenceInput source="CardType" reference="OPC_LicenseType">
             <SelectInput optionText="LicenseTypeNameAR" />
           </ReferenceInput>
           <ReferenceInput source="Supplier" reference="Supplier">

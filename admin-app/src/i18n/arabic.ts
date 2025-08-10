@@ -215,7 +215,7 @@ export const arabicMessages: TranslationMessages = {
     },
   },
   resources: {
-    OPC_Facility_view: {
+    OPC_Facility: {
       name: 'منشأة |||| منشآت',
       fields: {
         id: 'معرف المنشأة',
@@ -230,7 +230,7 @@ export const arabicMessages: TranslationMessages = {
         LicenseExpirationDate: 'تاريخ الانتهاء',
       },
     },
-    OPC_Driver_view: {
+    OPC_Driver: {
       name: 'سائق |||| سائقون',
       fields: {
         id: 'معرف السائق',
@@ -241,7 +241,7 @@ export const arabicMessages: TranslationMessages = {
         Name: 'اسم المنشأة',
       },
     },
-    OPC_DriverCard_view: {
+    OPC_DriverCard: {
       name: 'بطاقة سائق |||| بطاقات السائقين',
       fields: {
         id: 'المعرف',
@@ -256,7 +256,7 @@ export const arabicMessages: TranslationMessages = {
         Category: 'الفئة',
       },
     },
-    OPC_Card_view: {
+    OPC_Card: {
       name: 'بطاقة تشغيل |||| بطاقات التشغيل',
       fields: {
         id: 'المعرف',
@@ -271,7 +271,7 @@ export const arabicMessages: TranslationMessages = {
         Status: 'الحالة',
       },
     },
-    OPC_LicenseType_view: {
+    OPC_LicenseType: {
       name: 'نوع الرخصة |||| أنواع الرخص',
       fields: {
         id: 'معرف النوع',
@@ -294,14 +294,14 @@ export const arabicMessages: TranslationMessages = {
         NameEn: 'الاسم بالإنجليزية',
       },
     },
-    OPC_Brand_view: {
+    OPC_Brand: {
       name: 'علامة تجارية |||| علامات تجارية',
       fields: {
         id: 'المعرف',
         BrandName: 'العلامة التجارية',
       },
     },
-    OPC_Model_view: {
+    OPC_Model: {
       name: 'طراز |||| طرازات',
       fields: {
         id: 'المعرف',
@@ -309,14 +309,14 @@ export const arabicMessages: TranslationMessages = {
         ModelName: 'الطراز',
       },
     },
-    OPC_Color_view: {
+    OPC_Color: {
       name: 'لون |||| ألوان',
       fields: {
         id: 'المعرف',
         ColorName: 'اللون',
       },
     },
-    OPC_Vehicle_view: {
+    OPC_Vehicle: {
       name: 'مركبة |||| مركبات',
       fields: {
         id: 'المعرف',

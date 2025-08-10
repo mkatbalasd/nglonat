@@ -18,13 +18,13 @@ export const OperationCardList = () => (
   <List>
     <Datagrid rowClick="show">
       <TextField source="id" />
-      <ReferenceField source="FacilityID" reference="OPC_Facility_view">
+      <ReferenceField source="FacilityID" reference="OPC_Facility">
         <TextField source="Name" />
       </ReferenceField>
-      <ReferenceField source="DriverID" reference="OPC_Driver_view">
+      <ReferenceField source="DriverID" reference="OPC_Driver">
         <TextField source="FirstName" />
       </ReferenceField>
-      <ReferenceField source="VehicleID" reference="OPC_Vehicle_view">
+      <ReferenceField source="VehicleID" reference="OPC_Vehicle">
         <TextField source="PlateNumber" />
       </ReferenceField>
       <TextField source="IssueDate" />
@@ -38,13 +38,13 @@ export const OperationCardShow = () => (
     <SimpleShowLayout>
       <TextField source="id" />
       <TextField source="CardNumber" />
-      <ReferenceField source="FacilityID" reference="OPC_Facility_view">
+      <ReferenceField source="FacilityID" reference="OPC_Facility">
         <TextField source="Name" />
       </ReferenceField>
-      <ReferenceField source="DriverID" reference="OPC_Driver_view">
+      <ReferenceField source="DriverID" reference="OPC_Driver">
         <TextField source="FirstName" />
       </ReferenceField>
-      <ReferenceField source="VehicleID" reference="OPC_Vehicle_view">
+      <ReferenceField source="VehicleID" reference="OPC_Vehicle">
         <TextField source="PlateNumber" />
       </ReferenceField>
       <ReferenceField source="Supplier" reference="Supplier">
@@ -60,13 +60,13 @@ export const OperationCardShow = () => (
 
 export const OperationCardForm = () => (
   <SimpleForm>
-    <ReferenceInput source="FacilityID" reference="OPC_Facility_view">
+    <ReferenceInput source="FacilityID" reference="OPC_Facility">
       <SelectInput optionText="Name" />
     </ReferenceInput>
-    <ReferenceInput source="DriverID" reference="OPC_Driver_view">
+    <ReferenceInput source="DriverID" reference="OPC_Driver">
       <SelectInput optionText="FirstName" />
     </ReferenceInput>
-    <ReferenceInput source="VehicleID" reference="OPC_Vehicle_view">
+    <ReferenceInput source="VehicleID" reference="OPC_Vehicle">
       <SelectInput optionText="PlateNumber" />
     </ReferenceInput>
     <ReferenceInput source="Supplier" reference="Supplier">
