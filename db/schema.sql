@@ -1,3 +1,4 @@
+SET client_encoding = 'UTF8';
 -- PostgreSQL schema for nagl database
 
 -- Drop existing views

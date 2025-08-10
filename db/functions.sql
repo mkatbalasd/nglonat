@@ -1,3 +1,5 @@
+SET client_encoding = 'UTF8';
+-- تأكد من حفظ الملف بترميز UTF-8
 -- Database functions and triggers for nagl
 
 -- Update timestamp column automatically
