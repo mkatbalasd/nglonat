@@ -2,6 +2,8 @@
 -- Existing tables are renamed with a _backup suffix before new ones are created.
 -- The original data remains in the *_backup tables for reference or manual migration.
 
+SET ROLE supabase_admin;
+
 BEGIN;
 
 ALTER TABLE IF EXISTS "CardSequence" RENAME TO "CardSequence_backup";
