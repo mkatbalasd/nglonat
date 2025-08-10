@@ -18,8 +18,6 @@ import {
   DateInput,
 } from 'react-admin'
 
-const steps = ['المنشأة', 'السائق', 'بطاقة السائق', 'بطاقة التشغيل']
-
 const DriverWizard = () => {
   const dataProvider = useDataProvider()
   const [activeStep, setActiveStep] = useState(0)
@@ -48,9 +46,13 @@ const DriverWizard = () => {
   const [driverRecord, setDriverRecord] = useState<DriverRecord | null>(null)
   const [driverCardRecord, setDriverCardRecord] = useState<Record<string, unknown> | null>(null)
 
-  const [operationCard, setOperationCard] = useState({
-    issue: false,
-  })
+  const [operationCard, setOperationCard] = useState({ issue: false })
+  const steps = [
+    'المنشأة',
+    'السائق',
+    'بطاقة السائق',
+    ...(operationCard.issue ? ['المركبة', 'بطاقة التشغيل'] : ['بطاقة التشغيل']),
+  ]
   const [vehicle, setVehicle] = useState({
     plate_number: '',
     serial_number: '',
@@ -173,7 +175,7 @@ const DriverWizard = () => {
         await dataProvider.create('opc_driver_card', {
           data: payload,
         })
-      setActiveStep(3)
+      setActiveStep(steps.indexOf('بطاقة التشغيل'))
     } catch {
       window.alert('فشل إنشاء بطاقة السائق')
     }
@@ -184,7 +186,7 @@ const DriverWizard = () => {
       const filter: Record<string, string> = {}
       if (vehicle.plate_number) filter.plate_number = vehicle.plate_number
       if (vehicle.serial_number) filter.serial_number = vehicle.serial_number
-      const { data } = await dataProvider.getList('vehicle', {
+      const { data } = await dataProvider.getList('opc_vehicle', {
         filter,
         pagination: { page: 1, perPage: 1 },
         sort: { field: 'id', order: 'ASC' },
@@ -202,15 +204,20 @@ const DriverWizard = () => {
         })
         if (cardData.length > 0) setOperationCardRecord(cardData[0])
         else setOperationCardRecord(null)
+        setActiveStep(steps.indexOf('بطاقة التشغيل'))
       } else {
         setShowVehicleCreate(true)
+        setVehicle({
+          plate_number: filter.plate_number || '',
+          serial_number: filter.serial_number || '',
+        })
       }
     } catch {
       window.alert('فشل البحث عن المركبة')
     }
   }
 
-  const handleVehicleCreate = async (values: Record<string, unknown>) => {
+  const handleVehicleNext = async (values: Record<string, unknown>) => {
     try {
       const { model_id, color_id, plate_number, serial_number } = values as {
         model_id: unknown
@@ -218,7 +225,7 @@ const DriverWizard = () => {
         plate_number: string
         serial_number: string
       }
-      const { data } = await dataProvider.create('vehicle', {
+      const { data } = await dataProvider.create('opc_vehicle', {
         data: {
           model_id,
           color_id,
@@ -234,6 +241,7 @@ const DriverWizard = () => {
       })
       setShowVehicleCreate(false)
       setOperationCardRecord(null)
+      setActiveStep(steps.indexOf('بطاقة التشغيل'))
     } catch {
       window.alert('فشل إنشاء المركبة')
     }
@@ -255,7 +263,7 @@ const DriverWizard = () => {
           })
         else await dataProvider.create('opc_card', { data: payload })
       }
-      setActiveStep(4)
+      setActiveStep(steps.length)
     } catch {
       window.alert('فشل إنشاء بطاقة التشغيل')
     }
@@ -387,7 +395,7 @@ const DriverWizard = () => {
           </MuiButton>
         </Form>
       )}
-      {activeStep === 3 && (
+      {activeStep === 3 && !operationCard.issue && (
         <Box>
           <FormControlLabel
             control={
@@ -400,32 +408,40 @@ const DriverWizard = () => {
             }
             label="إصدار بطاقة تشغيل"
           />
-          {operationCard.issue && !vehicleRecord && !showVehicleCreate && (
-            <Box>
-              <TextField
-                label="رقم اللوحة"
-                fullWidth
-                margin="normal"
-                value={vehicle.plate_number}
-                onChange={e =>
-                  setVehicle({ ...vehicle, plate_number: e.target.value })
-                }
-              />
-              <TextField
-                label="رقم الهيكل"
-                fullWidth
-                margin="normal"
-                value={vehicle.serial_number}
-                onChange={e =>
-                  setVehicle({ ...vehicle, serial_number: e.target.value })
-                }
-              />
-              <MuiButton onClick={handleVehicleSearch}>بحث المركبة</MuiButton>
-            </Box>
+          {!operationCard.issue && (
+            <MuiButton
+              variant="contained"
+              onClick={() => handleOperationCardFinish({})}
+            >
+              إنهاء
+            </MuiButton>
           )}
-          {operationCard.issue && showVehicleCreate && (
+        </Box>
+      )}
+      {activeStep === 3 && operationCard.issue && (
+        <Box>
+          <TextField
+            label="رقم اللوحة"
+            fullWidth
+            margin="normal"
+            value={vehicle.plate_number}
+            onChange={e =>
+              setVehicle({ ...vehicle, plate_number: e.target.value })
+            }
+          />
+          <TextField
+            label="رقم الهيكل"
+            fullWidth
+            margin="normal"
+            value={vehicle.serial_number}
+            onChange={e =>
+              setVehicle({ ...vehicle, serial_number: e.target.value })
+            }
+          />
+          <MuiButton onClick={handleVehicleSearch}>بحث المركبة</MuiButton>
+          {showVehicleCreate && (
             <Form
-              onSubmit={handleVehicleCreate}
+              onSubmit={handleVehicleNext}
               defaultValues={{
                 plate_number: vehicle.plate_number,
                 serial_number: vehicle.serial_number,
@@ -444,33 +460,25 @@ const DriverWizard = () => {
               </MuiButton>
             </Form>
           )}
-          {operationCard.issue && vehicleRecord && (
-            <Form
-              onSubmit={handleOperationCardFinish}
-              defaultValues={operationCardRecord || {}}
-            >
-              <TextInput source="card_number" label="رقم بطاقة التشغيل" fullWidth />
-              <ReferenceInput source="supplier_id" reference="supplier">
-                <SelectInput optionText="name" />
-              </ReferenceInput>
-              <DateInput source="issue_date" label="تاريخ الإصدار" />
-              <DateInput source="expiration_date" label="تاريخ الانتهاء" />
-              <MuiButton type="submit" variant="contained">
-                إنهاء
-              </MuiButton>
-            </Form>
-          )}
-          {!operationCard.issue && (
-            <MuiButton
-              variant="contained"
-              onClick={() => handleOperationCardFinish({})}
-            >
-              إنهاء
-            </MuiButton>
-          )}
         </Box>
       )}
-      {activeStep === 4 && <Box>تم إكمال المعالج</Box>}
+      {activeStep === 4 && operationCard.issue && (
+        <Form
+          onSubmit={handleOperationCardFinish}
+          defaultValues={operationCardRecord || {}}
+        >
+          <TextInput source="card_number" label="رقم بطاقة التشغيل" fullWidth />
+          <ReferenceInput source="supplier_id" reference="supplier">
+            <SelectInput optionText="name" />
+          </ReferenceInput>
+          <DateInput source="issue_date" label="تاريخ الإصدار" />
+          <DateInput source="expiration_date" label="تاريخ الانتهاء" />
+          <MuiButton type="submit" variant="contained">
+            إنهاء
+          </MuiButton>
+        </Form>
+      )}
+      {activeStep === steps.length && <Box>تم إكمال المعالج</Box>}
     </Box>
   )
 }
