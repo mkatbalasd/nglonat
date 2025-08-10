@@ -11,6 +11,8 @@
 - [دليل إعداد وتشغيل البيئة](docs/environment_setup.md)
 - [دليل الترحيل من MySQL](docs/migration_from_mysql.md)
 - [البنية الجديدة للجدول وخطوات الترحيل](docs/new_table_structure.md)
+- [تشغيل سكربتات قاعدة البيانات](docs/run_db_scripts.md)
+بعد إعداد البيئة، يُنصح بتشغيل ملفات SQL بالترتيب `schema.sql` ثم `functions.sql` ثم `security.sql` ثم `seed.sql` كما هو موضح في الدليل أعلاه.
 
 ## التوثيق
 يمكن العثور على دليل الاستخدام الكامل في مجلد [docs](./docs)، والذي يشمل:
