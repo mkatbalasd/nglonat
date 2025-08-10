@@ -182,7 +182,6 @@ CREATE TABLE IF NOT EXISTS opc_driver_card (
     token VARCHAR(50) UNIQUE,
     card_number VARCHAR(30) UNIQUE,
     card_type INTEGER,
-    category VARCHAR(50),
     facility_id INTEGER,
     driver_id INTEGER,
     issue_date VARCHAR(10) CHECK (issue_date ~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'),
