@@ -138,15 +138,16 @@ $func$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION generate_token_and_card(p_type text, p_facility_id integer,
                                                    OUT token text, OUT cardnumber text) AS $func$
 DECLARE
-  license_number VARCHAR(30);
+  facility_license_number VARCHAR(30);
 BEGIN
-  SELECT "LicenseNumber" INTO license_number
-  FROM "OPC_Facility"
-  WHERE id = p_facility_id
+  SELECT f."LicenseNumber"
+  INTO facility_license_number
+  FROM "OPC_Facility" AS f
+  WHERE f.id = p_facility_id
   LIMIT 1;
 
   token := md5(random()::text || clock_timestamp()::text);
-  cardnumber := generate_card_number(p_type, license_number);
+  cardnumber := generate_card_number(p_type, facility_license_number);
 END;
 $func$ LANGUAGE plpgsql;
 
