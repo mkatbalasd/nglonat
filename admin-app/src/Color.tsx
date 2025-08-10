@@ -12,14 +12,14 @@ export const ColorList = () => (
   <List>
     <Datagrid rowClick="edit">
       <TextField source="id" />
-      <TextField source="name" />
+      <TextField source="color_name" />
     </Datagrid>
   </List>
 )
 
 const ColorForm = () => (
   <SimpleForm>
-    <TextInput source="name" />
+    <TextInput source="color_name" />
   </SimpleForm>
 )
 

@@ -312,7 +312,7 @@ export const arabicMessages: TranslationMessages = {
       name: 'لون |||| ألوان',
       fields: {
         id: 'المعرف',
-        name: 'اللون',
+        color_name: 'اللون',
       },
     },
     opc_vehicle: {

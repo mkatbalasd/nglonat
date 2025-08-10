@@ -37,7 +37,7 @@ export const VehicleShow = () => (
         <TextField source="name" />
       </ReferenceField>
       <ReferenceField source="color_id" reference="opc_color">
-        <TextField source="name" />
+        <TextField source="color_name" />
       </ReferenceField>
       <TextField source="plate_number" />
       <TextField source="serial_number" />
@@ -55,7 +55,7 @@ export const VehicleForm = () => (
       <SelectInput optionText="name" />
     </ReferenceInput>
     <ReferenceInput source="color_id" reference="opc_color">
-      <SelectInput optionText="name" />
+      <SelectInput optionText="color_name" />
     </ReferenceInput>
     <TextInput source="plate_number" />
     <TextInput source="serial_number" />
