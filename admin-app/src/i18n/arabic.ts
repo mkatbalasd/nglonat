@@ -252,7 +252,6 @@ export const arabicMessages: TranslationMessages = {
         card_number: 'رقم البطاقة',
         supplier_id: 'المزوّد',
         status: 'الحالة',
-        category: 'الفئة',
       },
     },
     opc_card: {
