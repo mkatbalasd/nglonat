@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS opc_card (
     id BIGSERIAL PRIMARY KEY,
     token VARCHAR(50) UNIQUE,
     card_number VARCHAR(30) UNIQUE,
-    card_type VARCHAR(100),
+    card_type INTEGER,
     facility_id INTEGER,
     vehicle_id INTEGER,
     driver_id INTEGER,
@@ -170,6 +170,7 @@ CREATE TABLE IF NOT EXISTS opc_card (
     CONSTRAINT fk_card_facility FOREIGN KEY (facility_id) REFERENCES opc_facility (id) ON DELETE CASCADE,
     CONSTRAINT fk_card_vehicle FOREIGN KEY (vehicle_id) REFERENCES opc_vehicle (id) ON DELETE SET NULL,
     CONSTRAINT fk_card_driver FOREIGN KEY (driver_id) REFERENCES opc_driver (id) ON DELETE SET NULL,
+    CONSTRAINT fk_card_type FOREIGN KEY (card_type) REFERENCES opc_license_type (id) ON DELETE SET NULL,
     CONSTRAINT fk_card_supplier FOREIGN KEY (supplier_id) REFERENCES supplier (id) ON DELETE SET NULL,
     CONSTRAINT fk_card_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL
 );

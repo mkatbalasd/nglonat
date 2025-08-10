@@ -8,7 +8,6 @@ import {
   Create,
   Edit,
   SimpleForm,
-  TextInput,
   ReferenceInput,
   SelectInput,
   DateInput,
@@ -26,6 +25,9 @@ export const OperationCardList = () => (
       </ReferenceField>
       <ReferenceField source="vehicle_id" reference="opc_vehicle">
         <TextField source="plate_number" />
+      </ReferenceField>
+      <ReferenceField source="card_type" reference="opc_license_type">
+        <TextField source="license_type_name_ar" />
       </ReferenceField>
       <TextField source="issue_date" />
       <TextField source="expiration_date" />
@@ -50,7 +52,9 @@ export const OperationCardShow = () => (
       <ReferenceField source="supplier_id" reference="supplier">
         <TextField source="name" />
       </ReferenceField>
-      <TextField source="card_type" />
+      <ReferenceField source="card_type" reference="opc_license_type">
+        <TextField source="license_type_name_ar" />
+      </ReferenceField>
       <TextField source="issue_date" />
       <TextField source="expiration_date" />
       <TextField source="status" />
@@ -72,7 +76,9 @@ export const OperationCardForm = () => (
     <ReferenceInput source="supplier_id" reference="supplier">
       <SelectInput optionText="name" />
     </ReferenceInput>
-    <TextInput source="card_type" />
+    <ReferenceInput source="card_type" reference="opc_license_type">
+      <SelectInput optionText="license_type_name_ar" />
+    </ReferenceInput>
     <DateInput source="issue_date" />
     <DateInput source="expiration_date" />
   </SimpleForm>
