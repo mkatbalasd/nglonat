@@ -239,84 +239,6 @@ CREATE INDEX IF NOT EXISTS idx_facility_license_type ON opc_facility (license_ty
 CREATE INDEX IF NOT EXISTS idx_facility_license_city ON opc_facility (license_city_id);
 
 -- Functions
-
--- Generate card number based on type with separate sequences for each type
-CREATE OR REPLACE FUNCTION generate_card_number(type text, license_number text)
-RETURNS text AS $$
-DECLARE
-  prefix_val TEXT := COALESCE(SUBSTRING(license_number FROM 1 FOR 3), '000');
-  next_num INTEGER;
-BEGIN
-  IF type = 'operation' THEN
-    SELECT last_operation_card_number + 1 INTO next_num
-    FROM card_sequence WHERE prefix = prefix_val FOR UPDATE;
-
-    IF NOT FOUND THEN
-      next_num := 1;
-      INSERT INTO card_sequence (prefix, last_driver_card_number, last_operation_card_number, created_at, updated_at)
-      VALUES (prefix_val, 0, next_num, now(), now());
-    ELSE
-      UPDATE card_sequence SET last_operation_card_number = next_num, updated_at = now() WHERE prefix = prefix_val;
-    END IF;
-  ELSE
-    SELECT last_driver_card_number + 1 INTO next_num
-    FROM card_sequence WHERE prefix = prefix_val FOR UPDATE;
-
-    IF NOT FOUND THEN
-      next_num := 1;
-      INSERT INTO card_sequence (prefix, last_driver_card_number, last_operation_card_number, created_at, updated_at)
-      VALUES (prefix_val, next_num, 0, now(), now());
-    ELSE
-      UPDATE card_sequence SET last_driver_card_number = next_num, updated_at = now() WHERE prefix = prefix_val;
-    END IF;
-  END IF;
-
-  RETURN prefix_val || LPAD(next_num::text, 6, '0');
-END;
-$$ LANGUAGE plpgsql;
-
--- Generate token and card number for the given facility
-CREATE OR REPLACE FUNCTION generate_token_and_card(p_type text, p_facility_id integer,
-                                                   OUT token text, OUT card_number text)
-AS $$
-DECLARE
-  license_number VARCHAR(30);
-BEGIN
-  SELECT license_number INTO license_number
-  FROM opc_facility
-  WHERE id = p_facility_id
-  LIMIT 1;
-
-  token := md5(random()::text || clock_timestamp()::text);
-  card_number := generate_card_number(p_type, license_number);
-END;
-$$ LANGUAGE plpgsql;
-
--- Trigger functions
-CREATE OR REPLACE FUNCTION before_insert_opc_card()
-RETURNS TRIGGER AS $$
-DECLARE
-  details RECORD;
-BEGIN
-  SELECT * INTO details FROM generate_token_and_card('operation', NEW.facility_id);
-  NEW.token := details.token;
-  NEW.card_number := details.card_number;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION before_insert_opc_driver_card()
-RETURNS TRIGGER AS $$
-DECLARE
-  details RECORD;
-BEGIN
-  SELECT * INTO details FROM generate_token_and_card('driver', NEW.facility_id);
-  NEW.token := details.token;
-  NEW.card_number := details.card_number;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
 CREATE OR REPLACE FUNCTION prevent_duplicate_active_driver_card()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -336,16 +258,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Triggers
-DROP TRIGGER IF EXISTS before_insert_opc_card ON opc_card;
-CREATE TRIGGER before_insert_opc_card
-BEFORE INSERT ON opc_card
-FOR EACH ROW EXECUTE FUNCTION before_insert_opc_card();
-
-DROP TRIGGER IF EXISTS before_insert_opc_driver_card ON opc_driver_card;
-CREATE TRIGGER before_insert_opc_driver_card
-BEFORE INSERT ON opc_driver_card
-FOR EACH ROW EXECUTE FUNCTION before_insert_opc_driver_card();
-
 DROP TRIGGER IF EXISTS prevent_duplicate_active_driver_card ON opc_driver_card;
 CREATE TRIGGER prevent_duplicate_active_driver_card
 BEFORE INSERT ON opc_driver_card
