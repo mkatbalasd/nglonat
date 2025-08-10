@@ -85,73 +85,73 @@ const App = () => {
         <Route path="/wizard" element={<DriverWizard />} />
       </CustomRoutes>
       <Resource
-        name="OPC_Facility"
+        name="opc_facility"
         list={FacilityList}
         show={FacilityShow}
         create={FacilityCreate}
         edit={FacilityEdit}
       />
       <Resource
-        name="OPC_Driver"
+        name="opc_driver"
         list={DriverList}
         show={DriverShow}
         create={DriverCreate}
         edit={DriverEdit}
       />
       <Resource
-        name="OPC_DriverCard"
+        name="opc_driver_card"
         list={DriverCardList}
         show={DriverCardShow}
         create={DriverCardCreate}
         edit={DriverCardEdit}
       />
       <Resource
-        name="OPC_Card"
+        name="opc_card"
         list={OperationCardList}
         show={OperationCardShow}
         create={OperationCardCreate}
         edit={OperationCardEdit}
       />
       <Resource
-        name="OPC_LicenseType"
+        name="opc_license_type"
         list={LicenseTypeList}
         show={LicenseTypeShow}
         create={LicenseTypeCreate}
         edit={LicenseTypeEdit}
       />
       <Resource
-        name="OPC_Brand"
+        name="opc_brand"
         list={BrandList}
         create={BrandCreate}
         edit={BrandEdit}
       />
       <Resource
-        name="OPC_Model"
+        name="opc_model"
         list={ModelList}
         create={ModelCreate}
         edit={ModelEdit}
       />
       <Resource
-        name="OPC_Color"
+        name="opc_color"
         list={ColorList}
         create={ColorCreate}
         edit={ColorEdit}
       />
       <Resource
-        name="Supplier"
+        name="supplier"
         list={SupplierList}
         create={SupplierCreate}
         edit={SupplierEdit}
       />
-      <Resource name="City" list={CityList} create={CityCreate} edit={CityEdit} />
+      <Resource name="city" list={CityList} create={CityCreate} edit={CityEdit} />
       <Resource
-        name="OPC_Vehicle"
+        name="opc_vehicle"
         list={VehicleList}
         show={VehicleShow}
         create={VehicleCreate}
         edit={VehicleEdit}
       />
-      <Resource name="AuditLog" list={AuditLogList} show={AuditLogShow} />
+      <Resource name="audit_log" list={AuditLogList} show={AuditLogShow} />
     </Admin>
   )
 }

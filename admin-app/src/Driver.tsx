@@ -31,10 +31,10 @@ export const DriverList = () => (
   <List actions={<DriverListActions />}>
     <Datagrid rowClick="show">
       <TextField source="id" />
-      <TextField source="FirstName" />
-      <TextField source="LastName" />
-      <ReferenceField source="FacilityID" reference="OPC_Facility">
-        <TextField source="Name" />
+      <TextField source="first_name" />
+      <TextField source="last_name" />
+      <ReferenceField source="facility_id" reference="opc_facility">
+        <TextField source="name" />
       </ReferenceField>
     </Datagrid>
   </List>
@@ -44,11 +44,11 @@ export const DriverShow = () => (
   <Show>
     <SimpleShowLayout>
       <TextField source="id" />
-      <TextField source="FirstName" />
-      <TextField source="LastName" />
-      <TextField source="IdentityNumber" />
-      <ReferenceField source="FacilityID" reference="OPC_Facility">
-        <TextField source="Name" />
+      <TextField source="first_name" />
+      <TextField source="last_name" />
+      <TextField source="identity_number" />
+      <ReferenceField source="facility_id" reference="opc_facility">
+        <TextField source="name" />
       </ReferenceField>
     </SimpleShowLayout>
   </Show>
@@ -56,12 +56,12 @@ export const DriverShow = () => (
 
 export const DriverForm = () => (
   <SimpleForm>
-    <ReferenceInput source="FacilityID" reference="OPC_Facility">
-      <SelectInput optionText="Name" />
+    <ReferenceInput source="facility_id" reference="opc_facility">
+      <SelectInput optionText="name" />
     </ReferenceInput>
-    <TextInput source="FirstName" />
-    <TextInput source="LastName" />
-    <TextInput source="IdentityNumber" />
+    <TextInput source="first_name" />
+    <TextInput source="last_name" />
+    <TextInput source="identity_number" />
   </SimpleForm>
 )
 
