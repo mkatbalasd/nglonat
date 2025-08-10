@@ -62,15 +62,16 @@ LANGUAGE plpgsql
 SET search_path = pg_catalog, public
 AS $$
 DECLARE
-  license_number VARCHAR(30);
+  facility_license_number VARCHAR(30);
 BEGIN
-  SELECT license_number INTO license_number
-  FROM public.opc_facility
-  WHERE id = p_facility_id
+  SELECT f.license_number
+  INTO facility_license_number
+  FROM public.opc_facility AS f
+  WHERE f.id = p_facility_id
   LIMIT 1;
 
   token := md5(random()::text || clock_timestamp()::text);
-  cardnumber := public.generate_card_number(p_type, license_number);
+  cardnumber := public.generate_card_number(p_type, facility_license_number);
 END;
 $$;
 ALTER FUNCTION public.generate_token_and_card(text, integer) OWNER TO supabase_admin;
