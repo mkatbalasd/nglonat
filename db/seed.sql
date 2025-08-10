@@ -1,3 +1,4 @@
+SET client_encoding = 'UTF8';
 -- Seed data using the new id and created_at columns
 -- Adjust or extend as needed for real deployments.
 
