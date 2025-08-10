@@ -19,6 +19,46 @@
 - [شرح هيكل المشروع ووظائف الملفات](docs/project_structure.md).
 - [آلية النشر والتطوير المستقبلي](docs/deployment_and_future_updates.md).
 
+## تشغيل سكربتات PostgreSQL
+
+تحتاج سكربتات قواعد البيانات إلى تحديد متغيرات الاتصال التالية قبل التنفيذ:
+
+- `PGUSER`: اسم مستخدم قاعدة البيانات.
+- `PGPASSWORD`: كلمة المرور.
+- `PGHOST`: عنوان الخادوم.
+- `PGPORT`: المنفذ (الافتراضي `5432`).
+- `PGDATABASE`: اسم قاعدة البيانات المستهدفة.
+
+مثال لتشغيل سكربت باستخدام هذه المتغيرات:
+
+```bash
+PGUSER=postgres PGPASSWORD=secret PGHOST=localhost PGPORT=5432 PGDATABASE=postgres \
+psql -f db/schema.sql
+```
+
+لتجنّب إدخال كلمة المرور في كل مرة، يمكن استخدام أحد الخيارين التاليين:
+
+1. **ملف `.env`**
+   - أنشئ ملفاً يحتوي المتغيرات السابقة:
+     ```
+     PGUSER=postgres
+     PGPASSWORD=secret
+     PGHOST=localhost
+     PGPORT=5432
+     PGDATABASE=postgres
+     ```
+   - حمّل القيم في الجلسة الحالية عبر:
+     ```bash
+     export $(grep -v '^#' .env | xargs)
+     ```
+
+2. **ملف `.pgpass`**
+   - أنشئ ملفاً في المسار `~/.pgpass` بالقالب:
+     ```
+     localhost:5432:postgres:postgres:secret
+     ```
+   - غيّر أذوناته إلى `chmod 600 ~/.pgpass` وسيستخدمه `psql` تلقائياً دون طلب كلمة المرور.
+
 ## نشر المشروع على الخادوم
 
 اتّبع الخطوات التالية لنشر التطبيق على خادوم الإنتاج:
