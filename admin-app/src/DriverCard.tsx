@@ -18,17 +18,17 @@ export const DriverCardList = () => (
   <List>
     <Datagrid rowClick="show">
       <TextField source="id" />
-      <ReferenceField source="DriverID" reference="OPC_Driver">
-        <TextField source="FirstName" />
+      <ReferenceField source="driver_id" reference="opc_driver">
+        <TextField source="first_name" />
       </ReferenceField>
-      <ReferenceField source="FacilityID" reference="OPC_Facility">
-        <TextField source="Name" />
+      <ReferenceField source="facility_id" reference="opc_facility">
+        <TextField source="name" />
       </ReferenceField>
-      <ReferenceField source="CardType" reference="OPC_LicenseType">
-        <TextField source="LicenseTypeNameAR" />
+      <ReferenceField source="card_type" reference="opc_license_type">
+        <TextField source="name_ar" />
       </ReferenceField>
-      <TextField source="IssueDate" />
-      <TextField source="ExpirationDate" />
+      <TextField source="issue_date" />
+      <TextField source="expiration_date" />
     </Datagrid>
   </List>
 )
@@ -37,43 +37,43 @@ export const DriverCardShow = () => (
   <Show>
     <SimpleShowLayout>
       <TextField source="id" />
-      <TextField source="CardNumber" />
-      <ReferenceField source="DriverID" reference="OPC_Driver">
-        <TextField source="FirstName" />
+      <TextField source="card_number" />
+      <ReferenceField source="driver_id" reference="opc_driver">
+        <TextField source="first_name" />
       </ReferenceField>
-      <ReferenceField source="FacilityID" reference="OPC_Facility">
-        <TextField source="Name" />
-      </ReferenceField>
-      <ReferenceField source="CardType" reference="OPC_LicenseType">
-        <TextField source="LicenseTypeNameAR" />
-      </ReferenceField>
-      <ReferenceField source="Supplier" reference="Supplier">
+      <ReferenceField source="facility_id" reference="opc_facility">
         <TextField source="name" />
       </ReferenceField>
-      <TextField source="IssueDate" />
-      <TextField source="ExpirationDate" />
-      <TextField source="Status" />
+      <ReferenceField source="card_type" reference="opc_license_type">
+        <TextField source="name_ar" />
+      </ReferenceField>
+      <ReferenceField source="supplier_id" reference="supplier">
+        <TextField source="name" />
+      </ReferenceField>
+      <TextField source="issue_date" />
+      <TextField source="expiration_date" />
+      <TextField source="status" />
     </SimpleShowLayout>
   </Show>
 )
 
 export const DriverCardForm = () => (
   <SimpleForm>
-    <ReferenceInput source="FacilityID" reference="OPC_Facility">
-      <SelectInput optionText="Name" />
-    </ReferenceInput>
-    <ReferenceInput source="DriverID" reference="OPC_Driver">
-      <SelectInput optionText="FirstName" />
-    </ReferenceInput>
-    <ReferenceInput source="CardType" reference="OPC_LicenseType">
-      <SelectInput optionText="LicenseTypeNameAR" />
-    </ReferenceInput>
-    <ReferenceInput source="Supplier" reference="Supplier">
+    <ReferenceInput source="facility_id" reference="opc_facility">
       <SelectInput optionText="name" />
     </ReferenceInput>
-    <DateInput source="IssueDate" />
-    <DateInput source="ExpirationDate" />
-    <TextInput source="Category" />
+    <ReferenceInput source="driver_id" reference="opc_driver">
+      <SelectInput optionText="first_name" />
+    </ReferenceInput>
+    <ReferenceInput source="card_type" reference="opc_license_type">
+      <SelectInput optionText="name_ar" />
+    </ReferenceInput>
+    <ReferenceInput source="supplier_id" reference="supplier">
+      <SelectInput optionText="name" />
+    </ReferenceInput>
+    <DateInput source="issue_date" />
+    <DateInput source="expiration_date" />
+    <TextInput source="category" />
   </SimpleForm>
 )
 

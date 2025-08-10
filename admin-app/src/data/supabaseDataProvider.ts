@@ -22,7 +22,7 @@ import { supabase } from '../supabaseClient'
  */
 const supabaseDataProvider = (client = supabase): DataProvider => {
   /**
-   * يسجل العملية في جدول AuditLog مع تجاهل أي أخطاء قد تحدث أثناء التسجيل.
+   * يسجل العملية في جدول audit_log مع تجاهل أي أخطاء قد تحدث أثناء التسجيل.
    */
   const logAudit = async (
     action: string,
@@ -31,7 +31,7 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
     id?: string | number
   ) => {
     try {
-      await client.from('AuditLog').insert({
+      await client.from('audit_log').insert({
         table_name: resource,
         action,
         record_id: id ?? ((record as { id?: string | number })?.id ?? null),

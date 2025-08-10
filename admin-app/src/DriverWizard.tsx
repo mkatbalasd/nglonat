@@ -25,9 +25,9 @@ const DriverWizard = () => {
   const [activeStep, setActiveStep] = useState(0)
 
   const [facility, setFacility] = useState({
-    IdentityNumber: '',
-    LicenseNumber: '',
-    Name: '',
+    identity_number: '',
+    license_number: '',
+    name: '',
   })
   interface FacilityRecord {
     id: number
@@ -35,9 +35,9 @@ const DriverWizard = () => {
   const [facilityRecord, setFacilityRecord] = useState<FacilityRecord | null>(null)
 
   const [driver, setDriver] = useState({
-    FirstName: '',
-    LastName: '',
-    IdentityNumber: '',
+    first_name: '',
+    last_name: '',
+    identity_number: '',
   })
   interface DriverRecord {
     id: number
@@ -51,11 +51,11 @@ const DriverWizard = () => {
   const handleFacilitySearch = async () => {
     try {
       const filter: Record<string, string> = {}
-      if (facility.IdentityNumber)
-        filter.IdentityNumber = facility.IdentityNumber
-      if (facility.LicenseNumber)
-        filter.LicenseNumber = facility.LicenseNumber
-      const { data } = await dataProvider.getList('OPC_Facility', {
+      if (facility.identity_number)
+        filter.identity_number = facility.identity_number
+      if (facility.license_number)
+        filter.license_number = facility.license_number
+      const { data } = await dataProvider.getList('opc_facility', {
         filter,
         pagination: { page: 1, perPage: 1 },
         sort: { field: 'id', order: 'ASC' },
@@ -63,9 +63,9 @@ const DriverWizard = () => {
       if (data.length > 0) {
         setFacilityRecord(data[0])
         setFacility({
-          IdentityNumber: data[0].IdentityNumber || '',
-          LicenseNumber: data[0].LicenseNumber || '',
-          Name: data[0].Name || '',
+          identity_number: data[0].identity_number || '',
+          license_number: data[0].license_number || '',
+          name: data[0].name || '',
         })
         setActiveStep(1)
       } else {
@@ -78,7 +78,7 @@ const DriverWizard = () => {
 
   const handleFacilityNext = async () => {
     try {
-      const { data } = await dataProvider.create('OPC_Facility', { data: facility })
+      const { data } = await dataProvider.create('opc_facility', { data: facility })
       setFacilityRecord(data)
       setActiveStep(1)
     } catch {
@@ -88,17 +88,17 @@ const DriverWizard = () => {
 
   const handleDriverSearch = async () => {
     try {
-      const { data } = await dataProvider.getList('OPC_Driver', {
-        filter: { IdentityNumber: driver.IdentityNumber },
+      const { data } = await dataProvider.getList('opc_driver', {
+        filter: { identity_number: driver.identity_number },
         pagination: { page: 1, perPage: 1 },
         sort: { field: 'id', order: 'ASC' },
       })
       if (data.length > 0) {
         setDriverRecord(data[0])
         setDriver({
-          FirstName: data[0].FirstName || '',
-          LastName: data[0].LastName || '',
-          IdentityNumber: data[0].IdentityNumber || '',
+          first_name: data[0].first_name || '',
+          last_name: data[0].last_name || '',
+          identity_number: data[0].identity_number || '',
         })
         setActiveStep(2)
       } else {
@@ -111,8 +111,8 @@ const DriverWizard = () => {
 
   const handleDriverNext = async () => {
     try {
-      const { data } = await dataProvider.create('OPC_Driver', {
-        data: { ...driver, FacilityID: facilityRecord?.id },
+      const { data } = await dataProvider.create('opc_driver', {
+        data: { ...driver, facility_id: facilityRecord?.id },
       })
       setDriverRecord(data)
       setActiveStep(2)
@@ -123,18 +123,18 @@ const DriverWizard = () => {
 
   const handleDriverCardNext = async (values: Record<string, unknown>) => {
     try {
-      const { CardType, Supplier, ...rest } = values as {
-        CardType: unknown
-        Supplier: unknown
+      const { card_type, supplier_id, ...rest } = values as {
+        card_type: unknown
+        supplier_id: unknown
         [key: string]: unknown
       }
-      await dataProvider.create('OPC_DriverCard', {
+      await dataProvider.create('opc_driver_card', {
         data: {
           ...rest,
-          CardType,
-          Supplier,
-          DriverID: driverRecord?.id,
-          FacilityID: facilityRecord?.id,
+          card_type,
+          supplier_id,
+          driver_id: driverRecord?.id,
+          facility_id: facilityRecord?.id,
         },
       })
       setActiveStep(3)
@@ -146,11 +146,11 @@ const DriverWizard = () => {
   const handleOperationCardFinish = async (values: Record<string, unknown>) => {
     try {
       if (operationCard.issue) {
-        await dataProvider.create('OPC_Card', {
+        await dataProvider.create('opc_card', {
           data: {
             ...values,
-            DriverID: driverRecord?.id,
-            FacilityID: facilityRecord?.id,
+            driver_id: driverRecord?.id,
+            facility_id: facilityRecord?.id,
           },
         })
       }
@@ -175,22 +175,26 @@ const DriverWizard = () => {
             label="هوية المنشأة"
             fullWidth
             margin="normal"
-            value={facility.IdentityNumber}
-            onChange={e => setFacility({ ...facility, IdentityNumber: e.target.value })}
+            value={facility.identity_number}
+            onChange={e =>
+              setFacility({ ...facility, identity_number: e.target.value })
+            }
           />
           <TextField
             label="رقم الترخيص"
             fullWidth
             margin="normal"
-            value={facility.LicenseNumber}
-            onChange={e => setFacility({ ...facility, LicenseNumber: e.target.value })}
+            value={facility.license_number}
+            onChange={e =>
+              setFacility({ ...facility, license_number: e.target.value })
+            }
           />
           <TextField
             label="اسم المنشأة"
             fullWidth
             margin="normal"
-            value={facility.Name}
-            onChange={e => setFacility({ ...facility, Name: e.target.value })}
+            value={facility.name}
+            onChange={e => setFacility({ ...facility, name: e.target.value })}
           />
           <MuiButton onClick={handleFacilitySearch}>بحث</MuiButton>
           <MuiButton variant="contained" onClick={handleFacilityNext} sx={{ ml: 1 }}>
@@ -204,22 +208,24 @@ const DriverWizard = () => {
             label="الاسم الأول"
             fullWidth
             margin="normal"
-            value={driver.FirstName}
-            onChange={e => setDriver({ ...driver, FirstName: e.target.value })}
+            value={driver.first_name}
+            onChange={e => setDriver({ ...driver, first_name: e.target.value })}
           />
           <TextField
             label="اسم العائلة"
             fullWidth
             margin="normal"
-            value={driver.LastName}
-            onChange={e => setDriver({ ...driver, LastName: e.target.value })}
+            value={driver.last_name}
+            onChange={e => setDriver({ ...driver, last_name: e.target.value })}
           />
           <TextField
             label="رقم الهوية"
             fullWidth
             margin="normal"
-            value={driver.IdentityNumber}
-            onChange={e => setDriver({ ...driver, IdentityNumber: e.target.value })}
+            value={driver.identity_number}
+            onChange={e =>
+              setDriver({ ...driver, identity_number: e.target.value })
+            }
           />
           <MuiButton onClick={handleDriverSearch}>بحث</MuiButton>
           <MuiButton variant="contained" onClick={handleDriverNext} sx={{ ml: 1 }}>
@@ -229,15 +235,15 @@ const DriverWizard = () => {
       )}
       {activeStep === 2 && (
         <Form onSubmit={handleDriverCardNext} defaultValues={{}}>
-          <TextInput source="CardNumber" label="رقم بطاقة السائق" fullWidth />
-          <ReferenceInput source="CardType" reference="OPC_LicenseType">
-            <SelectInput optionText="LicenseTypeNameAR" />
+          <TextInput source="card_number" label="رقم بطاقة السائق" fullWidth />
+          <ReferenceInput source="card_type" reference="opc_license_type">
+            <SelectInput optionText="name_ar" />
           </ReferenceInput>
-          <ReferenceInput source="Supplier" reference="Supplier">
+          <ReferenceInput source="supplier_id" reference="supplier">
             <SelectInput optionText="name" />
           </ReferenceInput>
-          <DateInput source="IssueDate" label="تاريخ الإصدار" />
-          <DateInput source="ExpiryDate" label="تاريخ الانتهاء" />
+          <DateInput source="issue_date" label="تاريخ الإصدار" />
+          <DateInput source="expiration_date" label="تاريخ الانتهاء" />
           <MuiButton type="submit" variant="contained">
             التالي
           </MuiButton>
@@ -258,12 +264,15 @@ const DriverWizard = () => {
           />
           {operationCard.issue && (
             <>
-              <TextInput source="CardNumber" label="رقم بطاقة التشغيل" fullWidth />
-              <ReferenceInput source="SupplierID" reference="Supplier">
+              <TextInput source="card_number" label="رقم بطاقة التشغيل" fullWidth />
+              <ReferenceInput source="supplier_id" reference="supplier">
                 <SelectInput optionText="name" />
               </ReferenceInput>
-              <DateInput source="IssueDate" label="تاريخ الإصدار" />
-              <DateInput source="ExpiryDate" label="تاريخ الانتهاء" />
+              <DateInput source="issue_date" label="تاريخ الإصدار" />
+              <DateInput
+                source="expiration_date"
+                label="تاريخ الانتهاء"
+              />
             </>
           )}
           <MuiButton type="submit" variant="contained">

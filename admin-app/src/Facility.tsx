@@ -18,8 +18,8 @@ export const FacilityList = () => (
   <List>
     <Datagrid rowClick="show">
       <TextField source="id" />
-      <TextField source="Name" />
-      <TextField source="LicenseNumber" />
+      <TextField source="name" />
+      <TextField source="license_number" />
     </Datagrid>
   </List>
 )
@@ -28,36 +28,36 @@ export const FacilityShow = () => (
   <Show>
     <SimpleShowLayout>
       <TextField source="id" />
-      <TextField source="IdentityNumber" />
-      <TextField source="Name" />
-      <TextField source="EnglishName" />
-      <TextField source="LicenseNumber" />
-      <ReferenceField source="LicenseTypeID" reference="OPC_LicenseType">
-        <TextField source="LicenseTypeNameAR" />
+      <TextField source="identity_number" />
+      <TextField source="name" />
+      <TextField source="english_name" />
+      <TextField source="license_number" />
+      <ReferenceField source="license_type_id" reference="opc_license_type">
+        <TextField source="name_ar" />
       </ReferenceField>
-      <ReferenceField source="LicenseCityID" reference="City">
-        <TextField source="NameAr" />
+      <ReferenceField source="license_city_id" reference="city">
+        <TextField source="name_ar" />
       </ReferenceField>
-      <TextField source="LicenseIssueDate" />
-      <TextField source="LicenseExpirationDate" />
+      <TextField source="license_issue_date" />
+      <TextField source="license_expiration_date" />
     </SimpleShowLayout>
   </Show>
 )
 
 export const FacilityForm = () => (
   <SimpleForm>
-    <TextInput source="IdentityNumber" />
-    <TextInput source="Name" />
-    <TextInput source="EnglishName" />
-    <TextInput source="LicenseNumber" />
-    <ReferenceInput source="LicenseTypeID" reference="OPC_LicenseType">
-      <SelectInput optionText="LicenseTypeNameAR" />
+    <TextInput source="identity_number" />
+    <TextInput source="name" />
+    <TextInput source="english_name" />
+    <TextInput source="license_number" />
+    <ReferenceInput source="license_type_id" reference="opc_license_type">
+      <SelectInput optionText="name_ar" />
     </ReferenceInput>
-    <ReferenceInput source="LicenseCityID" reference="City">
-      <SelectInput optionText="NameAr" />
+    <ReferenceInput source="license_city_id" reference="city">
+      <SelectInput optionText="name_ar" />
     </ReferenceInput>
-    <DateInput source="LicenseIssueDate" />
-    <DateInput source="LicenseExpirationDate" />
+    <DateInput source="license_issue_date" />
+    <DateInput source="license_expiration_date" />
   </SimpleForm>
 )
 

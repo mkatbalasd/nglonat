@@ -12,16 +12,16 @@ export const CityList = () => (
   <List>
     <Datagrid rowClick="edit">
       <TextField source="id" />
-      <TextField source="NameAr" />
-      <TextField source="NameEn" />
+      <TextField source="name_ar" />
+      <TextField source="name_en" />
     </Datagrid>
   </List>
 )
 
 const CityForm = () => (
   <SimpleForm>
-    <TextInput source="NameAr" />
-    <TextInput source="NameEn" />
+    <TextInput source="name_ar" />
+    <TextInput source="name_en" />
   </SimpleForm>
 )
 

@@ -18,9 +18,9 @@ export const VehicleList = () => (
   <List>
     <Datagrid rowClick="show">
       <TextField source="id" />
-      <TextField source="PlateNumber" />
-      <ReferenceField source="FacilityID" reference="OPC_Facility">
-        <TextField source="Name" />
+      <TextField source="plate_number" />
+      <ReferenceField source="facility_id" reference="opc_facility">
+        <TextField source="name" />
       </ReferenceField>
     </Datagrid>
   </List>
@@ -30,36 +30,36 @@ export const VehicleShow = () => (
   <Show>
     <SimpleShowLayout>
       <TextField source="id" />
-      <ReferenceField source="FacilityID" reference="OPC_Facility">
-        <TextField source="Name" />
+      <ReferenceField source="facility_id" reference="opc_facility">
+        <TextField source="name" />
       </ReferenceField>
-      <ReferenceField source="ModelID" reference="OPC_Model">
-        <TextField source="ModelName" />
+      <ReferenceField source="model_id" reference="opc_model">
+        <TextField source="name" />
       </ReferenceField>
-      <ReferenceField source="ColorID" reference="OPC_Color">
-        <TextField source="ColorName" />
+      <ReferenceField source="color_id" reference="opc_color">
+        <TextField source="name" />
       </ReferenceField>
-      <TextField source="PlateNumber" />
-      <TextField source="SerialNumber" />
-      <TextField source="ManufacturingYear" />
+      <TextField source="plate_number" />
+      <TextField source="serial_number" />
+      <TextField source="manufacturing_year" />
     </SimpleShowLayout>
   </Show>
 )
 
 export const VehicleForm = () => (
   <SimpleForm>
-    <ReferenceInput source="FacilityID" reference="OPC_Facility">
-      <SelectInput optionText="Name" />
+    <ReferenceInput source="facility_id" reference="opc_facility">
+      <SelectInput optionText="name" />
     </ReferenceInput>
-    <ReferenceInput source="ModelID" reference="OPC_Model">
-      <SelectInput optionText="ModelName" />
+    <ReferenceInput source="model_id" reference="opc_model">
+      <SelectInput optionText="name" />
     </ReferenceInput>
-    <ReferenceInput source="ColorID" reference="OPC_Color">
-      <SelectInput optionText="ColorName" />
+    <ReferenceInput source="color_id" reference="opc_color">
+      <SelectInput optionText="name" />
     </ReferenceInput>
-    <TextInput source="PlateNumber" />
-    <TextInput source="SerialNumber" />
-    <NumberInput source="ManufacturingYear" />
+    <TextInput source="plate_number" />
+    <TextInput source="serial_number" />
+    <NumberInput source="manufacturing_year" />
   </SimpleForm>
 )
 

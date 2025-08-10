@@ -215,120 +215,119 @@ export const arabicMessages: TranslationMessages = {
     },
   },
   resources: {
-    OPC_Facility: {
+    opc_facility: {
       name: 'منشأة |||| منشآت',
       fields: {
         id: 'معرف المنشأة',
-        IdentityNumber: 'رقم الهوية',
-        Name: 'الاسم',
-        EnglishName: 'الاسم بالإنجليزية',
-        LicenseNumber: 'رقم الرخصة',
-        LicenseTypeID: 'نوع الرخصة',
-        LicenseTypeNameAR: 'نوع الرخصة بالعربية',
-        LicenseCityID: 'مدينة الرخصة',
-        LicenseIssueDate: 'تاريخ الإصدار',
-        LicenseExpirationDate: 'تاريخ الانتهاء',
+        identity_number: 'رقم الهوية',
+        name: 'الاسم',
+        english_name: 'الاسم بالإنجليزية',
+        license_number: 'رقم الرخصة',
+        license_type_id: 'نوع الرخصة',
+        license_type_name_ar: 'نوع الرخصة بالعربية',
+        license_city_id: 'مدينة الرخصة',
+        license_issue_date: 'تاريخ الإصدار',
+        license_expiration_date: 'تاريخ الانتهاء',
       },
     },
-    OPC_Driver: {
+    opc_driver: {
       name: 'سائق |||| سائقون',
       fields: {
         id: 'معرف السائق',
-        FirstName: 'الاسم الأول',
-        LastName: 'اسم العائلة',
-        IdentityNumber: 'رقم الهوية',
-        FacilityID: 'المنشأة',
-        Name: 'اسم المنشأة',
+        first_name: 'الاسم الأول',
+        last_name: 'اسم العائلة',
+        identity_number: 'رقم الهوية',
+        facility_id: 'المنشأة',
       },
     },
-    OPC_DriverCard: {
+    opc_driver_card: {
       name: 'بطاقة سائق |||| بطاقات السائقين',
       fields: {
         id: 'المعرف',
-        DriverID: 'السائق',
-        FacilityID: 'المنشأة',
-        CardType: 'نوع البطاقة',
-        IssueDate: 'تاريخ الإصدار',
-        ExpirationDate: 'تاريخ الانتهاء',
-        CardNumber: 'رقم البطاقة',
-        Supplier: 'المزوّد',
-        Status: 'الحالة',
-        Category: 'الفئة',
+        driver_id: 'السائق',
+        facility_id: 'المنشأة',
+        card_type: 'نوع البطاقة',
+        issue_date: 'تاريخ الإصدار',
+        expiration_date: 'تاريخ الانتهاء',
+        card_number: 'رقم البطاقة',
+        supplier_id: 'المزوّد',
+        status: 'الحالة',
+        category: 'الفئة',
       },
     },
-    OPC_Card: {
+    opc_card: {
       name: 'بطاقة تشغيل |||| بطاقات التشغيل',
       fields: {
         id: 'المعرف',
-        CardNumber: 'رقم البطاقة',
-        FacilityID: 'المنشأة',
-        DriverID: 'السائق',
-        VehicleID: 'المركبة',
-        Supplier: 'المزوّد',
-        CardType: 'نوع البطاقة',
-        IssueDate: 'تاريخ الإصدار',
-        ExpirationDate: 'تاريخ الانتهاء',
-        Status: 'الحالة',
+        card_number: 'رقم البطاقة',
+        facility_id: 'المنشأة',
+        driver_id: 'السائق',
+        vehicle_id: 'المركبة',
+        supplier_id: 'المزوّد',
+        card_type: 'نوع البطاقة',
+        issue_date: 'تاريخ الإصدار',
+        expiration_date: 'تاريخ الانتهاء',
+        status: 'الحالة',
       },
     },
-    OPC_LicenseType: {
+    opc_license_type: {
       name: 'نوع الرخصة |||| أنواع الرخص',
       fields: {
         id: 'معرف النوع',
-        LicenseTypeNameAR: 'الاسم بالعربية',
-        LicenseTypeNameEN: 'الاسم بالإنجليزية',
+        name_ar: 'الاسم بالعربية',
+        name_en: 'الاسم بالإنجليزية',
       },
     },
-    Supplier: {
+    supplier: {
       name: 'مزوّد |||| مزوّدون',
       fields: {
         id: 'المعرف',
         name: 'الاسم',
       },
     },
-    City: {
+    city: {
       name: 'مدينة |||| مدن',
       fields: {
         id: 'المعرف',
-        NameAr: 'الاسم بالعربية',
-        NameEn: 'الاسم بالإنجليزية',
+        name_ar: 'الاسم بالعربية',
+        name_en: 'الاسم بالإنجليزية',
       },
     },
-    OPC_Brand: {
+    opc_brand: {
       name: 'علامة تجارية |||| علامات تجارية',
       fields: {
         id: 'المعرف',
-        BrandName: 'العلامة التجارية',
+        name: 'العلامة التجارية',
       },
     },
-    OPC_Model: {
+    opc_model: {
       name: 'طراز |||| طرازات',
       fields: {
         id: 'المعرف',
-        BrandID: 'العلامة التجارية',
-        ModelName: 'الطراز',
+        brand_id: 'العلامة التجارية',
+        name: 'الطراز',
       },
     },
-    OPC_Color: {
+    opc_color: {
       name: 'لون |||| ألوان',
       fields: {
         id: 'المعرف',
-        ColorName: 'اللون',
+        name: 'اللون',
       },
     },
-    OPC_Vehicle: {
+    opc_vehicle: {
       name: 'مركبة |||| مركبات',
       fields: {
         id: 'المعرف',
-        PlateNumber: 'رقم اللوحة',
-        FacilityID: 'المنشأة',
-        ModelID: 'الطراز',
-        ColorID: 'اللون',
-        SerialNumber: 'الرقم التسلسلي',
-        ManufacturingYear: 'سنة الصنع',
+        plate_number: 'رقم اللوحة',
+        facility_id: 'المنشأة',
+        model_id: 'الطراز',
+        color_id: 'اللون',
+        serial_number: 'الرقم التسلسلي',
+        manufacturing_year: 'سنة الصنع',
       },
     },
-    AuditLog: {
+    audit_log: {
       name: 'سجل التدقيق |||| سجلات التدقيق',
       fields: {
         id: 'المعرف',
