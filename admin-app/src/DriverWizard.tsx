@@ -237,7 +237,7 @@ const DriverWizard = () => {
         <Form onSubmit={handleDriverCardNext} defaultValues={{}}>
           <TextInput source="card_number" label="رقم بطاقة السائق" fullWidth />
           <ReferenceInput source="card_type" reference="opc_license_type">
-            <SelectInput optionText="name_ar" />
+            <SelectInput optionText="license_type_name_ar" />
           </ReferenceInput>
           <ReferenceInput source="supplier_id" reference="supplier">
             <SelectInput optionText="name" />

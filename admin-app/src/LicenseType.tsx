@@ -14,7 +14,7 @@ export const LicenseTypeList = () => (
   <List>
     <Datagrid rowClick="show">
       <TextField source="id" />
-      <TextField source="name_ar" />
+      <TextField source="license_type_name_ar" />
     </Datagrid>
   </List>
 )
@@ -23,16 +23,16 @@ export const LicenseTypeShow = () => (
   <Show>
     <SimpleShowLayout>
       <TextField source="id" />
-      <TextField source="name_ar" />
-      <TextField source="name_en" />
+      <TextField source="license_type_name_ar" />
+      <TextField source="license_type_name_en" />
     </SimpleShowLayout>
   </Show>
 )
 
 export const LicenseTypeForm = () => (
   <SimpleForm>
-    <TextInput source="name_ar" />
-    <TextInput source="name_en" />
+    <TextInput source="license_type_name_ar" />
+    <TextInput source="license_type_name_en" />
   </SimpleForm>
 )
 
