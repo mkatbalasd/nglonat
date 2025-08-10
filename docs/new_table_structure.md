@@ -72,7 +72,7 @@
 - **الفهارس:** `uq_users_username_lower` فهرس فريد على `LOWER(username)`.
 
 ## opc_card
-- **الأعمدة:** id، token، card_number، card_type، facility_id، vehicle_id، driver_id، issue_date، expiration_date، renewal_date، supplier_id، adding_date، last_update، user_id، status، created_at، updated_at.
+- **الأعمدة:** id، token، card_number، card_type، facility_id، vehicle_id، driver_id، issue_date، expiration_date، renewal_date، supplier_id، user_id، status، created_at، updated_at.
 - **القيود:**
   - مفتاح أساسي على `id`.
   - `token` و`card_number` قيم فريدة.
@@ -82,7 +82,7 @@
 - **الفهارس:** `idx_card_facility`، `idx_card_vehicle`، `idx_card_driver`، `idx_card_supplier`، `idx_card_user`.
 
 ## opc_driver_card
-- **الأعمدة:** id، token، card_number، card_type، facility_id، driver_id، issue_date، expiration_date، renewal_date، supplier_id، adding_date، last_update، user_id، status، created_at، updated_at.
+- **الأعمدة:** id، token، card_number، card_type، facility_id، driver_id، issue_date، expiration_date، renewal_date، supplier_id، user_id، status، created_at، updated_at.
 - **القيود:**
   - مفتاح أساسي على `id`.
   - `token` و`card_number` قيم فريدة.
