@@ -10,6 +10,7 @@ BEGIN
   RETURN NEW;
 END;
 $$;
+ALTER FUNCTION public.set_updated_at() OWNER TO supabase_admin;
 
 -- Generate card number based on type with separate sequences for each type
 CREATE OR REPLACE FUNCTION public.generate_card_number(type text, license_number text)
@@ -52,6 +53,7 @@ BEGIN
   RETURN prefix_val || LPAD(next_num::text, 6, '0');
 END;
 $$;
+ALTER FUNCTION public.generate_card_number(text, text) OWNER TO supabase_admin;
 
 -- Generate token and card number for the given facility
 CREATE OR REPLACE FUNCTION public.generate_token_and_card(p_type text, p_facility_id integer,
@@ -71,6 +73,7 @@ BEGIN
   cardnumber := public.generate_card_number(p_type, license_number);
 END;
 $$;
+ALTER FUNCTION public.generate_token_and_card(text, integer) OWNER TO supabase_admin;
 
 -- Trigger function for opc_card
 CREATE OR REPLACE FUNCTION public.before_insert_opc_card()
@@ -86,6 +89,7 @@ BEGIN
   RETURN NEW;
 END;
 $$;
+ALTER FUNCTION public.before_insert_opc_card() OWNER TO supabase_admin;
 
 -- Trigger function for opc_driver_card
 CREATE OR REPLACE FUNCTION public.before_insert_opc_driver_card()
@@ -101,6 +105,7 @@ BEGIN
   RETURN NEW;
 END;
 $$;
+ALTER FUNCTION public.before_insert_opc_driver_card() OWNER TO supabase_admin;
 
 -- Triggers to generate token and card numbers
 DROP TRIGGER IF EXISTS before_insert_opc_card ON public.opc_card;
