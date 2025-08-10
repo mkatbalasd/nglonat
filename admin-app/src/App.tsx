@@ -85,54 +85,54 @@ const App = () => {
         <Route path="/wizard" element={<DriverWizard />} />
       </CustomRoutes>
       <Resource
-        name="OPC_Facility_view"
+        name="OPC_Facility"
         list={FacilityList}
         show={FacilityShow}
         create={FacilityCreate}
         edit={FacilityEdit}
       />
       <Resource
-        name="OPC_Driver_view"
+        name="OPC_Driver"
         list={DriverList}
         show={DriverShow}
         create={DriverCreate}
         edit={DriverEdit}
       />
       <Resource
-        name="OPC_DriverCard_view"
+        name="OPC_DriverCard"
         list={DriverCardList}
         show={DriverCardShow}
         create={DriverCardCreate}
         edit={DriverCardEdit}
       />
       <Resource
-        name="OPC_Card_view"
+        name="OPC_Card"
         list={OperationCardList}
         show={OperationCardShow}
         create={OperationCardCreate}
         edit={OperationCardEdit}
       />
       <Resource
-        name="OPC_LicenseType_view"
+        name="OPC_LicenseType"
         list={LicenseTypeList}
         show={LicenseTypeShow}
         create={LicenseTypeCreate}
         edit={LicenseTypeEdit}
       />
       <Resource
-        name="OPC_Brand_view"
+        name="OPC_Brand"
         list={BrandList}
         create={BrandCreate}
         edit={BrandEdit}
       />
       <Resource
-        name="OPC_Model_view"
+        name="OPC_Model"
         list={ModelList}
         create={ModelCreate}
         edit={ModelEdit}
       />
       <Resource
-        name="OPC_Color_view"
+        name="OPC_Color"
         list={ColorList}
         create={ColorCreate}
         edit={ColorEdit}
@@ -143,9 +143,9 @@ const App = () => {
         create={SupplierCreate}
         edit={SupplierEdit}
       />
-      <Resource name="City_view" list={CityList} create={CityCreate} edit={CityEdit} />
+      <Resource name="City" list={CityList} create={CityCreate} edit={CityEdit} />
       <Resource
-        name="OPC_Vehicle_view"
+        name="OPC_Vehicle"
         list={VehicleList}
         show={VehicleShow}
         create={VehicleCreate}

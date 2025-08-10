@@ -19,7 +19,7 @@ export const VehicleList = () => (
     <Datagrid rowClick="show">
       <TextField source="id" />
       <TextField source="PlateNumber" />
-      <ReferenceField source="FacilityID" reference="OPC_Facility_view">
+      <ReferenceField source="FacilityID" reference="OPC_Facility">
         <TextField source="Name" />
       </ReferenceField>
     </Datagrid>
@@ -30,13 +30,13 @@ export const VehicleShow = () => (
   <Show>
     <SimpleShowLayout>
       <TextField source="id" />
-      <ReferenceField source="FacilityID" reference="OPC_Facility_view">
+      <ReferenceField source="FacilityID" reference="OPC_Facility">
         <TextField source="Name" />
       </ReferenceField>
-      <ReferenceField source="ModelID" reference="OPC_Model_view">
+      <ReferenceField source="ModelID" reference="OPC_Model">
         <TextField source="ModelName" />
       </ReferenceField>
-      <ReferenceField source="ColorID" reference="OPC_Color_view">
+      <ReferenceField source="ColorID" reference="OPC_Color">
         <TextField source="ColorName" />
       </ReferenceField>
       <TextField source="PlateNumber" />
@@ -48,13 +48,13 @@ export const VehicleShow = () => (
 
 export const VehicleForm = () => (
   <SimpleForm>
-    <ReferenceInput source="FacilityID" reference="OPC_Facility_view">
+    <ReferenceInput source="FacilityID" reference="OPC_Facility">
       <SelectInput optionText="Name" />
     </ReferenceInput>
-    <ReferenceInput source="ModelID" reference="OPC_Model_view">
+    <ReferenceInput source="ModelID" reference="OPC_Model">
       <SelectInput optionText="ModelName" />
     </ReferenceInput>
-    <ReferenceInput source="ColorID" reference="OPC_Color_view">
+    <ReferenceInput source="ColorID" reference="OPC_Color">
       <SelectInput optionText="ColorName" />
     </ReferenceInput>
     <TextInput source="PlateNumber" />
