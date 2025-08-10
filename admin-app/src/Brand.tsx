@@ -12,14 +12,14 @@ export const BrandList = () => (
   <List>
     <Datagrid rowClick="edit">
       <TextField source="id" />
-      <TextField source="name" />
+      <TextField source="brand_name" />
     </Datagrid>
   </List>
 )
 
 const BrandForm = () => (
   <SimpleForm>
-    <TextInput source="name" />
+    <TextInput source="brand_name" />
   </SimpleForm>
 )
 

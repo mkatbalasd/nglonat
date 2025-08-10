@@ -297,7 +297,7 @@ export const arabicMessages: TranslationMessages = {
       name: 'علامة تجارية |||| علامات تجارية',
       fields: {
         id: 'المعرف',
-        name: 'العلامة التجارية',
+        brand_name: 'العلامة التجارية',
       },
     },
     opc_model: {
@@ -305,7 +305,7 @@ export const arabicMessages: TranslationMessages = {
       fields: {
         id: 'المعرف',
         brand_id: 'العلامة التجارية',
-        name: 'الطراز',
+        model_name: 'الطراز',
       },
     },
     opc_color: {
