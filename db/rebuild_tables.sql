@@ -23,3 +23,4 @@ COMMIT;
 -- Recreate the tables using the latest schema
 \ir schema.sql
 \ir functions.sql
+\ir security.sql
