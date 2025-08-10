@@ -11,26 +11,39 @@ import {
   ReferenceInput,
   SelectInput,
   DateInput,
+  Button,
+  TopToolbar,
 } from 'react-admin'
+import { useNavigate } from 'react-router-dom'
 
-export const DriverCardList = () => (
-  <List>
-    <Datagrid rowClick="show">
-      <TextField source="id" />
-      <ReferenceField source="driver_id" reference="opc_driver">
-        <TextField source="first_name" />
-      </ReferenceField>
-      <ReferenceField source="facility_id" reference="opc_facility">
-        <TextField source="name" />
-      </ReferenceField>
-      <ReferenceField source="card_type" reference="opc_license_type">
-        <TextField source="license_type_name_ar" />
-      </ReferenceField>
-      <TextField source="issue_date" />
-      <TextField source="expiration_date" />
-    </Datagrid>
-  </List>
-)
+export const DriverCardList = () => {
+  const navigate = useNavigate()
+
+  return (
+    <List
+      actions={
+        <TopToolbar>
+          <Button label="إصدار بطاقة جديدة" onClick={() => navigate('/wizard')} />
+        </TopToolbar>
+      }
+    >
+      <Datagrid rowClick="show">
+        <TextField source="id" />
+        <ReferenceField source="driver_id" reference="opc_driver">
+          <TextField source="first_name" />
+        </ReferenceField>
+        <ReferenceField source="facility_id" reference="opc_facility">
+          <TextField source="name" />
+        </ReferenceField>
+        <ReferenceField source="card_type" reference="opc_license_type">
+          <TextField source="license_type_name_ar" />
+        </ReferenceField>
+        <TextField source="issue_date" />
+        <TextField source="expiration_date" />
+      </Datagrid>
+    </List>
+  )
+}
 
 export const DriverCardShow = () => (
   <Show>
