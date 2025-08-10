@@ -1,0 +1,9 @@
+{
+  "name": "nglonat-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "migrate": "psql -f db/rebuild_tables.sql",
+    "seed": "psql -f db/seed.sql"
+  }
+}

@@ -280,8 +280,8 @@ BEGIN
 
     IF NOT FOUND THEN
       next_num := 1;
-      INSERT INTO "CardSequence" ("Prefix", "LastDriverCardNumber", "LastOperationCardNumber")
-      VALUES (prefix, 0, next_num);
+      INSERT INTO "CardSequence" ("Prefix", "LastDriverCardNumber", "LastOperationCardNumber", created_at)
+      VALUES (prefix, 0, next_num, now());
     ELSE
       UPDATE "CardSequence" SET "LastOperationCardNumber" = next_num WHERE "Prefix" = prefix;
     END IF;
@@ -291,8 +291,8 @@ BEGIN
 
     IF NOT FOUND THEN
       next_num := 1;
-      INSERT INTO "CardSequence" ("Prefix", "LastDriverCardNumber", "LastOperationCardNumber")
-      VALUES (prefix, next_num, 0);
+      INSERT INTO "CardSequence" ("Prefix", "LastDriverCardNumber", "LastOperationCardNumber", created_at)
+      VALUES (prefix, next_num, 0, now());
     ELSE
       UPDATE "CardSequence" SET "LastDriverCardNumber" = next_num WHERE "Prefix" = prefix;
     END IF;
