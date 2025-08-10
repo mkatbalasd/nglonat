@@ -274,8 +274,8 @@ export const arabicMessages: TranslationMessages = {
       name: 'نوع الرخصة |||| أنواع الرخص',
       fields: {
         id: 'معرف النوع',
-        name_ar: 'الاسم بالعربية',
-        name_en: 'الاسم بالإنجليزية',
+        license_type_name_ar: 'الاسم بالعربية',
+        license_type_name_en: 'الاسم بالإنجليزية',
       },
     },
     supplier: {
