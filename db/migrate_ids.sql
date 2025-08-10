@@ -111,25 +111,25 @@ BEGIN
     SELECT "LastOperationCardNumber" + 1 INTO next_num
     FROM "CardSequence" WHERE "Prefix" = prefix FOR UPDATE;
 
-    IF NOT FOUND THEN
-      next_num := 1;
-      INSERT INTO "CardSequence" ("Prefix", "LastDriverCardNumber", "LastOperationCardNumber")
-      VALUES (prefix, 0, next_num);
+      IF NOT FOUND THEN
+        next_num := 1;
+        INSERT INTO "CardSequence" ("Prefix", "LastDriverCardNumber", "LastOperationCardNumber", created_at)
+        VALUES (prefix, 0, next_num, now());
+      ELSE
+        UPDATE "CardSequence" SET "LastOperationCardNumber" = next_num WHERE "Prefix" = prefix;
+      END IF;
     ELSE
-      UPDATE "CardSequence" SET "LastOperationCardNumber" = next_num WHERE "Prefix" = prefix;
-    END IF;
-  ELSE
-    SELECT "LastDriverCardNumber" + 1 INTO next_num
-    FROM "CardSequence" WHERE "Prefix" = prefix FOR UPDATE;
+      SELECT "LastDriverCardNumber" + 1 INTO next_num
+      FROM "CardSequence" WHERE "Prefix" = prefix FOR UPDATE;
 
-    IF NOT FOUND THEN
-      next_num := 1;
-      INSERT INTO "CardSequence" ("Prefix", "LastDriverCardNumber", "LastOperationCardNumber")
-      VALUES (prefix, next_num, 0);
-    ELSE
-      UPDATE "CardSequence" SET "LastDriverCardNumber" = next_num WHERE "Prefix" = prefix;
+      IF NOT FOUND THEN
+        next_num := 1;
+        INSERT INTO "CardSequence" ("Prefix", "LastDriverCardNumber", "LastOperationCardNumber", created_at)
+        VALUES (prefix, next_num, 0, now());
+      ELSE
+        UPDATE "CardSequence" SET "LastDriverCardNumber" = next_num WHERE "Prefix" = prefix;
+      END IF;
     END IF;
-  END IF;
 
   RETURN prefix || LPAD(next_num::text, 6, '0');
 END;
