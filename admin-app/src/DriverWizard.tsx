@@ -6,11 +6,10 @@ import {
   StepLabel,
   Button as MuiButton,
   TextField,
-  Checkbox,
-  FormControlLabel,
 } from '@mui/material'
 import {
   useDataProvider,
+  useRedirect,
   Form,
   TextInput,
   ReferenceInput,
@@ -20,19 +19,25 @@ import {
 
 const DriverWizard = () => {
   const dataProvider = useDataProvider()
+  const redirect = useRedirect()
   const [activeStep, setActiveStep] = useState(0)
 
   const [facility, setFacility] = useState({
     identity_number: '',
-    license_number: '',
     name: '',
+    english_name: '',
+    license_number: '',
+    license_type_id: '',
+    license_city_id: '',
     license_issue_date: '',
     license_expiration_date: '',
   })
   interface FacilityRecord {
     id: number
   }
-  const [facilityRecord, setFacilityRecord] = useState<FacilityRecord | null>(null)
+  const [facilityRecord, setFacilityRecord] = useState<FacilityRecord | null>(
+    null
+  )
   const [showFacilityCreate, setShowFacilityCreate] = useState(false)
 
   const [driver, setDriver] = useState({
@@ -44,38 +49,16 @@ const DriverWizard = () => {
     id: number
   }
   const [driverRecord, setDriverRecord] = useState<DriverRecord | null>(null)
-  const [driverCardRecord, setDriverCardRecord] = useState<Record<string, unknown> | null>(null)
-
-  const [operationCard, setOperationCard] = useState({ issue: false })
-  const steps = [
-    'المنشأة',
-    'السائق',
-    'بطاقة السائق',
-    ...(operationCard.issue ? ['المركبة', 'بطاقة التشغيل'] : ['بطاقة التشغيل']),
-  ]
-  const [vehicle, setVehicle] = useState({
-    plate_number: '',
-    serial_number: '',
-  })
-  interface VehicleRecord {
-    id: number
-    plate_number?: string
-    serial_number?: string
-  }
-  const [vehicleRecord, setVehicleRecord] = useState<VehicleRecord | null>(null)
-  const [showVehicleCreate, setShowVehicleCreate] = useState(false)
-  const [operationCardRecord, setOperationCardRecord] =
+  const [showDriverCreate, setShowDriverCreate] = useState(false)
+  const [driverCardRecord, setDriverCardRecord] =
     useState<Record<string, unknown> | null>(null)
+
+  const steps = ['المنشأة', 'السائق', 'بطاقة السائق']
 
   const handleFacilitySearch = async () => {
     try {
-      const filter: Record<string, string> = {}
-      if (facility.identity_number)
-        filter.identity_number = facility.identity_number
-      if (facility.license_number)
-        filter.license_number = facility.license_number
       const { data } = await dataProvider.getList('opc_facility', {
-        filter,
+        filter: { identity_number: facility.identity_number },
         pagination: { page: 1, perPage: 1 },
         sort: { field: 'id', order: 'ASC' },
       })
@@ -83,15 +66,17 @@ const DriverWizard = () => {
         setFacilityRecord(data[0])
         setFacility({
           identity_number: data[0].identity_number || '',
-          license_number: data[0].license_number || '',
           name: data[0].name || '',
+          english_name: data[0].english_name || '',
+          license_number: data[0].license_number || '',
+          license_type_id: data[0].license_type_id || '',
+          license_city_id: data[0].license_city_id || '',
           license_issue_date: data[0].license_issue_date || '',
           license_expiration_date: data[0].license_expiration_date || '',
         })
         setActiveStep(1)
       } else {
         setShowFacilityCreate(true)
-        setFacility({ ...facility, identity_number: filter.identity_number || '' })
       }
     } catch {
       window.alert('فشل البحث عن المنشأة')
@@ -100,7 +85,9 @@ const DriverWizard = () => {
 
   const handleFacilityNext = async () => {
     try {
-      const { data } = await dataProvider.create('opc_facility', { data: facility })
+      const { data } = await dataProvider.create('opc_facility', {
+        data: facility,
+      })
       setFacilityRecord(data)
       setShowFacilityCreate(false)
       setActiveStep(1)
@@ -123,16 +110,18 @@ const DriverWizard = () => {
           last_name: data[0].last_name || '',
           identity_number: data[0].identity_number || '',
         })
-        const { data: cardData } = await dataProvider.getList('opc_driver_card', {
-          filter: { driver_id: data[0].id },
-          pagination: { page: 1, perPage: 1 },
-          sort: { field: 'id', order: 'ASC' },
-        })
-        if (cardData.length > 0) setDriverCardRecord(cardData[0])
-        else setDriverCardRecord(null)
+        const { data: cardData } = await dataProvider.getList(
+          'opc_driver_card',
+          {
+            filter: { driver_id: data[0].id },
+            pagination: { page: 1, perPage: 1 },
+            sort: { field: 'id', order: 'ASC' },
+          }
+        )
+        setDriverCardRecord(cardData.length > 0 ? cardData[0] : null)
         setActiveStep(2)
       } else {
-        window.alert('لم يتم العثور على سائق')
+        setShowDriverCreate(true)
       }
     } catch {
       window.alert('فشل البحث عن السائق')
@@ -146,6 +135,7 @@ const DriverWizard = () => {
       })
       setDriverRecord(data)
       setDriverCardRecord(null)
+      setShowDriverCreate(false)
       setActiveStep(2)
     } catch {
       window.alert('فشل إنشاء السائق')
@@ -171,101 +161,10 @@ const DriverWizard = () => {
           id: (driverCardRecord as { id: number }).id,
           data: payload,
         })
-      else
-        await dataProvider.create('opc_driver_card', {
-          data: payload,
-        })
-      setActiveStep(steps.indexOf('بطاقة التشغيل'))
+      else await dataProvider.create('opc_driver_card', { data: payload })
+      redirect('/opc_driver_card')
     } catch {
-      window.alert('فشل إنشاء بطاقة السائق')
-    }
-  }
-
-  const handleVehicleSearch = async () => {
-    try {
-      const filter: Record<string, string> = {}
-      if (vehicle.plate_number) filter.plate_number = vehicle.plate_number
-      if (vehicle.serial_number) filter.serial_number = vehicle.serial_number
-      const { data } = await dataProvider.getList('opc_vehicle', {
-        filter,
-        pagination: { page: 1, perPage: 1 },
-        sort: { field: 'id', order: 'ASC' },
-      })
-      if (data.length > 0) {
-        setVehicleRecord(data[0])
-        setVehicle({
-          plate_number: data[0].plate_number || '',
-          serial_number: data[0].serial_number || '',
-        })
-        const { data: cardData } = await dataProvider.getList('opc_card', {
-          filter: { vehicle_id: data[0].id },
-          pagination: { page: 1, perPage: 1 },
-          sort: { field: 'id', order: 'ASC' },
-        })
-        if (cardData.length > 0) setOperationCardRecord(cardData[0])
-        else setOperationCardRecord(null)
-        setActiveStep(steps.indexOf('بطاقة التشغيل'))
-      } else {
-        setShowVehicleCreate(true)
-        setVehicle({
-          plate_number: filter.plate_number || '',
-          serial_number: filter.serial_number || '',
-        })
-      }
-    } catch {
-      window.alert('فشل البحث عن المركبة')
-    }
-  }
-
-  const handleVehicleNext = async (values: Record<string, unknown>) => {
-    try {
-      const { model_id, color_id, plate_number, serial_number } = values as {
-        model_id: unknown
-        color_id: unknown
-        plate_number: string
-        serial_number: string
-      }
-      const { data } = await dataProvider.create('opc_vehicle', {
-        data: {
-          model_id,
-          color_id,
-          plate_number,
-          serial_number,
-          facility_id: facilityRecord?.id,
-        },
-      })
-      setVehicleRecord(data)
-      setVehicle({
-        plate_number: data.plate_number || '',
-        serial_number: data.serial_number || '',
-      })
-      setShowVehicleCreate(false)
-      setOperationCardRecord(null)
-      setActiveStep(steps.indexOf('بطاقة التشغيل'))
-    } catch {
-      window.alert('فشل إنشاء المركبة')
-    }
-  }
-
-  const handleOperationCardFinish = async (values: Record<string, unknown>) => {
-    try {
-      if (operationCard.issue && vehicleRecord) {
-        const payload = {
-          ...values,
-          driver_id: driverRecord?.id,
-          facility_id: facilityRecord?.id,
-          vehicle_id: vehicleRecord.id,
-        }
-        if (operationCardRecord)
-          await dataProvider.update('opc_card', {
-            id: (operationCardRecord as { id: number }).id,
-            data: payload,
-          })
-        else await dataProvider.create('opc_card', { data: payload })
-      }
-      setActiveStep(steps.length)
-    } catch {
-      window.alert('فشل إنشاء بطاقة التشغيل')
+      window.alert('فشل حفظ بطاقة السائق')
     }
   }
 
@@ -289,15 +188,7 @@ const DriverWizard = () => {
               setFacility({ ...facility, identity_number: e.target.value })
             }
           />
-          <TextField
-            label="رقم الترخيص"
-            fullWidth
-            margin="normal"
-            value={facility.license_number}
-            onChange={e =>
-              setFacility({ ...facility, license_number: e.target.value })
-            }
-          />
+          <MuiButton onClick={handleFacilitySearch}>بحث</MuiButton>
           {showFacilityCreate && (
             <>
               <TextField
@@ -307,6 +198,42 @@ const DriverWizard = () => {
                 value={facility.name}
                 onChange={e =>
                   setFacility({ ...facility, name: e.target.value })
+                }
+              />
+              <TextField
+                label="الاسم بالإنجليزية"
+                fullWidth
+                margin="normal"
+                value={facility.english_name}
+                onChange={e =>
+                  setFacility({ ...facility, english_name: e.target.value })
+                }
+              />
+              <TextField
+                label="رقم الترخيص"
+                fullWidth
+                margin="normal"
+                value={facility.license_number}
+                onChange={e =>
+                  setFacility({ ...facility, license_number: e.target.value })
+                }
+              />
+              <TextField
+                label="نوع الترخيص"
+                fullWidth
+                margin="normal"
+                value={facility.license_type_id}
+                onChange={e =>
+                  setFacility({ ...facility, license_type_id: e.target.value })
+                }
+              />
+              <TextField
+                label="مدينة الترخيص"
+                fullWidth
+                margin="normal"
+                value={facility.license_city_id}
+                onChange={e =>
+                  setFacility({ ...facility, license_city_id: e.target.value })
                 }
               />
               <TextField
@@ -341,29 +268,14 @@ const DriverWizard = () => {
                 onClick={handleFacilityNext}
                 sx={{ ml: 1 }}
               >
-                إنشاء
+                التالي
               </MuiButton>
             </>
           )}
-          <MuiButton onClick={handleFacilitySearch}>بحث</MuiButton>
         </Box>
       )}
       {activeStep === 1 && (
         <Box>
-          <TextField
-            label="الاسم الأول"
-            fullWidth
-            margin="normal"
-            value={driver.first_name}
-            onChange={e => setDriver({ ...driver, first_name: e.target.value })}
-          />
-          <TextField
-            label="اسم العائلة"
-            fullWidth
-            margin="normal"
-            value={driver.last_name}
-            onChange={e => setDriver({ ...driver, last_name: e.target.value })}
-          />
           <TextField
             label="رقم الهوية"
             fullWidth
@@ -374,13 +286,42 @@ const DriverWizard = () => {
             }
           />
           <MuiButton onClick={handleDriverSearch}>بحث</MuiButton>
-          <MuiButton variant="contained" onClick={handleDriverNext} sx={{ ml: 1 }}>
-            إنشاء
-          </MuiButton>
+          {showDriverCreate && (
+            <>
+              <TextField
+                label="الاسم الأول"
+                fullWidth
+                margin="normal"
+                value={driver.first_name}
+                onChange={e =>
+                  setDriver({ ...driver, first_name: e.target.value })
+                }
+              />
+              <TextField
+                label="اسم العائلة"
+                fullWidth
+                margin="normal"
+                value={driver.last_name}
+                onChange={e =>
+                  setDriver({ ...driver, last_name: e.target.value })
+                }
+              />
+              <MuiButton
+                variant="contained"
+                onClick={handleDriverNext}
+                sx={{ ml: 1 }}
+              >
+                التالي
+              </MuiButton>
+            </>
+          )}
         </Box>
       )}
       {activeStep === 2 && (
-        <Form onSubmit={handleDriverCardNext} defaultValues={driverCardRecord || {}}>
+        <Form
+          onSubmit={handleDriverCardNext}
+          defaultValues={driverCardRecord || {}}
+        >
           <TextInput source="card_number" label="رقم بطاقة السائق" fullWidth />
           <ReferenceInput source="card_type" reference="opc_license_type">
             <SelectInput optionText="license_type_name_ar" />
@@ -391,96 +332,13 @@ const DriverWizard = () => {
           <DateInput source="issue_date" label="تاريخ الإصدار" />
           <DateInput source="expiration_date" label="تاريخ الانتهاء" />
           <MuiButton type="submit" variant="contained">
-            التالي
+            حفظ
           </MuiButton>
         </Form>
       )}
-      {activeStep === 3 && !operationCard.issue && (
-        <Box>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={operationCard.issue}
-                onChange={e =>
-                  setOperationCard({ ...operationCard, issue: e.target.checked })
-                }
-              />
-            }
-            label="إصدار بطاقة تشغيل"
-          />
-          {!operationCard.issue && (
-            <MuiButton
-              variant="contained"
-              onClick={() => handleOperationCardFinish({})}
-            >
-              إنهاء
-            </MuiButton>
-          )}
-        </Box>
-      )}
-      {activeStep === 3 && operationCard.issue && (
-        <Box>
-          <TextField
-            label="رقم اللوحة"
-            fullWidth
-            margin="normal"
-            value={vehicle.plate_number}
-            onChange={e =>
-              setVehicle({ ...vehicle, plate_number: e.target.value })
-            }
-          />
-          <TextField
-            label="رقم الهيكل"
-            fullWidth
-            margin="normal"
-            value={vehicle.serial_number}
-            onChange={e =>
-              setVehicle({ ...vehicle, serial_number: e.target.value })
-            }
-          />
-          <MuiButton onClick={handleVehicleSearch}>بحث المركبة</MuiButton>
-          {showVehicleCreate && (
-            <Form
-              onSubmit={handleVehicleNext}
-              defaultValues={{
-                plate_number: vehicle.plate_number,
-                serial_number: vehicle.serial_number,
-              }}
-            >
-              <ReferenceInput source="model_id" reference="opc_model">
-                <SelectInput optionText="model_name" />
-              </ReferenceInput>
-              <ReferenceInput source="color_id" reference="opc_color">
-                <SelectInput optionText="color_name" />
-              </ReferenceInput>
-              <TextInput source="plate_number" label="رقم اللوحة" />
-              <TextInput source="serial_number" label="رقم الهيكل" />
-              <MuiButton type="submit" variant="contained">
-                إنشاء المركبة
-              </MuiButton>
-            </Form>
-          )}
-        </Box>
-      )}
-      {activeStep === 4 && operationCard.issue && (
-        <Form
-          onSubmit={handleOperationCardFinish}
-          defaultValues={operationCardRecord || {}}
-        >
-          <TextInput source="card_number" label="رقم بطاقة التشغيل" fullWidth />
-          <ReferenceInput source="supplier_id" reference="supplier">
-            <SelectInput optionText="name" />
-          </ReferenceInput>
-          <DateInput source="issue_date" label="تاريخ الإصدار" />
-          <DateInput source="expiration_date" label="تاريخ الانتهاء" />
-          <MuiButton type="submit" variant="contained">
-            إنهاء
-          </MuiButton>
-        </Form>
-      )}
-      {activeStep === steps.length && <Box>تم إكمال المعالج</Box>}
     </Box>
   )
 }
 
 export default DriverWizard
+
