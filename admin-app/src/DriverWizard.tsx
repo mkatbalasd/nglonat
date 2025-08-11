@@ -16,6 +16,9 @@ import {
   SelectInput,
   DateInput,
 } from 'react-admin'
+import { useFormContext } from 'react-hook-form'
+import LicenseTypeQuickCreate from './LicenseTypeQuickCreate'
+import CityQuickCreate from './CityQuickCreate'
 
 const DriverWizard = () => {
   const dataProvider = useDataProvider()
@@ -24,13 +27,6 @@ const DriverWizard = () => {
 
   const [facility, setFacility] = useState({
     identity_number: '',
-    name: '',
-    english_name: '',
-    license_number: '',
-    license_type_id: '',
-    license_city_id: '',
-    license_issue_date: '',
-    license_expiration_date: '',
   })
   interface FacilityRecord {
     id: number
@@ -55,6 +51,56 @@ const DriverWizard = () => {
 
   const steps = ['المنشأة', 'السائق', 'بطاقة السائق']
 
+  const FacilityCreateForm = () => {
+    const { setValue } = useFormContext()
+    return (
+      <>
+        <TextInput source="name" label="اسم المنشأة" fullWidth />
+        <TextInput
+          source="english_name"
+          label="الاسم بالإنجليزية"
+          fullWidth
+        />
+        <TextInput source="license_number" label="رقم الترخيص" fullWidth />
+        <ReferenceInput source="license_type_id" reference="opc_license_type">
+          <SelectInput
+            optionText="license_type_name_ar"
+            create={<LicenseTypeQuickCreate />}
+          />
+        </ReferenceInput>
+        <ReferenceInput source="license_city_id" reference="city">
+          <SelectInput
+            optionText="name_ar"
+            create={<CityQuickCreate />}
+          />
+        </ReferenceInput>
+        <DateInput
+          source="license_issue_date"
+          label="تاريخ إصدار الترخيص"
+          onChange={value => {
+            const issue =
+              typeof value === 'string'
+                ? value
+                : (value as { target?: { value: string } }).target?.value
+            if (issue) {
+              const exp = new Date(issue)
+              exp.setFullYear(exp.getFullYear() + 1)
+              setValue('license_expiration_date', exp.toISOString().split('T')[0])
+            }
+          }}
+        />
+        <DateInput
+          source="license_expiration_date"
+          label="تاريخ انتهاء الترخيص"
+          disabled
+        />
+        <MuiButton type="submit" variant="contained" sx={{ ml: 1 }}>
+          التالي
+        </MuiButton>
+      </>
+    )
+  }
+
   const handleFacilitySearch = async () => {
     try {
       const { data } = await dataProvider.getList('opc_facility', {
@@ -64,16 +110,6 @@ const DriverWizard = () => {
       })
       if (data.length > 0) {
         setFacilityRecord(data[0])
-        setFacility({
-          identity_number: data[0].identity_number || '',
-          name: data[0].name || '',
-          english_name: data[0].english_name || '',
-          license_number: data[0].license_number || '',
-          license_type_id: data[0].license_type_id || '',
-          license_city_id: data[0].license_city_id || '',
-          license_issue_date: data[0].license_issue_date || '',
-          license_expiration_date: data[0].license_expiration_date || '',
-        })
         setActiveStep(1)
       } else {
         setShowFacilityCreate(true)
@@ -83,10 +119,10 @@ const DriverWizard = () => {
     }
   }
 
-  const handleFacilityNext = async () => {
+  const handleFacilityNext = async (values: Record<string, unknown>) => {
     try {
       const { data } = await dataProvider.create('opc_facility', {
-        data: facility,
+        data: { ...values, identity_number: facility.identity_number },
       })
       setFacilityRecord(data)
       setShowFacilityCreate(false)
@@ -160,6 +196,7 @@ const DriverWizard = () => {
         await dataProvider.update('opc_driver_card', {
           id: (driverCardRecord as { id: number }).id,
           data: payload,
+          previousData: driverCardRecord as Record<string, unknown>,
         })
       else await dataProvider.create('opc_driver_card', { data: payload })
       redirect('/opc_driver_card')
@@ -190,87 +227,9 @@ const DriverWizard = () => {
           />
           <MuiButton onClick={handleFacilitySearch}>بحث</MuiButton>
           {showFacilityCreate && (
-            <>
-              <TextField
-                label="اسم المنشأة"
-                fullWidth
-                margin="normal"
-                value={facility.name}
-                onChange={e =>
-                  setFacility({ ...facility, name: e.target.value })
-                }
-              />
-              <TextField
-                label="الاسم بالإنجليزية"
-                fullWidth
-                margin="normal"
-                value={facility.english_name}
-                onChange={e =>
-                  setFacility({ ...facility, english_name: e.target.value })
-                }
-              />
-              <TextField
-                label="رقم الترخيص"
-                fullWidth
-                margin="normal"
-                value={facility.license_number}
-                onChange={e =>
-                  setFacility({ ...facility, license_number: e.target.value })
-                }
-              />
-              <TextField
-                label="نوع الترخيص"
-                fullWidth
-                margin="normal"
-                value={facility.license_type_id}
-                onChange={e =>
-                  setFacility({ ...facility, license_type_id: e.target.value })
-                }
-              />
-              <TextField
-                label="مدينة الترخيص"
-                fullWidth
-                margin="normal"
-                value={facility.license_city_id}
-                onChange={e =>
-                  setFacility({ ...facility, license_city_id: e.target.value })
-                }
-              />
-              <TextField
-                label="تاريخ إصدار الترخيص"
-                type="date"
-                fullWidth
-                margin="normal"
-                InputLabelProps={{ shrink: true }}
-                value={facility.license_issue_date}
-                onChange={e => {
-                  const issue = e.target.value
-                  const exp = new Date(issue)
-                  exp.setFullYear(exp.getFullYear() + 1)
-                  setFacility({
-                    ...facility,
-                    license_issue_date: issue,
-                    license_expiration_date: exp.toISOString().split('T')[0],
-                  })
-                }}
-              />
-              <TextField
-                label="تاريخ انتهاء الترخيص"
-                type="date"
-                fullWidth
-                margin="normal"
-                InputLabelProps={{ shrink: true }}
-                value={facility.license_expiration_date}
-                disabled
-              />
-              <MuiButton
-                variant="contained"
-                onClick={handleFacilityNext}
-                sx={{ ml: 1 }}
-              >
-                التالي
-              </MuiButton>
-            </>
+            <Form onSubmit={handleFacilityNext}>
+              <FacilityCreateForm />
+            </Form>
           )}
         </Box>
       )}
