@@ -22,7 +22,7 @@ const CityQuickCreateButton = () => {
       <Button startIcon={<AddCircleOutline />} onClick={() => setOpen(true)}>
         إضافة جديد
       </Button>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} fullWidth>
         <Create
           resource="city"
           mutationOptions={{ onSuccess: handleSuccess }}
