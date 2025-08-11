@@ -62,17 +62,19 @@ const DriverWizard = () => {
           fullWidth
         />
         <TextInput source="license_number" label="رقم الترخيص" fullWidth />
-        <ReferenceInput source="license_type_id" reference="opc_license_type">
-          <SelectInput
-            optionText="license_type_name_ar"
-            create={<LicenseTypeQuickCreateButton />}
-          />
+        <ReferenceInput
+          source="license_type_id"
+          reference="opc_license_type"
+          create={<LicenseTypeQuickCreateButton />}
+        >
+          <SelectInput optionText="license_type_name_ar" />
         </ReferenceInput>
-        <ReferenceInput source="license_city_id" reference="city">
-          <SelectInput
-            optionText="name_ar"
-            create={<CityQuickCreateButton />}
-          />
+        <ReferenceInput
+          source="license_city_id"
+          reference="city"
+          create={<CityQuickCreateButton />}
+        >
+          <SelectInput optionText="name_ar" />
         </ReferenceInput>
         <DateInput
           source="license_issue_date"

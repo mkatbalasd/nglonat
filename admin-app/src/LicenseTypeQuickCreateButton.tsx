@@ -22,7 +22,7 @@ const LicenseTypeQuickCreateButton = () => {
       <Button startIcon={<AddCircleOutline />} onClick={() => setOpen(true)}>
         إضافة جديد
       </Button>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} fullWidth>
         <Create
           resource="opc_license_type"
           mutationOptions={{ onSuccess: handleSuccess }}
