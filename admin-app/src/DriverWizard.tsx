@@ -17,8 +17,8 @@ import {
   DateInput,
 } from 'react-admin'
 import { useFormContext } from 'react-hook-form'
-import LicenseTypeQuickCreate from './LicenseTypeQuickCreate'
-import CityQuickCreate from './CityQuickCreate'
+import LicenseTypeQuickCreateButton from './LicenseTypeQuickCreateButton'
+import CityQuickCreateButton from './CityQuickCreateButton'
 
 const DriverWizard = () => {
   const dataProvider = useDataProvider()
@@ -65,13 +65,13 @@ const DriverWizard = () => {
         <ReferenceInput source="license_type_id" reference="opc_license_type">
           <SelectInput
             optionText="license_type_name_ar"
-            create={<LicenseTypeQuickCreate />}
+            create={<LicenseTypeQuickCreateButton />}
           />
         </ReferenceInput>
         <ReferenceInput source="license_city_id" reference="city">
           <SelectInput
             optionText="name_ar"
-            create={<CityQuickCreate />}
+            create={<CityQuickCreateButton />}
           />
         </ReferenceInput>
         <DateInput
