@@ -55,13 +55,14 @@ import {
   VehicleCreate,
   VehicleEdit,
 } from './Vehicle'
-import DriverWizard from './DriverWizard'
 import OperationCardWizard from './OperationCardWizard'
-import FacilityStep from './features/DriverCardWizard/FacilityStep'
-import DriverStep from './features/DriverCardWizard/DriverStep'
-import SummaryStep from './features/DriverCardWizard/SummaryStep'
-import CreateDriverCard from './features/DriverCardWizard/CreateDriverCard'
-import EditDriverCard from './features/DriverCardWizard/EditDriverCard'
+import DriverWizard, {
+  FacilityStep,
+  DriverStep,
+  SummaryStep,
+  CreateDriverCard,
+  EditDriverCard,
+} from './features/DriverCardWizard'
 
 // إنشاء الثيم مع دعم الاتجاه من اليمين إلى اليسار
 const theme = createTheme({

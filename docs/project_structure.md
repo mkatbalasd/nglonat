@@ -26,6 +26,6 @@
     - `LicenseType.tsx`: `LicenseTypeList`, `LicenseTypeShow`, `LicenseTypeForm`, `LicenseTypeCreate`, `LicenseTypeEdit` لأنواع الرخص.
     - `Supplier.tsx`: `SupplierList`, `SupplierShow`, `SupplierForm`, `SupplierCreate`, `SupplierEdit` للمزوّدين.
     - `Vehicle.tsx`: `VehicleList`, `VehicleShow`, `VehicleForm`, `VehicleCreate`, `VehicleEdit` للمركبات.
-    - `DriverWizard.tsx`: مكوّن معالج متعدد الخطوات لإنشاء منشأة، سائق، بطاقة سائق وبطاقة تشغيل.
+    - `features/DriverCardWizard/DriverWizard.tsx`: مكوّن معالج متعدد الخطوات لإنشاء منشأة، سائق، بطاقة سائق وبطاقة تشغيل.
   - ملفات الأنماط مثل `App.css` و`index.css` لتنسيق الواجهة.
 
