@@ -14,7 +14,7 @@ type AddableSelectProps = {
   onChange?: (value: number | string) => void
   formFields: ReactNode
   initialValues?: Record<string, unknown>
-  firstFieldRef?: RefObject<InputRef>
+  firstInputRef?: RefObject<InputRef>
 }
 
 const AddableSelect = ({
@@ -24,11 +24,10 @@ const AddableSelect = ({
   onChange,
   formFields,
   initialValues,
-  firstFieldRef,
+  firstInputRef,
 }: AddableSelectProps) => {
   const dataProvider = useDataProvider()
   const [items, setItems] = useState<Item[]>([])
-  const [formValues, setFormValues] = useState<Record<string, unknown>>(initialValues || {})
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
 
@@ -42,19 +41,21 @@ const AddableSelect = ({
   }, [resource, dataProvider])
 
   const addItem = async () => {
-    if (!Object.keys(formValues).length) return
-    setLoading(true)
-    const { data } = await dataProvider.create<Item>(resource, {
-      data: formValues,
-    })
-    setItems([...items, data])
-    onChange?.(data.id)
-    setFormValues(initialValues || {})
-    form.resetFields()
-    setLoading(false)
-    setTimeout(() => {
-      firstFieldRef?.current?.focus()
-    })
+    try {
+      const values = await form.validateFields()
+      setLoading(true)
+      const { data } = await dataProvider.create<Item>(resource, {
+        data: values,
+      })
+      setItems([...items, data])
+      onChange?.(data.id)
+      form.resetFields()
+      setTimeout(() => {
+        firstInputRef?.current?.focus()
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -68,12 +69,7 @@ const AddableSelect = ({
           {menu}
           <Divider style={{ margin: '8px 0' }} />
           <div style={{ padding: '0 8px 4px' }}>
-            <Form
-              layout="vertical"
-              form={form}
-              initialValues={initialValues}
-              onValuesChange={(_, allValues) => setFormValues(allValues)}
-            >
+            <Form layout="vertical" form={form} initialValues={initialValues}>
               {formFields}
               <Form.Item>
                 <Button type="text" icon={<PlusOutlined />} onClick={addItem} loading={loading}>
