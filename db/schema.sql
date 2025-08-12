@@ -232,31 +232,11 @@ CREATE INDEX IF NOT EXISTS idx_driver_card_driver ON opc_driver_card (driver_id)
 CREATE INDEX IF NOT EXISTS idx_driver_card_supplier ON opc_driver_card (supplier_id);
 CREATE INDEX IF NOT EXISTS idx_driver_card_user ON opc_driver_card (user_id);
 
+-- Ensure only one active card per driver and facility
+CREATE UNIQUE INDEX IF NOT EXISTS uq_active_driver_facility
+  ON opc_driver_card (driver_id, facility_id)
+  WHERE status = 'نشطة';
+
 CREATE INDEX IF NOT EXISTS idx_facility_license_type ON opc_facility (license_type_id);
 CREATE INDEX IF NOT EXISTS idx_facility_license_city ON opc_facility (license_city_id);
-
--- Functions
-CREATE OR REPLACE FUNCTION prevent_duplicate_active_driver_card()
-RETURNS TRIGGER AS $$
-DECLARE
-  existing_count INTEGER;
-BEGIN
-  SELECT COUNT(*) INTO existing_count
-  FROM opc_driver_card
-  WHERE driver_id = NEW.driver_id
-    AND status = 'نشطة';
-
-  IF existing_count > 0 THEN
-    RAISE EXCEPTION '⚠️ لا يمكن إصدار بطاقة جديدة: السائق يملك بطاقة فعالة مسبقًا';
-  END IF;
-
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Triggers
-DROP TRIGGER IF EXISTS prevent_duplicate_active_driver_card ON opc_driver_card;
-CREATE TRIGGER prevent_duplicate_active_driver_card
-BEFORE INSERT ON opc_driver_card
-FOR EACH ROW EXECUTE FUNCTION prevent_duplicate_active_driver_card();
 

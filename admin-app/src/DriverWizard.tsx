@@ -253,7 +253,9 @@ const DriverWizard = () => {
         (error as { message?: string })?.message ||
         ''
       notify(
-        message.includes('duplicate key')
+        message.includes('uq_active_driver_facility')
+          ? 'توجد بطاقة نشطة لهذا السائق في هذه المنشأة'
+          : message.includes('duplicate key')
           ? 'رقم بطاقة السائق مستخدم مسبقاً'
           : message || 'فشل حفظ بطاقة السائق',
         { type: 'error' }
