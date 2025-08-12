@@ -176,8 +176,9 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    * @param params البيانات المراد إدخالها.
    * @returns السجل المُنشأ.
    * @throws يظهر خطأ من Supabase عند فشل التنفيذ.
-   */
+  */
   async create(resource: string, params: CreateParams) {
+    console.debug(`${resource}/create payload`, params.data)
     const { data, error } = await (client as any)
       .from(resource)
       .insert(params.data)
@@ -200,6 +201,7 @@ const supabaseDataProvider = (client = supabase): DataProvider => {
    * @throws يظهر خطأ من Supabase عند فشل التنفيذ.
   */
   async update(resource: string, params: UpdateParams) {
+    console.debug(`${resource}/update payload`, params.data)
     const { data: updated, error } = await (client as any)
       .from(resource)
       .update(params.data)
