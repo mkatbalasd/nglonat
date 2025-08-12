@@ -10,6 +10,7 @@ import {
 import {
   useDataProvider,
   useRedirect,
+  useNotify,
   Form,
   TextInput,
   ReferenceInput,
@@ -23,6 +24,7 @@ import SupplierSelect from './components/SupplierSelect'
 const DriverWizard = () => {
   const dataProvider = useDataProvider()
   const redirect = useRedirect()
+  const notify = useNotify()
   const [activeStep, setActiveStep] = useState(0)
 
   const [facility, setFacility] = useState({
@@ -96,6 +98,10 @@ const DriverWizard = () => {
   }
 
   const handleFacilitySearch = async () => {
+    if (!facility.identity_number) {
+      notify('يرجى إدخال هوية المنشأة', { type: 'warning' })
+      return
+    }
     try {
       const { data } = await dataProvider.getList('opc_facility', {
         filter: { identity_number: facility.identity_number },
@@ -108,8 +114,11 @@ const DriverWizard = () => {
       } else {
         setShowFacilityCreate(true)
       }
-    } catch {
-      window.alert('فشل البحث عن المنشأة')
+    } catch (error) {
+      notify(
+        (error as { message?: string })?.message || 'فشل البحث عن المنشأة',
+        { type: 'error' }
+      )
     }
   }
 
