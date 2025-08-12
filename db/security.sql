@@ -12,3 +12,31 @@ alter function public.before_insert_opc_driver_card() set search_path = pg_catal
 
 -- Placeholder for future RLS policies or additional constraints
 -- e.g., -- alter table some_table enable row level security;
+-- Enable RLS and allow inserts for authenticated users on reference tables
+alter table city enable row level security;
+drop policy if exists city_insert on city;
+create policy city_insert on city for insert to authenticated with check (true);
+
+alter table opc_license_type enable row level security;
+drop policy if exists opc_license_type_insert on opc_license_type;
+create policy opc_license_type_insert on opc_license_type for insert to authenticated with check (true);
+
+alter table supplier enable row level security;
+drop policy if exists supplier_insert on supplier;
+create policy supplier_insert on supplier for insert to authenticated with check (true);
+
+alter table opc_brand enable row level security;
+drop policy if exists opc_brand_insert on opc_brand;
+create policy opc_brand_insert on opc_brand for insert to authenticated with check (true);
+
+alter table opc_model enable row level security;
+drop policy if exists opc_model_insert on opc_model;
+create policy opc_model_insert on opc_model for insert to authenticated with check (true);
+
+alter table opc_color enable row level security;
+drop policy if exists opc_color_insert on opc_color;
+create policy opc_color_insert on opc_color for insert to authenticated with check (true);
+
+alter table opc_facility enable row level security;
+drop policy if exists opc_facility_insert on opc_facility;
+create policy opc_facility_insert on opc_facility for insert to authenticated with check (true);
