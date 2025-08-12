@@ -3,7 +3,7 @@ import { Button, Divider, Form, Select } from 'antd'
 import type { InputRef } from 'antd'
 import { useEffect, useState } from 'react'
 import type { ReactNode, RefObject } from 'react'
-import { useDataProvider } from 'react-admin'
+import { useDataProvider, useNotify } from 'react-admin'
 
 type Item = { id: number | string } & Record<string, unknown>
 
@@ -15,6 +15,7 @@ type AddableSelectProps = {
   formFields: ReactNode
   initialValues?: Record<string, unknown>
   firstInputRef?: RefObject<InputRef>
+  onAddError?: (error: unknown) => void
 }
 
 const AddableSelect = ({
@@ -25,8 +26,10 @@ const AddableSelect = ({
   formFields,
   initialValues,
   firstInputRef,
+  onAddError,
 }: AddableSelectProps) => {
   const dataProvider = useDataProvider()
+  const notify = useNotify()
   const [items, setItems] = useState<Item[]>([])
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
@@ -53,6 +56,12 @@ const AddableSelect = ({
       setTimeout(() => {
         firstInputRef?.current?.focus()
       })
+    } catch (error) {
+      notify(
+        (error as { message?: string })?.message || 'فشل إضافة العنصر',
+        { type: 'error' }
+      )
+      onAddError?.(error)
     } finally {
       setLoading(false)
     }
@@ -61,6 +70,7 @@ const AddableSelect = ({
   return (
     <Select
       style={{ width: '100%' }}
+      placeholder="اختر..."
       value={value}
       options={items.map((i) => ({ value: i.id, label: i[label] }))}
       onChange={onChange}
