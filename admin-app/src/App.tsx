@@ -56,6 +56,7 @@ import {
   VehicleEdit,
 } from './Vehicle'
 import DriverWizard from './DriverWizard'
+import OperationCardWizard from './OperationCardWizard'
 
 // إنشاء الثيم مع دعم الاتجاه من اليمين إلى اليسار
 const theme = createTheme({
@@ -83,6 +84,7 @@ const App = () => {
     >
       <CustomRoutes>
         <Route path="/wizard" element={<DriverWizard />} />
+        <Route path="/operation-wizard" element={<OperationCardWizard />} />
       </CustomRoutes>
       <Resource
         name="opc_facility"
