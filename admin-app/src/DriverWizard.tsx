@@ -6,6 +6,7 @@ import {
   StepLabel,
   Button as MuiButton,
   TextField,
+  Stack,
 } from '@mui/material'
 import {
   useDataProvider,
@@ -15,6 +16,7 @@ import {
   TextInput,
   ReferenceInput,
   DateInput,
+  required,
 } from 'react-admin'
 import { useFormContext } from 'react-hook-form'
 import LicenseTypeSelect from './components/LicenseTypeSelect'
@@ -56,23 +58,37 @@ const DriverWizard = () => {
   const FacilityCreateForm = () => {
     const { setValue } = useFormContext()
     return (
-      <>
-        <TextInput source="name" label="اسم المنشأة" fullWidth />
+      <Stack spacing={2}>
+        <TextInput
+          source="name"
+          label="اسم المنشأة"
+          fullWidth
+          validate={required()}
+          placeholder="أدخل اسم المنشأة"
+        />
         <TextInput
           source="english_name"
           label="الاسم بالإنجليزية"
           fullWidth
+          placeholder="أدخل الاسم بالإنجليزية"
         />
-        <TextInput source="license_number" label="رقم الترخيص" fullWidth />
+        <TextInput
+          source="license_number"
+          label="رقم الترخيص"
+          fullWidth
+          validate={required()}
+          placeholder="أدخل رقم الترخيص"
+        />
         <ReferenceInput source="license_type_id" reference="opc_license_type">
-          <LicenseTypeSelect />
+          <LicenseTypeSelect validate={required()} />
         </ReferenceInput>
         <ReferenceInput source="license_city_id" reference="city">
-          <CitySelect />
+          <CitySelect validate={required()} />
         </ReferenceInput>
         <DateInput
           source="license_issue_date"
           label="تاريخ إصدار الترخيص"
+          validate={required()}
           onChange={value => {
             const issue =
               typeof value === 'string'
@@ -93,7 +109,7 @@ const DriverWizard = () => {
         <MuiButton type="submit" variant="contained" sx={{ ml: 1 }}>
           التالي
         </MuiButton>
-      </>
+      </Stack>
     )
   }
 
