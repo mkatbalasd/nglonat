@@ -1,7 +1,7 @@
 import { SelectInput, ReferenceInput, useNotify, useDataProvider } from 'react-admin'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ModelSelect = ({ source, ...props }: any) => {
+const ModelSelect = ({ source, onCreate, ...props }: any) => {
   const notify = useNotify()
   const dataProvider = useDataProvider()
 
@@ -10,11 +10,12 @@ const ModelSelect = ({ source, ...props }: any) => {
       <SelectInput
         optionText="model_name"
         onCreate={async value => {
-          const { data: created } = await dataProvider.create('opc_model', {
+          const { data } = await dataProvider.create('opc_model', {
             data: { model_name: value },
           })
           notify('ra.notification.created', { type: 'info' })
-          return { id: created.id, model_name: created.model_name }
+          onCreate?.({ id: data.id, model_name: data.model_name })
+          return { id: data.id, model_name: data.model_name }
         }}
         {...props}
       />
