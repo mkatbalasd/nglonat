@@ -1,5 +1,8 @@
-const FacilityStep = () => {
-  return <div>Driver Card Facility Step</div>;
-};
+import { useDriverCardWizardState } from './state'
 
-export default FacilityStep;
+const FacilityStep = () => {
+  const { state } = useDriverCardWizardState()
+  return <div>Driver Card Facility Step {state.activeStep}</div>
+}
+
+export default FacilityStep
