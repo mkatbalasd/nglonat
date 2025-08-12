@@ -7,6 +7,7 @@ import {
   Button as MuiButton,
   TextField,
   Stack,
+  CircularProgress,
 } from '@mui/material'
 import {
   useDataProvider,
@@ -27,6 +28,7 @@ const DriverWizard = () => {
   const redirect = useRedirect()
   const notify = useNotify()
   const [activeStep, setActiveStep] = useState(0)
+  const [loading, setLoading] = useState(false)
 
   const [facility, setFacility] = useState({
     identity_number: '',
@@ -101,8 +103,13 @@ const DriverWizard = () => {
           label="تاريخ انتهاء الترخيص"
           disabled
         />
-        <MuiButton type="submit" variant="contained" sx={{ ml: 1 }}>
-          التالي
+        <MuiButton
+          type="submit"
+          variant="contained"
+          sx={{ ml: 1 }}
+          disabled={loading}
+        >
+          {loading ? <CircularProgress size={24} /> : 'التالي'}
         </MuiButton>
       </Stack>
     )
@@ -113,6 +120,7 @@ const DriverWizard = () => {
       notify('يرجى إدخال هوية المنشأة', { type: 'warning' })
       return
     }
+    setLoading(true)
     try {
       const { data } = await dataProvider.getList('opc_facility', {
         filter: { identity_number: facility.identity_number },
@@ -130,10 +138,13 @@ const DriverWizard = () => {
         (error as { message?: string })?.message || 'فشل البحث عن المنشأة',
         { type: 'error' }
       )
+    } finally {
+      setLoading(false)
     }
   }
 
   const handleFacilityNext = async (values: Record<string, unknown>) => {
+    setLoading(true)
     try {
       const { data } = await dataProvider.create('opc_facility', {
         data: { ...values, identity_number: facility.identity_number },
@@ -146,6 +157,8 @@ const DriverWizard = () => {
         (error as { message?: string })?.message || 'فشل إنشاء المنشأة',
         { type: 'error' }
       )
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -154,6 +167,7 @@ const DriverWizard = () => {
       notify('يرجى إدخال هوية السائق', { type: 'warning' })
       return
     }
+    setLoading(true)
     try {
       const { data } = await dataProvider.getList('opc_driver', {
         filter: { identity_number: driver.identity_number },
@@ -185,10 +199,13 @@ const DriverWizard = () => {
         (error as { message?: string })?.message || 'فشل البحث عن السائق',
         { type: 'error' }
       )
+    } finally {
+      setLoading(false)
     }
   }
 
   const handleDriverNext = async () => {
+    setLoading(true)
     try {
       const { data } = await dataProvider.create('opc_driver', {
         data: { ...driver, facility_id: facilityRecord?.id },
@@ -202,10 +219,13 @@ const DriverWizard = () => {
         (error as { message?: string })?.message || 'فشل إنشاء السائق',
         { type: 'error' }
       )
+    } finally {
+      setLoading(false)
     }
   }
 
   const handleDriverCardNext = async (values: Record<string, unknown>) => {
+    setLoading(true)
     try {
       const { card_type, supplier_id, ...rest } = values as {
         card_type: unknown
@@ -238,6 +258,8 @@ const DriverWizard = () => {
           : message || 'فشل حفظ بطاقة السائق',
         { type: 'error' }
       )
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -261,7 +283,9 @@ const DriverWizard = () => {
               setFacility({ ...facility, identity_number: e.target.value })
             }
           />
-          <MuiButton onClick={handleFacilitySearch}>بحث</MuiButton>
+          <MuiButton onClick={handleFacilitySearch} disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : 'بحث'}
+          </MuiButton>
           {showFacilityCreate && (
             <Form onSubmit={handleFacilityNext}>
               <FacilityCreateForm />
@@ -280,7 +304,9 @@ const DriverWizard = () => {
               setDriver({ ...driver, identity_number: e.target.value })
             }
           />
-          <MuiButton onClick={handleDriverSearch}>بحث</MuiButton>
+          <MuiButton onClick={handleDriverSearch} disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : 'بحث'}
+          </MuiButton>
           {showDriverCreate && (
             <>
               <TextField
@@ -307,8 +333,9 @@ const DriverWizard = () => {
                 variant="contained"
                 onClick={handleDriverNext}
                 sx={{ ml: 1 }}
+                disabled={loading}
               >
-                التالي
+                {loading ? <CircularProgress size={24} /> : 'التالي'}
               </MuiButton>
             </>
           )}
@@ -340,8 +367,8 @@ const DriverWizard = () => {
               label="تاريخ الانتهاء"
               validate={required()}
             />
-            <MuiButton type="submit" variant="contained">
-              حفظ
+            <MuiButton type="submit" variant="contained" disabled={loading}>
+              {loading ? <CircularProgress size={24} /> : 'حفظ'}
             </MuiButton>
           </Stack>
         </Form>

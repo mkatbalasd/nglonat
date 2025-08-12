@@ -7,6 +7,7 @@ import {
   Button as MuiButton,
   TextField,
   Stack,
+  CircularProgress,
 } from '@mui/material'
 import {
   useDataProvider,
@@ -30,6 +31,7 @@ const OperationCardWizard = () => {
   const redirect = useRedirect()
   const notify = useNotify()
   const [activeStep, setActiveStep] = useState(0)
+  const [loading, setLoading] = useState(false)
 
   const [facility, setFacility] = useState({
     identity_number: '',
@@ -104,8 +106,13 @@ const OperationCardWizard = () => {
           label="تاريخ انتهاء الترخيص"
           disabled
         />
-        <MuiButton type="submit" variant="contained" sx={{ ml: 1 }}>
-          التالي
+        <MuiButton
+          type="submit"
+          variant="contained"
+          sx={{ ml: 1 }}
+          disabled={loading}
+        >
+          {loading ? <CircularProgress size={24} /> : 'التالي'}
         </MuiButton>
       </Stack>
     )
@@ -116,6 +123,7 @@ const OperationCardWizard = () => {
       notify('يرجى إدخال هوية المنشأة', { type: 'warning' })
       return
     }
+    setLoading(true)
     try {
       const { data } = await dataProvider.getList('opc_facility', {
         filter: { identity_number: facility.identity_number },
@@ -133,10 +141,13 @@ const OperationCardWizard = () => {
         (error as { message?: string })?.message || 'فشل البحث عن المنشأة',
         { type: 'error' }
       )
+    } finally {
+      setLoading(false)
     }
   }
 
   const handleFacilityNext = async (values: Record<string, unknown>) => {
+    setLoading(true)
     try {
       const { data } = await dataProvider.create('opc_facility', {
         data: { ...values, identity_number: facility.identity_number },
@@ -149,6 +160,8 @@ const OperationCardWizard = () => {
         (error as { message?: string })?.message || 'فشل إنشاء المنشأة',
         { type: 'error' }
       )
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -159,6 +172,7 @@ const OperationCardWizard = () => {
       })
       return
     }
+    setLoading(true)
     try {
       const filter: Record<string, string> = {}
       if (vehicleSearch.plate_number)
@@ -187,10 +201,13 @@ const OperationCardWizard = () => {
         (error as { message?: string })?.message || 'فشل البحث عن المركبة',
         { type: 'error' }
       )
+    } finally {
+      setLoading(false)
     }
   }
 
   const handleVehicleNext = async (values: Record<string, unknown>) => {
+    setLoading(true)
     try {
       const { data } = await dataProvider.create('opc_vehicle', {
         data: { ...values, facility_id: facilityRecord?.id },
@@ -204,10 +221,13 @@ const OperationCardWizard = () => {
         (error as { message?: string })?.message || 'فشل إنشاء المركبة',
         { type: 'error' }
       )
+    } finally {
+      setLoading(false)
     }
   }
 
   const handleOperationCardSave = async (values: Record<string, unknown>) => {
+    setLoading(true)
     try {
       const payload = {
         ...values,
@@ -233,6 +253,8 @@ const OperationCardWizard = () => {
           : message || 'فشل حفظ بطاقة التشغيل',
         { type: 'error' }
       )
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -256,7 +278,9 @@ const OperationCardWizard = () => {
               setFacility({ ...facility, identity_number: e.target.value })
             }
           />
-          <MuiButton onClick={handleFacilitySearch}>بحث</MuiButton>
+          <MuiButton onClick={handleFacilitySearch} disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : 'بحث'}
+          </MuiButton>
           {showFacilityCreate && (
             <Form onSubmit={handleFacilityNext}>
               <FacilityCreateForm />
@@ -290,7 +314,9 @@ const OperationCardWizard = () => {
               })
             }
           />
-          <MuiButton onClick={handleVehicleSearch}>بحث</MuiButton>
+          <MuiButton onClick={handleVehicleSearch} disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : 'بحث'}
+          </MuiButton>
           {showVehicleCreate && (
             <Form onSubmit={handleVehicleNext}>
               <Stack spacing={2}>
@@ -303,8 +329,13 @@ const OperationCardWizard = () => {
                 <TextInput source="plate_number" />
                 <TextInput source="serial_number" />
                 <NumberInput source="manufacturing_year" />
-                <MuiButton type="submit" variant="contained" sx={{ ml: 1 }}>
-                  التالي
+                <MuiButton
+                  type="submit"
+                  variant="contained"
+                  sx={{ ml: 1 }}
+                  disabled={loading}
+                >
+                  {loading ? <CircularProgress size={24} /> : 'التالي'}
                 </MuiButton>
               </Stack>
             </Form>
@@ -325,7 +356,9 @@ const OperationCardWizard = () => {
             <SupplierSelect source="supplier_id" />
             <DateInput source="issue_date" />
             <DateInput source="expiration_date" />
-            <MuiButton type="submit">حفظ</MuiButton>
+            <MuiButton type="submit" disabled={loading}>
+              {loading ? <CircularProgress size={24} /> : 'حفظ'}
+            </MuiButton>
           </Stack>
         </Form>
       )}
