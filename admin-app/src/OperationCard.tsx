@@ -15,6 +15,9 @@ import {
   TopToolbar,
 } from 'react-admin'
 import { useNavigate } from 'react-router-dom'
+import DriverSelect from './components/DriverSelect'
+import SupplierSelect from './components/SupplierSelect'
+import LicenseTypeSelect from './components/LicenseTypeSelect'
  
 export const OperationCardList = () => {
   const navigate = useNavigate()
@@ -82,18 +85,12 @@ export const OperationCardForm = () => (
     <ReferenceInput source="facility_id" reference="opc_facility">
       <SelectInput optionText="name" />
     </ReferenceInput>
-    <ReferenceInput source="driver_id" reference="opc_driver">
-      <SelectInput optionText="first_name" />
-    </ReferenceInput>
+    <DriverSelect source="driver_id" />
     <ReferenceInput source="vehicle_id" reference="opc_vehicle">
       <SelectInput optionText="plate_number" />
     </ReferenceInput>
-    <ReferenceInput source="supplier_id" reference="supplier">
-      <SelectInput optionText="name" />
-    </ReferenceInput>
-    <ReferenceInput source="card_type" reference="opc_license_type">
-      <SelectInput optionText="license_type_name_ar" />
-    </ReferenceInput>
+    <SupplierSelect source="supplier_id" />
+    <LicenseTypeSelect source="card_type" />
     <DateInput source="issue_date" />
     <DateInput source="expiration_date" />
   </SimpleForm>

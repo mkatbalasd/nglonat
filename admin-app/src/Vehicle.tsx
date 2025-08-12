@@ -13,6 +13,8 @@ import {
   SelectInput,
   NumberInput,
 } from 'react-admin'
+import ModelSelect from './components/ModelSelect'
+import ColorSelect from './components/ColorSelect'
 
 export const VehicleList = () => (
   <List>
@@ -51,12 +53,8 @@ export const VehicleForm = () => (
     <ReferenceInput source="facility_id" reference="opc_facility">
       <SelectInput optionText="name" />
     </ReferenceInput>
-    <ReferenceInput source="model_id" reference="opc_model">
-      <SelectInput optionText="model_name" />
-    </ReferenceInput>
-    <ReferenceInput source="color_id" reference="opc_color">
-      <SelectInput optionText="color_name" />
-    </ReferenceInput>
+    <ModelSelect source="model_id" />
+    <ColorSelect source="color_id" />
     <TextInput source="plate_number" />
     <TextInput source="serial_number" />
     <NumberInput source="manufacturing_year" />

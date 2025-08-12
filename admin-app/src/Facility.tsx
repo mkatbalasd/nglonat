@@ -9,10 +9,10 @@ import {
   Edit,
   SimpleForm,
   TextInput,
-  ReferenceInput,
-  SelectInput,
   DateInput,
 } from 'react-admin'
+import LicenseTypeSelect from './components/LicenseTypeSelect'
+import CitySelect from './components/CitySelect'
 
 export const FacilityList = () => (
   <List>
@@ -50,12 +50,8 @@ export const FacilityForm = () => (
     <TextInput source="name" />
     <TextInput source="english_name" />
     <TextInput source="license_number" />
-    <ReferenceInput source="license_type_id" reference="opc_license_type">
-      <SelectInput optionText="license_type_name_ar" />
-    </ReferenceInput>
-    <ReferenceInput source="license_city_id" reference="city">
-      <SelectInput optionText="name_ar" />
-    </ReferenceInput>
+    <LicenseTypeSelect source="license_type_id" />
+    <CitySelect source="license_city_id" />
     <DateInput source="license_issue_date" />
     <DateInput source="license_expiration_date" />
   </SimpleForm>
