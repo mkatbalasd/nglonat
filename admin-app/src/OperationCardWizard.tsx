@@ -15,8 +15,6 @@ import {
   useNotify,
   Form,
   TextInput,
-  ReferenceInput,
-  SelectInput,
   DateInput,
   NumberInput,
   required,
@@ -25,6 +23,9 @@ import { useFormContext } from 'react-hook-form'
 import LicenseTypeSelect from './components/LicenseTypeSelect'
 import CitySelect from './components/CitySelect'
 import SupplierSelect from './components/SupplierSelect'
+import ModelSelect from './components/ModelSelect'
+import ColorSelect from './components/ColorSelect'
+import DriverSelect from './components/DriverSelect'
 
 const OperationCardWizard = () => {
   const dataProvider = useDataProvider()
@@ -320,12 +321,8 @@ const OperationCardWizard = () => {
           {showVehicleCreate && (
             <Form onSubmit={handleVehicleNext}>
               <Stack spacing={2}>
-                <ReferenceInput source="model_id" reference="opc_model">
-                  <SelectInput optionText="model_name" />
-                </ReferenceInput>
-                <ReferenceInput source="color_id" reference="opc_color">
-                  <SelectInput optionText="color_name" />
-                </ReferenceInput>
+                <ModelSelect source="model_id" />
+                <ColorSelect source="color_id" />
                 <TextInput source="plate_number" />
                 <TextInput source="serial_number" />
                 <NumberInput source="manufacturing_year" />
@@ -349,9 +346,7 @@ const OperationCardWizard = () => {
         >
           <Stack spacing={2}>
             {existingCard && <TextInput source="card_number" disabled />}
-            <ReferenceInput source="driver_id" reference="opc_driver">
-              <SelectInput optionText="first_name" />
-            </ReferenceInput>
+            <DriverSelect source="driver_id" facilityId={facilityRecord?.id} />
             <LicenseTypeSelect source="card_type" />
             <SupplierSelect source="supplier_id" />
             <DateInput source="issue_date" />
