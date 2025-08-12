@@ -1,12 +1,15 @@
 import { Form, Input } from 'antd'
 import type { InputRef } from 'antd'
 import { useRef } from 'react'
-import { useReferenceInputContext } from 'react-admin'
+import { useInput } from 'react-admin'
 import AddableSelect from './AddableSelect'
 
 const SupplierSelect = () => {
   const firstInputRef = useRef<InputRef | null>(null)
-  const { field } = useReferenceInputContext()
+  const { field } = useInput(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    props as any
+  )
 
   return (
     <AddableSelect
