@@ -73,14 +73,15 @@ const AddableSelect = forwardRef<HTMLDivElement, AddableSelectProps & SelectProp
   }
 
   return (
-    <Select
-      ref={ref as any}
+      <Select
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ref={ref as any}
       {...rest}
       style={{ width: '100%' }}
       placeholder="اختر..."
       value={value}
       options={items.map((i) => ({ value: i.id, label: i[optionText as keyof Item] as string }))}
-      onChange={onChange}
+      onChange={(v) => onChange?.(v as number | string)}
       popupRender={(menu) => (
         <>
           {menu}
