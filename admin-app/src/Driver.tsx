@@ -14,6 +14,7 @@ import {
   TopToolbar,
   CreateButton,
   Button,
+  required,
 } from 'react-admin'
 import { useNavigate } from 'react-router-dom'
 
@@ -59,8 +60,8 @@ export const DriverForm = () => (
     <ReferenceInput source="facility_id" reference="opc_facility">
       <SelectInput optionText="name" />
     </ReferenceInput>
-    <TextInput source="first_name" />
-    <TextInput source="last_name" />
+    <TextInput source="first_name" validate={required()} />
+    <TextInput source="last_name" validate={required()} />
     <TextInput source="identity_number" />
   </SimpleForm>
 )
