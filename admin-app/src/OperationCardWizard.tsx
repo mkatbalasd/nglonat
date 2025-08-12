@@ -79,6 +79,7 @@ const OperationCardWizard = () => {
         onSubmit={onSubmit}
         defaultValues={defaultValues}
         toolbar={false}
+        sx={{ overflow: 'visible' }}
       >
         {children}
       </SimpleForm>
@@ -285,8 +286,17 @@ const OperationCardWizard = () => {
   }
 
   return (
-    <Box sx={{ maxWidth: 600, m: 'auto', p: 2 }}>
-      <Stepper activeStep={activeStep} sx={{ mb: 2 }}>
+    <Box
+      sx={theme => ({
+        maxWidth: 600,
+        m: 'auto',
+        p: 2,
+        overflow: 'visible',
+        position: 'relative',
+        zIndex: theme.zIndex.modal,
+      })}
+    >
+      <Stepper activeStep={activeStep} sx={{ mb: 2, overflow: 'visible' }}>
         {steps.map(label => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
@@ -294,7 +304,7 @@ const OperationCardWizard = () => {
         ))}
       </Stepper>
       {activeStep === 0 && (
-        <Box>
+        <Box sx={{ overflow: 'visible' }}>
           <TextField
             label="هوية المنشأة"
             fullWidth
@@ -318,7 +328,7 @@ const OperationCardWizard = () => {
         </Box>
       )}
       {activeStep === 1 && (
-        <Box>
+        <Box sx={{ overflow: 'visible' }}>
           <TextField
             label="رقم اللوحة"
             fullWidth
