@@ -1,7 +1,7 @@
 import { SelectInput, ReferenceInput, useNotify, useDataProvider } from 'react-admin'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const CitySelect = ({ source, ...props }: any) => {
+const CitySelect = ({ source, onCreate, ...props }: any) => {
   const notify = useNotify()
   const dataProvider = useDataProvider()
 
@@ -10,11 +10,12 @@ const CitySelect = ({ source, ...props }: any) => {
       <SelectInput
         optionText="name_ar"
         onCreate={async value => {
-          const { data: created } = await dataProvider.create('city', {
+          const { data } = await dataProvider.create('city', {
             data: { name_ar: value },
           })
           notify('ra.notification.created', { type: 'info' })
-          return { id: created.id, name_ar: created.name_ar }
+          onCreate?.({ id: data.id, name_ar: data.name_ar })
+          return { id: data.id, name_ar: data.name_ar }
         }}
         {...props}
       />
