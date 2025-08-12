@@ -13,13 +13,12 @@ import {
   Form,
   TextInput,
   ReferenceInput,
-  AutocompleteInput,
   DateInput,
 } from 'react-admin'
 import { useFormContext } from 'react-hook-form'
-import LicenseTypeQuickCreate from './LicenseTypeQuickCreate'
-import CityQuickCreate from './CityQuickCreate'
-import SupplierQuickCreate from './SupplierQuickCreate'
+import LicenseTypeSelect from './components/LicenseTypeSelect'
+import CitySelect from './components/CitySelect'
+import SupplierSelect from './components/SupplierSelect'
 
 const DriverWizard = () => {
   const dataProvider = useDataProvider()
@@ -63,25 +62,11 @@ const DriverWizard = () => {
           fullWidth
         />
         <TextInput source="license_number" label="رقم الترخيص" fullWidth />
-        <ReferenceInput
-          source="license_type_id"
-          reference="opc_license_type"
-          perPage={100}
-        >
-          <AutocompleteInput
-            optionText="license_type_name_ar"
-            create={<LicenseTypeQuickCreate />}
-          />
+        <ReferenceInput source="license_type_id" reference="opc_license_type">
+          <LicenseTypeSelect />
         </ReferenceInput>
-        <ReferenceInput
-          source="license_city_id"
-          reference="city"
-          perPage={100}
-        >
-          <AutocompleteInput
-            optionText="name_ar"
-            create={<CityQuickCreate />}
-          />
+        <ReferenceInput source="license_city_id" reference="city">
+          <CitySelect />
         </ReferenceInput>
         <DateInput
           source="license_issue_date"
@@ -291,25 +276,11 @@ const DriverWizard = () => {
           defaultValues={driverCardRecord || {}}
         >
           <TextInput source="card_number" label="رقم بطاقة السائق" fullWidth />
-          <ReferenceInput
-            source="card_type"
-            reference="opc_license_type"
-            perPage={100}
-          >
-            <AutocompleteInput
-              optionText="license_type_name_ar"
-              create={<LicenseTypeQuickCreate />}
-            />
+          <ReferenceInput source="card_type" reference="opc_license_type">
+            <LicenseTypeSelect />
           </ReferenceInput>
-          <ReferenceInput
-            source="supplier_id"
-            reference="supplier"
-            perPage={100}
-          >
-            <AutocompleteInput
-              optionText="name"
-              create={<SupplierQuickCreate />}
-            />
+          <ReferenceInput source="supplier_id" reference="supplier">
+            <SupplierSelect />
           </ReferenceInput>
           <DateInput source="issue_date" label="تاريخ الإصدار" />
           <DateInput source="expiration_date" label="تاريخ الانتهاء" />

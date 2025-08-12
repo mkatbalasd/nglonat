@@ -1,7 +1,7 @@
 import { Form, Input } from 'antd'
 import AddableSelect from './AddableSelect'
 
-const LicenseTypeSelect = props => (
+const LicenseTypeSelect = (props: Record<string, unknown>) => (
   <AddableSelect
     resource="opc_license_type"
     fields={{
