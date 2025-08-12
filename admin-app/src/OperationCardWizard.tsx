@@ -23,6 +23,7 @@ import {
 import { useFormContext } from 'react-hook-form'
 import LicenseTypeSelect from './components/LicenseTypeSelect'
 import CitySelect from './components/CitySelect'
+import SupplierSelect from './components/SupplierSelect'
 
 const OperationCardWizard = () => {
   const dataProvider = useDataProvider()
@@ -80,12 +81,8 @@ const OperationCardWizard = () => {
           validate={required()}
           placeholder="أدخل رقم الترخيص"
         />
-        <ReferenceInput source="license_type_id" reference="opc_license_type">
-          <LicenseTypeSelect validate={required()} />
-        </ReferenceInput>
-        <ReferenceInput source="license_city_id" reference="city">
-          <CitySelect validate={required()} />
-        </ReferenceInput>
+        <LicenseTypeSelect source="license_type_id" validate={required()} />
+        <CitySelect source="license_city_id" validate={required()} />
         <DateInput
           source="license_issue_date"
           label="تاريخ إصدار الترخيص"
@@ -324,12 +321,8 @@ const OperationCardWizard = () => {
             <ReferenceInput source="driver_id" reference="opc_driver">
               <SelectInput optionText="first_name" />
             </ReferenceInput>
-            <ReferenceInput source="card_type" reference="opc_license_type">
-              <SelectInput optionText="license_type_name_ar" />
-            </ReferenceInput>
-            <ReferenceInput source="supplier_id" reference="supplier">
-              <SelectInput optionText="name" />
-            </ReferenceInput>
+            <LicenseTypeSelect source="card_type" />
+            <SupplierSelect source="supplier_id" />
             <DateInput source="issue_date" />
             <DateInput source="expiration_date" />
             <MuiButton type="submit">حفظ</MuiButton>

@@ -2,48 +2,65 @@ import {
   AutocompleteInput,
   SimpleForm,
   TextInput,
-  useCreate,
   useCreateSuggestionContext,
   useNotify,
   required,
+  ReferenceInput,
+  Create,
+  Toolbar,
+  SaveButton,
 } from 'react-admin'
+import { Button } from '@mui/material'
 
-const LicenseTypeQuickCreate = () => {
+const LicenseTypeQuickCreateForm = () => {
   const { onCancel, onCreate, filter } = useCreateSuggestionContext()
-  const [create] = useCreate()
   const notify = useNotify()
 
-  const handleSubmit = async (values: Record<string, unknown>) => {
-    try {
-      const { data } = await create('opc_license_type', { data: values })
-      onCreate(data)
-    } catch (error) {
-      notify(
-        (error as { message?: string })?.message || 'فشل إنشاء نوع الترخيص',
-        { type: 'error' }
-      )
-    }
-  }
+  const QuickCreateToolbar = () => (
+    <Toolbar>
+      <SaveButton />
+      <Button onClick={onCancel}>إلغاء</Button>
+    </Toolbar>
+  )
 
   return (
-    <SimpleForm onSubmit={handleSubmit} onCancel={onCancel} defaultValues={{ license_type_name_ar: filter }}>
-      <TextInput
-        source="license_type_name_ar"
-        label="نوع الترخيص"
-        validate={required()}
-        fullWidth
-      />
-    </SimpleForm>
+    <Create
+      resource="opc_license_type"
+      redirect={false}
+      mutationOptions={{
+        onSuccess: data => onCreate(data),
+        onError: error =>
+          notify(
+            (error as { message?: string })?.message || 'فشل إنشاء نوع الترخيص',
+            { type: 'error' }
+          ),
+      }}
+    >
+      <SimpleForm
+        defaultValues={{ license_type_name_ar: filter }}
+        toolbar={<QuickCreateToolbar />}
+      >
+        <TextInput
+          source="license_type_name_ar"
+          label="نوع الترخيص"
+          validate={required()}
+          fullWidth
+        />
+        <TextInput source="license_type_name_en" label="الاسم بالإنجليزية" fullWidth />
+      </SimpleForm>
+    </Create>
   )
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const LicenseTypeSelect = (props: any) => (
-  <AutocompleteInput
-    {...props}
-    optionText="license_type_name_ar"
-    create={<LicenseTypeQuickCreate />}
-  />
+const LicenseTypeSelect = ({ source, ...props }: any) => (
+  <ReferenceInput source={source} reference="opc_license_type">
+    <AutocompleteInput
+      optionText="license_type_name_ar"
+      create={<LicenseTypeQuickCreateForm />}
+      {...props}
+    />
+  </ReferenceInput>
 )
 
 export default LicenseTypeSelect
