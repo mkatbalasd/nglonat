@@ -23,7 +23,10 @@ export const DriverCardList = () => {
     <List
       actions={
         <TopToolbar>
-          <Button label="إصدار بطاقة جديدة" onClick={() => navigate('/wizard')} />
+          <Button
+            label="إصدار بطاقة جديدة"
+            onClick={() => navigate('/wizard/driver-card/facility')}
+          />
         </TopToolbar>
       }
     >
