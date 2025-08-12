@@ -1,6 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons'
 import { Button, Divider, Form, Select } from 'antd'
-import type { InputRef } from 'antd'
+import type { InputRef, SelectProps } from 'antd'
 import { useEffect, useState } from 'react'
 import type { ReactNode, RefObject } from 'react'
 import { useDataProvider, useNotify } from 'react-admin'
@@ -27,7 +27,8 @@ const AddableSelect = ({
   initialValues,
   firstInputRef,
   onAddError,
-}: AddableSelectProps) => {
+  ...rest
+}: AddableSelectProps & SelectProps) => {
   const dataProvider = useDataProvider()
   const notify = useNotify()
   const [items, setItems] = useState<Item[]>([])
@@ -69,6 +70,7 @@ const AddableSelect = ({
 
   return (
     <Select
+      {...rest}
       style={{ width: '100%' }}
       placeholder="اختر..."
       value={value}
