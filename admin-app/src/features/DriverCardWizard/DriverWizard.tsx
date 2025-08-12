@@ -19,9 +19,9 @@ import {
   required,
 } from 'react-admin'
 import { useFormContext } from 'react-hook-form'
-import LicenseTypeSelect from './components/LicenseTypeSelect'
-import CitySelect from './components/CitySelect'
-import SupplierSelect from './components/SupplierSelect'
+import LicenseTypeSelect from '../../components/LicenseTypeSelect'
+import CitySelect from '../../components/CitySelect'
+import SupplierSelect from '../../components/SupplierSelect'
 
 const DriverWizard = () => {
   const dataProvider = useDataProvider()
