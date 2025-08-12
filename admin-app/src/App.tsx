@@ -57,6 +57,11 @@ import {
 } from './Vehicle'
 import DriverWizard from './DriverWizard'
 import OperationCardWizard from './OperationCardWizard'
+import FacilityStep from './features/DriverCardWizard/FacilityStep'
+import DriverStep from './features/DriverCardWizard/DriverStep'
+import SummaryStep from './features/DriverCardWizard/SummaryStep'
+import CreateDriverCard from './features/DriverCardWizard/CreateDriverCard'
+import EditDriverCard from './features/DriverCardWizard/EditDriverCard'
 
 // إنشاء الثيم مع دعم الاتجاه من اليمين إلى اليسار
 const theme = createTheme({
@@ -85,6 +90,14 @@ const App = () => {
       <CustomRoutes>
         <Route path="/wizard" element={<DriverWizard />} />
         <Route path="/operation-wizard" element={<OperationCardWizard />} />
+        <Route path="/wizard/driver-card/facility" element={<FacilityStep />} />
+        <Route path="/wizard/driver-card/driver" element={<DriverStep />} />
+        <Route path="/wizard/driver-card/summary" element={<SummaryStep />} />
+        <Route path="/wizard/driver-card/create" element={<CreateDriverCard />} />
+        <Route
+          path="/wizard/driver-card/edit/:cardId"
+          element={<EditDriverCard />}
+        />
       </CustomRoutes>
       <Resource
         name="opc_facility"
