@@ -7,7 +7,7 @@ const SupplierSelect = (props: Record<string, unknown>) => (
     fields={{
       label: 'name',
       inputs: (
-        <Form.Item name="name" label="الاسم" rules={[{ required: true }]}>
+        <Form.Item name="name" label="الاسم" rules={[{ required: true }]}> 
           <Input />
         </Form.Item>
       ),

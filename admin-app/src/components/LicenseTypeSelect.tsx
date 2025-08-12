@@ -8,7 +8,7 @@ const LicenseTypeSelect = (props: Record<string, unknown>) => (
       label: 'license_type_name_ar',
       inputs: (
         <>
-          <Form.Item name="license_type_name_ar" label="الاسم بالعربية" rules={[{ required: true }]}>
+          <Form.Item name="license_type_name_ar" label="الاسم بالعربية" rules={[{ required: true }]}> 
             <Input />
           </Form.Item>
           <Form.Item name="license_type_name_en" label="الاسم بالإنجليزية">

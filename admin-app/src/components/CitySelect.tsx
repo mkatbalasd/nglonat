@@ -8,7 +8,7 @@ const CitySelect = (props: Record<string, unknown>) => (
       label: 'name_ar',
       inputs: (
         <>
-          <Form.Item name="name_ar" label="الاسم بالعربية" rules={[{ required: true }]}>
+          <Form.Item name="name_ar" label="الاسم بالعربية" rules={[{ required: true }]}> 
             <Input />
           </Form.Item>
           <Form.Item name="name_en" label="الاسم بالإنجليزية">
