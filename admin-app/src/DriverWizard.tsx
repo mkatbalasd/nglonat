@@ -146,12 +146,19 @@ const DriverWizard = () => {
       setFacilityRecord(data)
       setShowFacilityCreate(false)
       setActiveStep(1)
-    } catch {
-      window.alert('فشل إنشاء المنشأة')
+    } catch (error) {
+      notify(
+        (error as { message?: string })?.message || 'فشل إنشاء المنشأة',
+        { type: 'error' }
+      )
     }
   }
 
   const handleDriverSearch = async () => {
+    if (!driver.identity_number) {
+      notify('يرجى إدخال هوية السائق', { type: 'warning' })
+      return
+    }
     try {
       const { data } = await dataProvider.getList('opc_driver', {
         filter: { identity_number: driver.identity_number },
@@ -178,8 +185,11 @@ const DriverWizard = () => {
       } else {
         setShowDriverCreate(true)
       }
-    } catch {
-      window.alert('فشل البحث عن السائق')
+    } catch (error) {
+      notify(
+        (error as { message?: string })?.message || 'فشل البحث عن السائق',
+        { type: 'error' }
+      )
     }
   }
 
@@ -192,8 +202,11 @@ const DriverWizard = () => {
       setDriverCardRecord(null)
       setShowDriverCreate(false)
       setActiveStep(2)
-    } catch {
-      window.alert('فشل إنشاء السائق')
+    } catch (error) {
+      notify(
+        (error as { message?: string })?.message || 'فشل إنشاء السائق',
+        { type: 'error' }
+      )
     }
   }
 
@@ -219,8 +232,11 @@ const DriverWizard = () => {
         })
       else await dataProvider.create('opc_driver_card', { data: payload })
       redirect('/opc_driver_card')
-    } catch {
-      window.alert('فشل حفظ بطاقة السائق')
+    } catch (error) {
+      notify(
+        (error as { message?: string })?.message || 'فشل حفظ بطاقة السائق',
+        { type: 'error' }
+      )
     }
   }
 
@@ -270,6 +286,7 @@ const DriverWizard = () => {
                 label="الاسم الأول"
                 fullWidth
                 margin="normal"
+                required
                 value={driver.first_name}
                 onChange={e =>
                   setDriver({ ...driver, first_name: e.target.value })
@@ -279,6 +296,7 @@ const DriverWizard = () => {
                 label="اسم العائلة"
                 fullWidth
                 margin="normal"
+                required
                 value={driver.last_name}
                 onChange={e =>
                   setDriver({ ...driver, last_name: e.target.value })
