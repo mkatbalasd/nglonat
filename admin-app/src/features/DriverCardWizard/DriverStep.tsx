@@ -1,5 +1,8 @@
-const DriverStep = () => {
-  return <div>Driver Card Driver Step</div>;
-};
+import { useDriverCardWizardState } from './state'
 
-export default DriverStep;
+const DriverStep = () => {
+  const { state } = useDriverCardWizardState()
+  return <div>Driver Card Driver Step {state.activeStep}</div>
+}
+
+export default DriverStep
