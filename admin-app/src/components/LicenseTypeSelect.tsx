@@ -4,12 +4,13 @@ import { useRef } from 'react'
 import AddableSelect from './AddableSelect'
 
 const LicenseTypeSelect = (props: Record<string, unknown>) => {
-  const firstInputRef = useRef<InputRef>(null)
+  const firstInputRef = useRef<InputRef | null>(null)
 
   return (
     <AddableSelect
+      {...props}
       resource="opc_license_type"
-      label="license_type_name_ar"
+      optionText="license_type_name_ar"
       firstInputRef={firstInputRef}
       formFields={
         <>
@@ -25,7 +26,6 @@ const LicenseTypeSelect = (props: Record<string, unknown>) => {
           </Form.Item>
         </>
       }
-      {...props}
     />
   )
 }

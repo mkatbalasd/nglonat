@@ -4,12 +4,13 @@ import { useRef } from 'react'
 import AddableSelect from './AddableSelect'
 
 const CitySelect = (props: Record<string, unknown>) => {
-  const firstInputRef = useRef<InputRef>(null)
+  const firstInputRef = useRef<InputRef | null>(null)
 
   return (
     <AddableSelect
+      {...props}
       resource="city"
-      label="name_ar"
+      optionText="name_ar"
       firstInputRef={firstInputRef}
       formFields={
         <>
@@ -25,7 +26,6 @@ const CitySelect = (props: Record<string, unknown>) => {
           </Form.Item>
         </>
       }
-      {...props}
     />
   )
 }

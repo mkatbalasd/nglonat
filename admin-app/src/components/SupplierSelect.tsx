@@ -4,19 +4,19 @@ import { useRef } from 'react'
 import AddableSelect from './AddableSelect'
 
 const SupplierSelect = (props: Record<string, unknown>) => {
-  const firstInputRef = useRef<InputRef>(null)
+  const firstInputRef = useRef<InputRef | null>(null)
 
   return (
     <AddableSelect
+      {...props}
       resource="supplier"
-      label="name"
+      optionText="name"
       firstInputRef={firstInputRef}
       formFields={
         <Form.Item name="name" label="اسم المورد" rules={[{ required: true }]}> 
           <Input ref={firstInputRef} />
         </Form.Item>
       }
-      {...props}
     />
   )
 }

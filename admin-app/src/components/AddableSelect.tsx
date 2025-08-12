@@ -9,18 +9,18 @@ type Item = { id: number | string } & Record<string, unknown>
 
 type AddableSelectProps = {
   resource: string
-  label: string
+  optionText: string
   value?: number | string
   onChange?: (value: number | string) => void
   formFields: ReactNode
   initialValues?: Record<string, unknown>
-  firstInputRef?: RefObject<InputRef>
+  firstInputRef?: RefObject<InputRef | null>
   onAddError?: (error: unknown) => void
 }
 
 const AddableSelect = ({
   resource,
-  label,
+  optionText,
   value,
   onChange,
   formFields,
@@ -72,7 +72,7 @@ const AddableSelect = ({
       style={{ width: '100%' }}
       placeholder="اختر..."
       value={value}
-      options={items.map((i) => ({ value: i.id, label: i[label] }))}
+      options={items.map((i) => ({ value: i.id, label: i[optionText as keyof Item] as string }))}
       onChange={onChange}
       popupRender={(menu) => (
         <>
