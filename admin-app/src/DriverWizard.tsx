@@ -233,8 +233,14 @@ const DriverWizard = () => {
       else await dataProvider.create('opc_driver_card', { data: payload })
       redirect('/opc_driver_card')
     } catch (error) {
+      const message =
+        (error as { body?: string; message?: string })?.body ||
+        (error as { message?: string })?.message ||
+        ''
       notify(
-        (error as { message?: string })?.message || 'فشل حفظ بطاقة السائق',
+        message.includes('duplicate key')
+          ? 'رقم بطاقة السائق مستخدم مسبقاً'
+          : message || 'فشل حفظ بطاقة السائق',
         { type: 'error' }
       )
     }
@@ -318,18 +324,41 @@ const DriverWizard = () => {
           onSubmit={handleDriverCardNext}
           defaultValues={driverCardRecord || {}}
         >
-          <TextInput source="card_number" label="رقم بطاقة السائق" fullWidth />
-          <ReferenceInput source="card_type" reference="opc_license_type">
-            <LicenseTypeSelect />
-          </ReferenceInput>
-          <ReferenceInput source="supplier_id" reference="supplier">
-            <SupplierSelect />
-          </ReferenceInput>
-          <DateInput source="issue_date" label="تاريخ الإصدار" />
-          <DateInput source="expiration_date" label="تاريخ الانتهاء" />
-          <MuiButton type="submit" variant="contained">
-            حفظ
-          </MuiButton>
+          <Stack spacing={2}>
+            <TextInput
+              source="card_number"
+              label="رقم بطاقة السائق"
+              fullWidth
+              validate={required()}
+            />
+            <ReferenceInput
+              source="card_type"
+              reference="opc_license_type"
+              validate={required()}
+            >
+              <LicenseTypeSelect />
+            </ReferenceInput>
+            <ReferenceInput
+              source="supplier_id"
+              reference="supplier"
+              validate={required()}
+            >
+              <SupplierSelect />
+            </ReferenceInput>
+            <DateInput
+              source="issue_date"
+              label="تاريخ الإصدار"
+              validate={required()}
+            />
+            <DateInput
+              source="expiration_date"
+              label="تاريخ الانتهاء"
+              validate={required()}
+            />
+            <MuiButton type="submit" variant="contained">
+              حفظ
+            </MuiButton>
+          </Stack>
         </Form>
       )}
     </Box>
