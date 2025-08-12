@@ -1,21 +1,23 @@
 import { PlusOutlined } from '@ant-design/icons'
-import { Button, Divider, Form, Select } from 'antd'
-import type { ReactNode } from 'react'
-import { useEffect, useState } from 'react'
+import { Button, Divider, Input, Select, Space } from 'antd'
+import type { InputRef } from 'antd'
+import { useEffect, useRef, useState } from 'react'
 import { useDataProvider } from 'react-admin'
 
 type Item = { id: number | string } & Record<string, unknown>
 
 type AddableSelectProps = {
   resource: string
-  fields: { label: string; inputs: ReactNode }
+  label: string
   value?: number | string
   onChange?: (value: number | string) => void
 }
 
-const AddableSelect = ({ resource, fields, value, onChange }: AddableSelectProps) => {
+const AddableSelect = ({ resource, label, value, onChange }: AddableSelectProps) => {
   const dataProvider = useDataProvider()
   const [items, setItems] = useState<Item[]>([])
+  const [name, setName] = useState('')
+  const inputRef = useRef<InputRef>(null)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -27,30 +29,43 @@ const AddableSelect = ({ resource, fields, value, onChange }: AddableSelectProps
       .then(({ data }) => setItems(data))
   }, [resource, dataProvider])
 
-  const addItem = async (values: Record<string, unknown>) => {
+  const addItem = async () => {
+    if (!name) return
     setLoading(true)
-    const { data } = await dataProvider.create<Item>(resource, { data: values })
+    const { data } = await dataProvider.create<Item>(resource, {
+      data: { [label]: name },
+    })
     setItems([...items, data])
     onChange?.(data.id)
+    setName('')
     setLoading(false)
+    setTimeout(() => {
+      inputRef.current?.focus()
+    })
   }
 
   return (
     <Select
       style={{ width: '100%' }}
       value={value}
-      options={items.map((i) => ({ value: i.id, label: i[fields.label] }))}
+      options={items.map((i) => ({ value: i.id, label: i[label] }))}
       onChange={onChange}
-      dropdownRender={(menu) => (
+      popupRender={(menu) => (
         <>
           {menu}
           <Divider style={{ margin: '8px 0' }} />
-          <Form onFinish={addItem} layout="vertical">
-            {fields.inputs}
-            <Button htmlType="submit" type="text" icon={<PlusOutlined />} loading={loading}>
+          <Space style={{ padding: '0 8px 4px' }}>
+            <Input
+              placeholder="أدخل القيمة"
+              ref={inputRef}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onKeyDown={(e) => e.stopPropagation()}
+            />
+            <Button type="text" icon={<PlusOutlined />} onClick={addItem} loading={loading}>
               إضافة
             </Button>
-          </Form>
+          </Space>
         </>
       )}
     />
