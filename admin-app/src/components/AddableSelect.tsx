@@ -1,7 +1,8 @@
 import { PlusOutlined } from '@ant-design/icons'
-import { Button, Divider, Input, Select, Space } from 'antd'
+import { Button, Divider, Form, Select } from 'antd'
 import type { InputRef } from 'antd'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+import type { ReactNode, RefObject } from 'react'
 import { useDataProvider } from 'react-admin'
 
 type Item = { id: number | string } & Record<string, unknown>
@@ -11,13 +12,24 @@ type AddableSelectProps = {
   label: string
   value?: number | string
   onChange?: (value: number | string) => void
+  formFields: ReactNode
+  initialValues?: Record<string, unknown>
+  firstFieldRef?: RefObject<InputRef>
 }
 
-const AddableSelect = ({ resource, label, value, onChange }: AddableSelectProps) => {
+const AddableSelect = ({
+  resource,
+  label,
+  value,
+  onChange,
+  formFields,
+  initialValues,
+  firstFieldRef,
+}: AddableSelectProps) => {
   const dataProvider = useDataProvider()
   const [items, setItems] = useState<Item[]>([])
-  const [name, setName] = useState('')
-  const inputRef = useRef<InputRef>(null)
+  const [formValues, setFormValues] = useState<Record<string, unknown>>(initialValues || {})
+  const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -30,17 +42,18 @@ const AddableSelect = ({ resource, label, value, onChange }: AddableSelectProps)
   }, [resource, dataProvider])
 
   const addItem = async () => {
-    if (!name) return
+    if (!Object.keys(formValues).length) return
     setLoading(true)
     const { data } = await dataProvider.create<Item>(resource, {
-      data: { [label]: name },
+      data: formValues,
     })
     setItems([...items, data])
     onChange?.(data.id)
-    setName('')
+    setFormValues(initialValues || {})
+    form.resetFields()
     setLoading(false)
     setTimeout(() => {
-      inputRef.current?.focus()
+      firstFieldRef?.current?.focus()
     })
   }
 
@@ -54,18 +67,21 @@ const AddableSelect = ({ resource, label, value, onChange }: AddableSelectProps)
         <>
           {menu}
           <Divider style={{ margin: '8px 0' }} />
-          <Space style={{ padding: '0 8px 4px' }}>
-            <Input
-              placeholder="أدخل القيمة"
-              ref={inputRef}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              onKeyDown={(e) => e.stopPropagation()}
-            />
-            <Button type="text" icon={<PlusOutlined />} onClick={addItem} loading={loading}>
-              إضافة
-            </Button>
-          </Space>
+          <div style={{ padding: '0 8px 4px' }}>
+            <Form
+              layout="vertical"
+              form={form}
+              initialValues={initialValues}
+              onValuesChange={(_, allValues) => setFormValues(allValues)}
+            >
+              {formFields}
+              <Form.Item>
+                <Button type="text" icon={<PlusOutlined />} onClick={addItem} loading={loading}>
+                  إضافة
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
         </>
       )}
     />
