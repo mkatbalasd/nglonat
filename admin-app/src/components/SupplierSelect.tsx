@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import { useInput } from 'react-admin'
 import AddableSelect from './AddableSelect'
 
-const SupplierSelect = (props: Record<string, unknown>) => {
+const SupplierSelect = () => {
   const firstInputRef = useRef<InputRef | null>(null)
   const { field } = useInput(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
