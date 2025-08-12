@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import {
   Box,
   Stepper,
@@ -13,7 +13,8 @@ import {
   useDataProvider,
   useRedirect,
   useNotify,
-  Form,
+  CreateBase,
+  SimpleForm,
   TextInput,
   DateInput,
   NumberInput,
@@ -59,6 +60,30 @@ const OperationCardWizard = () => {
     useState<Record<string, unknown> | null>(null)
 
   const steps = ['المنشأة', 'المركبة', 'بطاقة التشغيل']
+
+  interface WizardStepWrapProps {
+    resource: string
+    onSubmit: (values: Record<string, unknown>) => void
+    defaultValues?: Record<string, unknown>
+    children: ReactNode
+  }
+
+  const WizardStepWrap = ({
+    resource,
+    onSubmit,
+    defaultValues,
+    children,
+  }: WizardStepWrapProps) => (
+    <CreateBase resource={resource}>
+      <SimpleForm
+        onSubmit={onSubmit}
+        defaultValues={defaultValues}
+        toolbar={false}
+      >
+        {children}
+      </SimpleForm>
+    </CreateBase>
+  )
 
   const FacilityCreateForm = () => {
     const { setValue } = useFormContext()
@@ -283,9 +308,12 @@ const OperationCardWizard = () => {
             {loading ? <CircularProgress size={24} /> : 'بحث'}
           </MuiButton>
           {showFacilityCreate && (
-            <Form onSubmit={handleFacilityNext}>
+            <WizardStepWrap
+              resource="opc_facility"
+              onSubmit={handleFacilityNext}
+            >
               <FacilityCreateForm />
-            </Form>
+            </WizardStepWrap>
           )}
         </Box>
       )}
@@ -319,7 +347,10 @@ const OperationCardWizard = () => {
             {loading ? <CircularProgress size={24} /> : 'بحث'}
           </MuiButton>
           {showVehicleCreate && (
-            <Form onSubmit={handleVehicleNext}>
+            <WizardStepWrap
+              resource="opc_vehicle"
+              onSubmit={handleVehicleNext}
+            >
               <Stack spacing={2}>
                 <ModelSelect source="model_id" />
                 <ColorSelect source="color_id" />
@@ -335,12 +366,13 @@ const OperationCardWizard = () => {
                   {loading ? <CircularProgress size={24} /> : 'التالي'}
                 </MuiButton>
               </Stack>
-            </Form>
+            </WizardStepWrap>
           )}
         </Box>
       )}
       {activeStep === 2 && (
-        <Form
+        <WizardStepWrap
+          resource="opc_card"
           onSubmit={handleOperationCardSave}
           defaultValues={existingCard ?? {}}
         >
@@ -355,7 +387,7 @@ const OperationCardWizard = () => {
               {loading ? <CircularProgress size={24} /> : 'حفظ'}
             </MuiButton>
           </Stack>
-        </Form>
+        </WizardStepWrap>
       )}
     </Box>
   )
