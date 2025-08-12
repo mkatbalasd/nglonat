@@ -2,43 +2,56 @@ import {
   AutocompleteInput,
   SimpleForm,
   TextInput,
-  useCreate,
   useCreateSuggestionContext,
   useNotify,
   required,
+  ReferenceInput,
+  Create,
+  Toolbar,
+  SaveButton,
 } from 'react-admin'
+import { Button } from '@mui/material'
 
-const SupplierQuickCreate = () => {
+const SupplierQuickCreateForm = () => {
   const { onCancel, onCreate, filter } = useCreateSuggestionContext()
-  const [create] = useCreate()
   const notify = useNotify()
 
-  const handleSubmit = async (values: Record<string, unknown>) => {
-    try {
-      const { data } = await create('supplier', { data: values })
-      onCreate(data)
-    } catch (error) {
-      notify(
-        (error as { message?: string })?.message || 'فشل إنشاء المورد',
-        { type: 'error' }
-      )
-    }
-  }
+  const QuickCreateToolbar = () => (
+    <Toolbar>
+      <SaveButton />
+      <Button onClick={onCancel}>إلغاء</Button>
+    </Toolbar>
+  )
 
   return (
-    <SimpleForm onSubmit={handleSubmit} onCancel={onCancel} defaultValues={{ name: filter }}>
-      <TextInput source="name" label="اسم المورد" validate={required()} fullWidth />
-    </SimpleForm>
+    <Create
+      resource="supplier"
+      redirect={false}
+      mutationOptions={{
+        onSuccess: data => onCreate(data),
+        onError: error =>
+          notify(
+            (error as { message?: string })?.message || 'فشل إنشاء المورد',
+            { type: 'error' }
+          ),
+      }}
+    >
+      <SimpleForm defaultValues={{ name: filter }} toolbar={<QuickCreateToolbar />}>
+        <TextInput source="name" label="اسم المورد" validate={required()} fullWidth />
+      </SimpleForm>
+    </Create>
   )
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const SupplierSelect = (props: any) => (
-  <AutocompleteInput
-    {...props}
-    optionText="name"
-    create={<SupplierQuickCreate />}
-  />
+const SupplierSelect = ({ source, ...props }: any) => (
+  <ReferenceInput source={source} reference="supplier">
+    <AutocompleteInput
+      optionText="name"
+      create={<SupplierQuickCreateForm />}
+      {...props}
+    />
+  </ReferenceInput>
 )
 
 export default SupplierSelect

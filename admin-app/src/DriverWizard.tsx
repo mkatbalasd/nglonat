@@ -14,7 +14,6 @@ import {
   useNotify,
   Form,
   TextInput,
-  ReferenceInput,
   DateInput,
   required,
 } from 'react-admin'
@@ -79,12 +78,8 @@ const DriverWizard = () => {
           validate={required()}
           placeholder="أدخل رقم الترخيص"
         />
-        <ReferenceInput source="license_type_id" reference="opc_license_type">
-          <LicenseTypeSelect validate={required()} />
-        </ReferenceInput>
-        <ReferenceInput source="license_city_id" reference="city">
-          <CitySelect validate={required()} />
-        </ReferenceInput>
+        <LicenseTypeSelect source="license_type_id" validate={required()} />
+        <CitySelect source="license_city_id" validate={required()} />
         <DateInput
           source="license_issue_date"
           label="تاريخ إصدار الترخيص"
@@ -333,18 +328,8 @@ const DriverWizard = () => {
                 disabled
               />
             )}
-            <ReferenceInput
-              source="card_type"
-              reference="opc_license_type"
-            >
-              <LicenseTypeSelect validate={required()} />
-            </ReferenceInput>
-            <ReferenceInput
-              source="supplier_id"
-              reference="supplier"
-            >
-              <SupplierSelect validate={required()} />
-            </ReferenceInput>
+            <LicenseTypeSelect source="card_type" validate={required()} />
+            <SupplierSelect source="supplier_id" validate={required()} />
             <DateInput
               source="issue_date"
               label="تاريخ الإصدار"

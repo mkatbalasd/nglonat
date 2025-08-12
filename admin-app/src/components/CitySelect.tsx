@@ -2,43 +2,57 @@ import {
   AutocompleteInput,
   SimpleForm,
   TextInput,
-  useCreate,
   useCreateSuggestionContext,
   useNotify,
   required,
+  ReferenceInput,
+  Create,
+  Toolbar,
+  SaveButton,
 } from 'react-admin'
+import { Button } from '@mui/material'
 
-const CityQuickCreate = () => {
+const CityQuickCreateForm = () => {
   const { onCancel, onCreate, filter } = useCreateSuggestionContext()
-  const [create] = useCreate()
   const notify = useNotify()
 
-  const handleSubmit = async (values: Record<string, unknown>) => {
-    try {
-      const { data } = await create('city', { data: values })
-      onCreate(data)
-    } catch (error) {
-      notify(
-        (error as { message?: string })?.message || 'فشل إنشاء المدينة',
-        { type: 'error' }
-      )
-    }
-  }
+  const QuickCreateToolbar = () => (
+    <Toolbar>
+      <SaveButton />
+      <Button onClick={onCancel}>إلغاء</Button>
+    </Toolbar>
+  )
 
   return (
-    <SimpleForm onSubmit={handleSubmit} onCancel={onCancel} defaultValues={{ name_ar: filter }}>
-      <TextInput source="name_ar" label="اسم المدينة" validate={required()} fullWidth />
-    </SimpleForm>
+    <Create
+      resource="city"
+      redirect={false}
+      mutationOptions={{
+        onSuccess: data => onCreate(data),
+        onError: error =>
+          notify(
+            (error as { message?: string })?.message || 'فشل إنشاء المدينة',
+            { type: 'error' }
+          ),
+      }}
+    >
+      <SimpleForm defaultValues={{ name_ar: filter }} toolbar={<QuickCreateToolbar />}>
+        <TextInput source="name_ar" label="اسم المدينة" validate={required()} fullWidth />
+        <TextInput source="name_en" label="الاسم بالإنجليزية" fullWidth />
+      </SimpleForm>
+    </Create>
   )
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const CitySelect = (props: any) => (
-  <AutocompleteInput
-    {...props}
-    optionText="name_ar"
-    create={<CityQuickCreate />}
-  />
+const CitySelect = ({ source, ...props }: any) => (
+  <ReferenceInput source={source} reference="city">
+    <AutocompleteInput
+      optionText="name_ar"
+      create={<CityQuickCreateForm />}
+      {...props}
+    />
+  </ReferenceInput>
 )
 
 export default CitySelect
