@@ -325,12 +325,14 @@ const DriverWizard = () => {
           defaultValues={driverCardRecord || {}}
         >
           <Stack spacing={2}>
-            <TextInput
-              source="card_number"
-              label="رقم بطاقة السائق"
-              fullWidth
-              validate={required()}
-            />
+            {driverCardRecord && (
+              <TextInput
+                source="card_number"
+                label="رقم بطاقة السائق"
+                fullWidth
+                disabled
+              />
+            )}
             <ReferenceInput
               source="card_type"
               reference="opc_license_type"
