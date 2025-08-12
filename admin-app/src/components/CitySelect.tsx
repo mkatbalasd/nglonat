@@ -1,7 +1,7 @@
 import { Form, Input } from 'antd'
 import AddableSelect from './AddableSelect'
 
-const CitySelect = props => (
+const CitySelect = (props: Record<string, unknown>) => (
   <AddableSelect
     resource="city"
     fields={{
