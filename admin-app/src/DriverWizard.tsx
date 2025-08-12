@@ -334,16 +334,14 @@ const DriverWizard = () => {
             <ReferenceInput
               source="card_type"
               reference="opc_license_type"
-              validate={required()}
             >
-              <LicenseTypeSelect />
+              <LicenseTypeSelect validate={required()} />
             </ReferenceInput>
             <ReferenceInput
               source="supplier_id"
               reference="supplier"
-              validate={required()}
             >
-              <SupplierSelect />
+              <SupplierSelect validate={required()} />
             </ReferenceInput>
             <DateInput
               source="issue_date"
