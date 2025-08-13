@@ -1,3 +1,5 @@
+[![Codex CI](https://github.com/mkatbalasd/nglonat/actions/workflows/codex-ci.yml/badge.svg)](https://github.com/mkatbalasd/nglonat/actions/workflows/codex-ci.yml)
+
 # مشروع nglonat
 
 لوحة إدارة لبطاقات السائقين والتشغيل تعتمد على React Admin وSupabase.
