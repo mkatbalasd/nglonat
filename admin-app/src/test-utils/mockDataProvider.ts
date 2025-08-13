@@ -38,11 +38,17 @@ const db: Record<string, RaRecord[]> = {
 const mockDataProvider: DataProvider = {
   getList: async <T extends RaRecord>(
     resource: string,
-    _params: GetListParams
-  ): Promise<GetListResult<T>> => ({
-    data: (db[resource] as T[]) ?? [],
-    total: (db[resource] ?? []).length,
-  }),
+    params: GetListParams
+  ): Promise<GetListResult<T>> => {
+    const records = (db[resource] as T[]) ?? []
+    const { page, perPage } = params.pagination
+    const start = (page - 1) * perPage
+    const end = start + perPage
+    return {
+      data: records.slice(start, end),
+      total: records.length,
+    }
+  },
   getOne: async <T extends RaRecord>(
     resource: string,
     params: GetOneParams<T>
