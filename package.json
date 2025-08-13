@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "migrate": "psql $DB_URL -f db/rebuild_tables.sql",
-    "seed": "psql $DB_URL -f db/seed.sql"
+    "migrate": "psql postgresql://supabase_admin:supabaseStrongPass123!@49.13.53.13:6543/postgres -f db/rebuild_tables.sql",
+    "seed": "psql postgresql://supabase_admin:supabaseStrongPass123!@49.13.53.13:6543/postgres -f db/seed.sql"
   }
 }
