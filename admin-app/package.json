@@ -8,7 +8,13 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "check-i18n": "tsc -p tsconfig.check-i18n.json",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest --run --reporter=verbose",
+    "test:ci": "vitest --run --reporter=junit --coverage",
+    "e2e": "playwright test",
+    "ci:e2e:start": "vite preview --port 5173 --strictPort",
+    "ci:e2e": "concurrently -k -s first -n PREVIEW,TEST \"npm run ci:e2e:start\" \"wait-on http://127.0.0.1:5173 && playwright test\"",
+    "codex:fix": "node tools/codex-fix.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -24,15 +30,23 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
+    "@playwright/test": "^1.54.2",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
+    "@vitest/coverage-c8": "^0.33.0",
+    "concurrently": "^9.2.0",
     "eslint": "^9.30.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
+    "msw": "^2.10.4",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
-    "vite": "^7.0.4"
+    "vite": "^7.0.4",
+    "vitest": "^3.2.4",
+    "wait-on": "^8.0.4"
   }
 }
