@@ -8,6 +8,7 @@ export default defineConfig({
     coverage: {
       reporter: ['text', 'lcov', 'cobertura'],
       reportsDirectory: 'reports/coverage'
-    }
+    },
+    exclude: ['e2e/**']
   }
 });
