@@ -1,5 +1,4 @@
 import { defineConfig, defaultExclude } from 'vitest/config';
-
 export default defineConfig({
   test: {
     environment: 'jsdom',
@@ -12,6 +11,6 @@ export default defineConfig({
       reportsDirectory: 'reports/coverage'
     },
     exclude: [...defaultExclude, 'e2e/**'],
-    include: ['src/**/*.{test,spec}.{ts,tsx}'] // اختياري
+    include: ['src/**/*.{test,spec}.{ts,tsx}']
   }
 });
