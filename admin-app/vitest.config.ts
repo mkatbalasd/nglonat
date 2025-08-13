@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitest/config';
+import { defineConfig, defaultExclude } from 'vitest/config';
 export default defineConfig({
   test: {
     environment: 'jsdom',
@@ -10,6 +10,7 @@ export default defineConfig({
       reporter: ['text', 'lcov', 'cobertura'],
       reportsDirectory: 'reports/coverage'
     },
-    exclude: ['e2e/**']
+    exclude: [...defaultExclude, 'e2e/**'],
+    include: ['src/**/*.{test,spec}.{ts,tsx}']
   }
 });
