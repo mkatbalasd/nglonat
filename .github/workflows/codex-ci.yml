@@ -14,6 +14,11 @@ on:
 jobs:
   codex-ci:
     runs-on: ubuntu-latest
+    env:
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      NODE_OPTIONS: --max-old-space-size=4096
     defaults:
       run:
         working-directory: admin-app
@@ -25,11 +30,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Run tests
-        run: npm run test:ci
+        continue-on-error: true
+        run: |
+          npm run test:ci && echo "TESTS_FAILED=0" >> $GITHUB_ENV || echo "TESTS_FAILED=1" >> $GITHUB_ENV
       - name: Build
         run: npm run build
       - name: Run e2e tests
-        run: npm run ci:e2e
+        continue-on-error: true
+        run: |
+          npm run ci:e2e && echo "E2E_FAILED=0" >> $GITHUB_ENV || echo "E2E_FAILED=1" >> $GITHUB_ENV
       - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -39,7 +48,7 @@ jobs:
             admin-app/reports
             admin-app/playwright-report
       - name: Codex fix
-        if: failure()
+        if: env.TESTS_FAILED == '1' || env.E2E_FAILED == '1'
         env:
           JUNIT_PATH: reports/junit/junit.xml
           COVERAGE_PATH: reports/coverage/coverage-summary.json
