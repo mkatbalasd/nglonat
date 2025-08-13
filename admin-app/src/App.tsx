@@ -7,6 +7,7 @@ import { createTheme } from '@mui/material'
 import arabicMessages from './i18n/arabic'
 // استيراد موفّر البيانات المبني على Supabase
 import supabaseDataProvider from './data/supabaseDataProvider'
+import mockDataProvider from './test-utils/mockDataProvider'
 import { AuditLogList, AuditLogShow } from './AuditLog'
 
 // استيراد مكونات الموارد
@@ -75,6 +76,11 @@ const theme = createTheme({
 // تهيئة موفر الترجمة للغة العربية
 const i18nProvider = polyglotI18nProvider(() => arabicMessages, 'ar')
 
+const dataProvider =
+  import.meta.env.VITE_USE_MOCK === 'true'
+    ? mockDataProvider
+    : supabaseDataProvider()
+
 const App = () => {
   // ضبط اتجاه الصفحة ليكون من اليمين إلى اليسار عند بدء التطبيق
   useEffect(() => {
@@ -84,7 +90,7 @@ const App = () => {
   return (
     // مكوّن الإدارة مع تمرير موفّر البيانات، الثيم، وموفّر الترجمة
     <Admin
-      dataProvider={supabaseDataProvider()}
+      dataProvider={dataProvider}
       theme={theme}
       i18nProvider={i18nProvider}
     >
