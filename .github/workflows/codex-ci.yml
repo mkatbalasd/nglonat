@@ -40,4 +40,7 @@ jobs:
             admin-app/playwright-report
       - name: Codex fix
         if: failure()
+        env:
+          JUNIT_PATH: reports/junit/junit.xml
+          COVERAGE_PATH: reports/coverage/coverage-summary.json
         run: node tools/codex-fix.mjs

@@ -79,8 +79,8 @@ async function createPR(owner, repo, branch, base, title, body) {
 }
 
 async function main() {
-  const junit = parseJUnit(JUNIT_PATH || 'junit.xml');
-  const coverage = parseCoverage(COVERAGE_PATH || 'coverage/coverage-summary.json');
+  const junit = parseJUnit(JUNIT_PATH || 'reports/junit/junit.xml');
+  const coverage = parseCoverage(COVERAGE_PATH || 'reports/coverage/coverage-summary.json');
 
   const failureText = junit.length
     ? junit.map(f => `- ${f.classname} ${f.name}: ${f.message}`).join('\n')
