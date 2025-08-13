@@ -16,6 +16,7 @@ import type {
   CreateResult,
   DeleteParams,
   DeleteResult,
+  PaginationPayload,
 } from 'react-admin'
 
 // In-memory data store seeded with users and main resources
@@ -35,13 +36,15 @@ const db: Record<string, RaRecord[]> = {
   audit_log: [],
 }
 
+const defaultPagination: PaginationPayload = { page: 1, perPage: 10 }
+
 const mockDataProvider: DataProvider = {
   getList: async <T extends RaRecord>(
     resource: string,
     params: GetListParams
   ): Promise<GetListResult<T>> => {
     const records = (db[resource] as T[]) ?? []
-    const { page, perPage } = params.pagination
+    const { page = 1, perPage = 10 } = params.pagination ?? defaultPagination
     const start = (page - 1) * perPage
     const end = start + perPage
     return {
