@@ -12,10 +12,14 @@ import type {
   GetManyReferenceResult,
   UpdateParams,
   UpdateResult,
+  UpdateManyParams,
+  UpdateManyResult,
   CreateParams,
   CreateResult,
   DeleteParams,
   DeleteResult,
+  DeleteManyParams,
+  DeleteManyResult,
   PaginationPayload,
 } from 'react-admin'
 
@@ -86,13 +90,16 @@ const mockDataProvider: DataProvider = {
     db[resource] = records
     return { data: updated }
   },
-  updateMany: async (resource, params) => {
-    const records = db[resource] ?? []
+  updateMany: async <T extends RaRecord>(
+    resource: string,
+    params: UpdateManyParams<T>
+  ): Promise<UpdateManyResult<T>> => {
+    const records = (db[resource] as T[]) ?? []
     const ids: Identifier[] = []
     db[resource] = records.map(record => {
       if (params.ids.includes(record.id)) {
         ids.push(record.id)
-        return { ...record, ...params.data }
+        return { ...record, ...params.data } as T
       }
       return record
     })
@@ -120,8 +127,11 @@ const mockDataProvider: DataProvider = {
     db[resource] = records
     return { data: removed as T }
   },
-  deleteMany: async (resource, params) => {
-    const records = db[resource] ?? []
+  deleteMany: async <T extends RaRecord>(
+    resource: string,
+    params: DeleteManyParams<T>
+  ): Promise<DeleteManyResult<T>> => {
+    const records = (db[resource] as T[]) ?? []
     db[resource] = records.filter(record => !params.ids.includes(record.id))
     return { data: params.ids }
   },
