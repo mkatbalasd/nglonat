@@ -6,6 +6,7 @@ export default defineConfig({
     reporters: ['verbose','junit'],
     outputFile: { junit: 'reports/junit/junit.xml' },
     coverage: {
+      provider: 'v8',
       reporter: ['text', 'lcov', 'cobertura'],
       reportsDirectory: 'reports/coverage'
     },

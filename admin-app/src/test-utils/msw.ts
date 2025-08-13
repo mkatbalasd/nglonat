@@ -1,6 +1,6 @@
-import { setupServer } from 'msw/node';
+import { setupServer } from 'msw/node'
+import { HttpHandler as RestHandler } from 'msw'
 
-const handlers = [];
-
-export const server = setupServer(...handlers);
+export const handlers: RestHandler[] = []
+export const server = setupServer(...handlers)
 
