@@ -36,6 +36,20 @@ PGUSER=postgres PGPASSWORD=secret PGHOST=localhost PGPORT=5432 PGDATABASE=postgr
 psql -f db/schema.sql
 ```
 
+يمكن أيضاً استخدام متغيّر واحد `DB_URL` يحتوي على سلسلة الاتصال كاملة بالشكل:
+
+```
+postgresql://USER:PASSWORD@HOST:PORT/DATABASE
+```
+
+ستستخدم أوامر `npm run migrate` و`npm run seed` هذا المتغيّر تلقائياً:
+
+```bash
+export DB_URL=postgresql://postgres:secret@localhost:5432/postgres
+npm run migrate
+npm run seed
+```
+
 لتجنّب إدخال كلمة المرور في كل مرة، يمكن استخدام أحد الخيارين التاليين:
 
 1. **ملف `.env`**
