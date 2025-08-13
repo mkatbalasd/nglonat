@@ -17,25 +17,40 @@ alter table city enable row level security;
 drop policy if exists city_insert on city;
 create policy city_insert on city for insert to authenticated with check (true);
 
-alter table opc_license_type enable row level security;
-drop policy if exists opc_license_type_insert on opc_license_type;
-create policy opc_license_type_insert on opc_license_type for insert to authenticated with check (true);
+alter table public.opc_license_type enable row level security;
+drop policy if exists opc_license_type_insert on public.opc_license_type;
+drop policy if exists "allow_insert_opc_license_type_for_authenticated" on public.opc_license_type;
+create policy "allow_insert_opc_license_type_for_authenticated"
+  on public.opc_license_type
+  for insert
+  to authenticated
+  with check (true);
 
 alter table supplier enable row level security;
 drop policy if exists supplier_insert on supplier;
 create policy supplier_insert on supplier for insert to authenticated with check (true);
 
-alter table opc_brand enable row level security;
-drop policy if exists opc_brand_insert on opc_brand;
-create policy opc_brand_insert on opc_brand for insert to authenticated with check (true);
+alter table public.opc_brand enable row level security;
+drop policy if exists opc_brand_insert on public.opc_brand;
+drop policy if exists "allow_insert_opc_brand_for_authenticated" on public.opc_brand;
+create policy "allow_insert_opc_brand_for_authenticated"
+  on public.opc_brand
+  for insert
+  to authenticated
+  with check (true);
 
 alter table opc_model enable row level security;
 drop policy if exists opc_model_insert on opc_model;
 create policy opc_model_insert on opc_model for insert to authenticated with check (true);
 
-alter table opc_color enable row level security;
-drop policy if exists opc_color_insert on opc_color;
-create policy opc_color_insert on opc_color for insert to authenticated with check (true);
+alter table public.opc_color enable row level security;
+drop policy if exists opc_color_insert on public.opc_color;
+drop policy if exists "allow_insert_opc_color_for_authenticated" on public.opc_color;
+create policy "allow_insert_opc_color_for_authenticated"
+  on public.opc_color
+  for insert
+  to authenticated
+  with check (true);
 
 alter table opc_facility enable row level security;
 drop policy if exists opc_facility_insert on opc_facility;
