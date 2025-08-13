@@ -1,7 +1,6 @@
 import { setupServer } from 'msw/node'
-import type { RequestHandler } from 'msw'
+import { HttpHandler as RestHandler } from 'msw'
 
-const handlers: RequestHandler[] = []
-
+export const handlers: RestHandler[] = []
 export const server = setupServer(...handlers)
 
