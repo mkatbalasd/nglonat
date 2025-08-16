@@ -10,10 +10,12 @@ export default defineConfig({
   },
 
   webServer: {
-    command: 'npm run ci:e2e:start',
+    // build first, then start preview (ci:e2e:start runs the preview)
+    command: 'npm run build && npm run ci:e2e:start',
     url: 'http://127.0.0.1:5173',
     reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
+    // تمديد المهلة لأن البناء+preview قد يأخذ وقتاً
+    timeout: 240_000,
   },
 
   reporter: [['junit', { outputFile: 'playwright-report/results.xml' }]],
