@@ -12,7 +12,7 @@
     "test": "vitest --run --reporter=verbose",
     "test:ci": "vitest --run --reporter=junit --coverage",
     "e2e": "playwright test",
-    "ci:e2e:start": "VITE_USE_MOCK=true vite preview --port 5173 --strictPort",
+    "ci:e2e:start": "set \"VITE_USE_MOCK=true\" && vite preview --port 5173 --strictPort",
     "ci:e2e": "VITE_USE_MOCK=true concurrently -k -s first -n PREVIEW,TEST \"npm run ci:e2e:start\" \"wait-on http://127.0.0.1:5173 && playwright test\"",
     "codex:fix": "node tools/codex-fix.mjs",
     "check-env": "node -e \"require('dotenv').config(); console.log(process.env)\""
