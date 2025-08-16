@@ -97,3 +97,53 @@ create policy "allow_insert_opc_facility_for_anon"
   for insert
   to anon
   with check (true);
+
+alter table opc_driver enable row level security;
+drop policy if exists opc_driver_insert on opc_driver;
+drop policy if exists "allow_insert_opc_driver_for_anon" on opc_driver;
+create policy opc_driver_insert on opc_driver for insert to authenticated with check (true);
+create policy "allow_insert_opc_driver_for_anon"
+  on opc_driver
+  for insert
+  to anon
+  with check (true);
+
+alter table opc_vehicle enable row level security;
+drop policy if exists opc_vehicle_insert on opc_vehicle;
+drop policy if exists "allow_insert_opc_vehicle_for_anon" on opc_vehicle;
+create policy opc_vehicle_insert on opc_vehicle for insert to authenticated with check (true);
+create policy "allow_insert_opc_vehicle_for_anon"
+  on opc_vehicle
+  for insert
+  to anon
+  with check (true);
+
+alter table opc_card enable row level security;
+drop policy if exists opc_card_insert on opc_card;
+drop policy if exists "allow_insert_opc_card_for_anon" on opc_card;
+create policy opc_card_insert on opc_card for insert to authenticated with check (true);
+create policy "allow_insert_opc_card_for_anon"
+  on opc_card
+  for insert
+  to anon
+  with check (true);
+
+alter table opc_driver_card enable row level security;
+drop policy if exists opc_driver_card_insert on opc_driver_card;
+drop policy if exists "allow_insert_opc_driver_card_for_anon" on opc_driver_card;
+create policy opc_driver_card_insert on opc_driver_card for insert to authenticated with check (true);
+create policy "allow_insert_opc_driver_card_for_anon"
+  on opc_driver_card
+  for insert
+  to anon
+  with check (true);
+
+alter table public.users enable row level security;
+drop policy if exists users_insert on public.users;
+drop policy if exists "allow_insert_users_for_anon" on public.users;
+create policy users_insert on public.users for insert to authenticated with check (true);
+create policy "allow_insert_users_for_anon"
+  on public.users
+  for insert
+  to anon
+  with check (true);
